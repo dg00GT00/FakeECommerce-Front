@@ -3,10 +3,14 @@ import ReactDOM from 'react-dom';
 import './index.scss';
 import App from './Main/App';
 import reportWebVitals from './reportWebVitals';
+import {MuiThemeProvider} from "@material-ui/core/";
+import {customTheme} from "./Utilities/Theme/CustomTheme";
 
 ReactDOM.render(
     <React.StrictMode>
-        <App/>
+        <MuiThemeProvider theme={customTheme}>
+            <App/>
+        </MuiThemeProvider>
     </React.StrictMode>,
     document.getElementById('root')
 );

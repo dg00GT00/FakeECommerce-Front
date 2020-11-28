@@ -2,13 +2,16 @@
     margin-left: 6.7vw;
 
     .main_call {
-        font-size: 3rem;
+        font-size: 2.5rem;
     }
     .sub_call {
         font-size: 1.5rem;
+        opacity: 0.5;
     }
     .call_action {
         text-transform: uppercase;
+        font-weight: bold;
+        margin-top: 20px;
     }
 }
 
