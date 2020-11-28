@@ -1,5 +1,5 @@
 .header {
-    height: 150px;
+    height: 200px;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -9,10 +9,14 @@
         ul {
             display: flex;
             justify-content: space-between;
+            align-items: center;
             list-style: none;
 
             li {
                 display: inline-block;
+            }
+            .cart {
+                font-size: 2.7rem;
             }
         }
     }

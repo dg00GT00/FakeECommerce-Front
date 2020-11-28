@@ -1,23 +1,7 @@
-.full_logo {
-    position: relative;
 
-    .logo_symbol {
-        height: 115px;
-        width: 115px;
-        transform: rotateZ(-12deg);
-    }
-
-    p {
-        width: max-content;
-        font-family: 'Nothing You Could Do', cursive;
-        position: absolute;
-        left: 18%;
-        bottom: -3%;
-
-        span {
-            font-family: 'Marvel', sans-serif;
-            font-size: 1.5rem;
-        }
-    }
+.logo {
+    height: 250px;
+    width: 250px;
 }
+
 
