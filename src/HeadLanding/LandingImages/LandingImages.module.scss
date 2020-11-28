@@ -1,10 +1,14 @@
 .front_images {
     max-height: 700px;
-    width: 100%;
+    width: 100vw;
+    margin-left: -8.8%;
     position: relative;
 
     .gradient {
         background-image: linear-gradient(to right, #f6f6f6 30%, transparent);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
         width: inherit;
         position: absolute;
         right: 100%;
