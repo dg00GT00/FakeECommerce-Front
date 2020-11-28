@@ -1,6 +1,7 @@
 import * as React from "react";
 import {Header} from "../Header/Header";
 import {MainLanding} from "../HeroSection/MainTextLanding/MainLanding";
+import {ProductsSection} from "../ProductsSection/ProductsSection";
 
 
 const App = () => {
@@ -8,6 +9,7 @@ const App = () => {
         <>
             <Header/>
             <MainLanding/>
+            <ProductsSection/>
         </>
     );
 }
