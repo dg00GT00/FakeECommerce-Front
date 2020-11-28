@@ -1,10 +1,14 @@
 import * as React from "react";
 import {Header} from "../Header/Header";
+import {FrontImages} from "../FrontImages/FrontImages";
 
 
 const App = () => {
     return (
-        <Header/>
+        <>
+            <Header/>
+            <FrontImages/>
+        </>
     );
 }
 
