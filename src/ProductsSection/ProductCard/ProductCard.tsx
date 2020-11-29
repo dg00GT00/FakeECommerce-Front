@@ -5,42 +5,47 @@ import CardActionArea from '@material-ui/core/CardActionArea';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
-import Button from '@material-ui/core/Button';
-import Typography from '@material-ui/core/Typography';
+import ShareRounded from '@material-ui/icons/ShareRounded';
+import CardHeader from "@material-ui/core/CardHeader";
+import styles from "./ProductCard.module.scss";
+import {ReactComponent as CartArrowDown} from "../../Assets/cartArrowDown.svg";
+import {ButtonBase} from "@material-ui/core";
+
 
 const useStyles = makeStyles({
     root: {
-        maxWidth: 345,
-    },
-    media: {
-        height: 140,
-    },
+        justifyContent: "space-between",
+        "& div:last-child": {
+            margin: 0
+        }
+    }
 });
 
 export const ProductCard: React.FunctionComponent = () => {
-    const classes = useStyles();
+    const style = useStyles();
 
     return (
-        <Card className={classes.root}>
+        <Card className={styles.card}>
             <CardActionArea>
-                <CardMedia className={classes.media} title="Placeholder"/>
+                <CardHeader title={"Product Title"}
+                            className={[style.root, styles.card_title].join(" ")}
+                            action={
+                                <ShareRounded/>
+                            } disableTypography>
+                </CardHeader>
+                <CardMedia className={styles.media} title="Placeholder"/>
                 <CardContent>
-                    <Typography gutterBottom variant="h5" component="h2">
-                        Lizard
-                    </Typography>
-                    <Typography variant="body2" color="textSecondary" component="p">
+                    <p>
                         Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging
                         across all continents except Antarctica
-                    </Typography>
+                    </p>
                 </CardContent>
             </CardActionArea>
-            <CardActions>
-                <Button size="small" color="primary">
-                    Share
-                </Button>
-                <Button size="small" color="primary">
-                    Learn More
-                </Button>
+            <CardActions className={styles.card_actions}>
+                <div className={styles.price}>$ 100.00</div>
+                <ButtonBase className={styles.cart_arrow_down_button}>
+                    <CartArrowDown className={styles.cart_arrow_down}/>
+                </ButtonBase>
             </CardActions>
         </Card>
     );
