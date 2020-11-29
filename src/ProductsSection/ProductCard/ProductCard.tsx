@@ -22,12 +22,8 @@ export const ProductCard: React.FunctionComponent = () => {
 
     return (
         <Card className={classes.root}>
-            <CardActionArea disableRipple>
-                <CardMedia
-                    className={classes.media}
-                    image="/static/images/cards/contemplative-reptile.jpg"
-                    title="Contemplative Reptile"
-                />
+            <CardActionArea>
+                <CardMedia className={classes.media} title="Placeholder"/>
                 <CardContent>
                     <Typography gutterBottom variant="h5" component="h2">
                         Lizard

@@ -2,18 +2,16 @@ import * as React from "react";
 import {LandingMarketing} from "../LandingMarketing/LandingMarketing";
 import styles from "./ProductsSection.module.scss";
 import {ProductCard} from "./ProductCard/ProductCard";
-import {makeStyles, Theme} from "@material-ui/core/styles";
-import {useTheme} from "@material-ui/core";
+import {createStyles, makeStyles} from "@material-ui/core/styles";
 
-const useStyles = makeStyles<Theme, { color: string }>({
-    root: props => ({
-        backgroundColor: props.color
-    })
-})
+const useStyles = makeStyles(theme => createStyles({
+    root: {
+        backgroundColor: theme.palette.primary.main
+    }
+}))
 
 export const ProductsSection: React.FunctionComponent = () => {
-    const classes = useTheme()
-    const style = useStyles({color: classes.palette.primary.main})
+    const style = useStyles()
 
     return (
         <>
