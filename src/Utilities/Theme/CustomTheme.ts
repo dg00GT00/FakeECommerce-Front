@@ -15,7 +15,7 @@ export const customTheme = createMuiTheme({
             light: "#ffdb87",
             main: '#ffd369',
             dark: "#b29349",
-            contrastText: "#000000"
+            contrastText: "#000000",
         },
         error: {
             main: red[900],
