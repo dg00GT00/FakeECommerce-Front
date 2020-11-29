@@ -19,11 +19,11 @@ export const LandingImages: React.FunctionComponent = props => {
     }, [image])
 
     return (
-        <section className={styles.front_images}>
+        <div className={styles.front_images}>
             <div className={styles.gradient}>
                 {props.children}
             </div>
             <img className={styles.images} src={image} alt={"Front page images"} height={"700"}/>
-        </section>
+        </div>
     )
 }
