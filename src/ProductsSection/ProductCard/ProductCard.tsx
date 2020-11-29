@@ -15,6 +15,9 @@ import {ButtonBase} from "@material-ui/core";
 const useStyles = makeStyles({
     root: {
         justifyContent: "space-between",
+        "& div:first-child": {
+            flex: 1
+        },
         "& div:last-child": {
             margin: 0
         }
@@ -26,7 +29,7 @@ export const ProductCard: React.FunctionComponent = () => {
 
     return (
         <Card className={styles.card}>
-            <CardActionArea>
+            <CardActionArea className={styles.card_action}>
                 <CardHeader title={"Product Title"}
                             className={[style.root, styles.card_title].join(" ")}
                             action={

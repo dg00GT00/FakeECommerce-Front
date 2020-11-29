@@ -1,5 +1,15 @@
 .card {
     max-width: 345px;
+    height: 500px;
+    display: flex;
+    flex-direction: column;
+
+    .card_action {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
 
     p {
         font-size: .8rem;
@@ -11,6 +21,7 @@
     .card_title {
         font-size: 1rem;
         font-weight: bold;
+        width: 100%;
     }
 
     .card_actions {
@@ -18,14 +29,14 @@
         justify-content: space-between;
 
         .price {
-            font-weight: bold;
+            font-weight: 700;
             font-size: 1.3rem;
             opacity: 0.7;
             margin-left: 2%;
         }
 
         .cart_arrow_down_button {
-            width: 18%;
+            width: 14%;
 
             .cart_arrow_down {
                 width: 100%;

@@ -12,14 +12,17 @@ const useStyles = makeStyles(theme => createStyles({
 
 export const ProductsSection: React.FunctionComponent = () => {
     const style = useStyles()
+    const productGridItems = Array.from(Array(12), _ => <ProductCard/>)
 
     return (
         <>
             <LandingMarketing color={"secondary"}>
                 <p>Take a look in our <span className={styles.fakeness}>Fakeness</span></p>
             </LandingMarketing>
-            <div className={[style.root, styles.container].join(' ')}>
-                <ProductCard/>
+            <div className={[style.root, styles.grid_container].join(' ')}>
+                <div className={styles.grid_content}>
+                    {productGridItems}
+                </div>
             </div>
         </>
     )
