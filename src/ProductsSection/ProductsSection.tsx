@@ -26,6 +26,8 @@ export const ProductsSection: React.FunctionComponent = () => {
             <div className={[style.root, styles.grid_container].join(' ')}>
                 <div className={styles.filter_options}>
                     {/*TODO: Refactor the following components in order to eliminate code repetition*/}
+                    {/*TODO: Implement a media query to cellular phone for leading with position of filter options*/}
+                    {/*TODO: Maybe implement a dedicated button to show the filter options when in mobile version*/}
                     <TypeProductOptions className={styles.product_type}/>
                     <BrandProductOptions className={styles.product_brand}/>
                     <SortProductOptions className={styles.product_sort}/>

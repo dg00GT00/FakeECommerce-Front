@@ -52,6 +52,7 @@ $column-gap: 6%;
         }
 
         @media (max-width: 1600px) {
+            height: 240px;
             grid-template-areas: "type type sort sort"
                                  "brand brand search search";
         }
