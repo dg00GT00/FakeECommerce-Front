@@ -13,10 +13,8 @@ const useFormStyles = makeStyles((theme: Theme) =>
 
             "& > .MuiOutlinedInput-root": {
                 backgroundColor: "#ffd36954", // Change this value if the secondary theme color also change
-                // border: "thin solid #969595",
                 "&:focus-within": {
                     backgroundColor: "initial",
-                    // border: 0
                 }
             },
             "& > fieldset": {
@@ -25,11 +23,16 @@ const useFormStyles = makeStyles((theme: Theme) =>
         },
         select: {
             color: theme.palette.common.white,
+            fontFamily: "inherit",
+            "&:not([multiple]) option": {
+                backgroundColor: theme.palette.primary.light,
+                color: "white",
+            },
         }
     }),
 );
 
-export const ProductNavOptions: React.FunctionComponent = () => {
+export const SortProductOptions: React.FunctionComponent = () => {
     const formStyles = useFormStyles();
     const [sortedBy, setSort] = React.useState("");
 
@@ -38,24 +41,22 @@ export const ProductNavOptions: React.FunctionComponent = () => {
     };
 
     return (
-        <div>
-            <FormControl color={"secondary"} variant="outlined" className={formStyles.root}>
-                <InputLabel htmlFor="sort" id={"sortIt"} classes={{formControl: formStyles.select}}>Sort</InputLabel>
-                <Select
-                    native
-                    className={formStyles.select}
-                    value={sortedBy}
-                    id={"sortIt"}
-                    onChange={handleChange}
-                    label="Sort"
-                    labelId={"sortIt"}
-                >
-                    <option/>
-                    <option value={"Alphabetically"}>Alphabetically</option>
-                    <option value={"Lower Price"}>Lower Price</option>
-                    <option value={"Higher Price"}>Higher Price</option>
-                </Select>
-            </FormControl>
-        </div>
+        <FormControl color={"secondary"} variant="outlined" className={formStyles.root}>
+            <InputLabel htmlFor="sortIt" id={"sortIt"} classes={{formControl: formStyles.select}}>Sort</InputLabel>
+            <Select
+                native
+                className={formStyles.select}
+                value={sortedBy}
+                id={"sortIt"}
+                onChange={handleChange}
+                label="Sort"
+                labelId={"sortIt"}
+            >
+                <option/>
+                <option value={"Alphabetically"}>Alphabetically</option>
+                <option value={"Lower Price"}>Lower Price</option>
+                <option value={"Higher Price"}>Higher Price</option>
+            </Select>
+        </FormControl>
     );
 }
