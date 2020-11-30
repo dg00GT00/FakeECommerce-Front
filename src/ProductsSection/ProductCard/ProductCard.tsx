@@ -9,7 +9,7 @@ import ShareRounded from '@material-ui/icons/ShareRounded';
 import CardHeader from "@material-ui/core/CardHeader";
 import styles from "./ProductCard.module.scss";
 import {ReactComponent as CartArrowDown} from "../../Assets/cartArrowDown.svg";
-import {ButtonBase} from "@material-ui/core";
+import {ButtonBase, useTheme} from "@material-ui/core";
 
 
 const useStyles = makeStyles({
@@ -24,12 +24,41 @@ const useStyles = makeStyles({
     }
 });
 
+type HighlightProductType = {
+    outerContainer?: { [i: string]: string }
+    innerContainer?: { [i: string]: string }
+}
+
 export const ProductCard: React.FunctionComponent = () => {
+    const [highlighted, setHighlight] = React.useState<HighlightProductType>({})
+    const theme = useTheme();
+
+    let productHighlighted: HighlightProductType = {
+        outerContainer: {
+            borderRadius: "4px",
+            backgroundColor: theme.palette.secondary.light
+        },
+        innerContainer: {
+            transform: "scale(.988)",
+            borderRadius: "inherit",
+            backgroundColor: "#e0c178"
+        }
+    }
+
     const cardHeaderStyle = useStyles();
 
+    const selectProduct = () => {
+        setHighlight(prevHighlight => {
+            if (Object.keys(prevHighlight).length !== 0) {
+                productHighlighted = {}
+            }
+            return productHighlighted
+        })
+    }
+
     return (
-        <div className={styles.card_highlight_outer}>
-            <div className={styles.card_highlight_inner}>
+        <div style={highlighted.outerContainer}>
+            <div style={highlighted.innerContainer}>
                 <Card className={styles.card}>
                     <CardActionArea className={styles.card_action_area}>
                         <CardHeader title={"Product Title"}
@@ -48,7 +77,7 @@ export const ProductCard: React.FunctionComponent = () => {
                     </CardActionArea>
                     <CardActions className={styles.card_actions}>
                         <div className={styles.price}>$ 100.00</div>
-                        <ButtonBase className={styles.cart_arrow_down_button}>
+                        <ButtonBase className={styles.cart_arrow_down_button} onClick={selectProduct}>
                             <CartArrowDown className={styles.cart_arrow_down}/>
                         </ButtonBase>
                     </CardActions>
