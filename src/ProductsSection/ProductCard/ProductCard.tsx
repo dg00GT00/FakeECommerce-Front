@@ -25,13 +25,13 @@ const useStyles = makeStyles({
 });
 
 export const ProductCard: React.FunctionComponent = () => {
-    const style = useStyles();
+    const cardHeaderStyle = useStyles();
 
     return (
         <Card className={styles.card}>
-            <CardActionArea className={styles.card_action}>
+            <CardActionArea className={styles.card_action_area}>
                 <CardHeader title={"Product Title"}
-                            className={[style.root, styles.card_title].join(" ")}
+                            className={[cardHeaderStyle.root, styles.card_title].join(" ")}
                             action={
                                 <ShareRounded/>
                             } disableTypography>

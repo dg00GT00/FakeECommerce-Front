@@ -24,11 +24,14 @@ export const ProductsSection: React.FunctionComponent = () => {
                 <p>Take a look in our <span className={styles.fakeness}>Fakeness</span></p>
             </LandingMarketing>
             <div className={[style.root, styles.grid_container].join(' ')}>
+                <div className={styles.filter_options}>
+                    {/*TODO: Refactor the following components in order to eliminate code repetition*/}
+                    <TypeProductOptions className={styles.product_type}/>
+                    <BrandProductOptions className={styles.product_brand}/>
+                    <SortProductOptions className={styles.product_sort}/>
+                    <SearchProducts className={styles.product_search}/>
+                </div>
                 <div className={styles.grid_content}>
-                    <TypeProductOptions/>
-                    <BrandProductOptions/>
-                    <SortProductOptions/>
-                    <SearchProducts/>
                     {productGridItems}
                 </div>
             </div>

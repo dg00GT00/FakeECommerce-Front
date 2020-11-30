@@ -8,9 +8,6 @@ import Select from '@material-ui/core/Select';
 const useFormStyles = makeStyles((theme: Theme) =>
     createStyles({
         root: {
-            margin: theme.spacing(1),
-            minWidth: 120,
-
             "& > .MuiOutlinedInput-root": {
                 backgroundColor: "#ffd36954", // Change this value if the secondary theme color also change
                 "&:focus-within": {
@@ -32,16 +29,23 @@ const useFormStyles = makeStyles((theme: Theme) =>
     }),
 );
 
-export const SortProductOptions: React.FunctionComponent = () => {
+export const SortProductOptions: React.FunctionComponent<{ className: string }> = props => {
+    const {className} = props
+
     const formStyles = useFormStyles();
     const [sortedBy, setSort] = React.useState("");
+    const formRef = React.useRef<HTMLDivElement>(null);
 
     const handleChange = (event: React.ChangeEvent<{ name?: string; value: unknown }>) => {
         setSort(event.target.value as string)
     };
 
+    React.useEffect(() => {
+        formRef.current?.classList.add(className)
+    }, [className])
+
     return (
-        <FormControl color={"secondary"} variant="outlined" className={formStyles.root}>
+        <FormControl fullWidth color={"secondary"} variant="outlined" className={formStyles.root} ref={formRef}>
             <InputLabel htmlFor="sortIt" id={"sortIt"} classes={{formControl: formStyles.select}}>Sort</InputLabel>
             <Select
                 native

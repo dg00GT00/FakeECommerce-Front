@@ -6,8 +6,6 @@ import {TextField} from "@material-ui/core";
 const useFormStyles = makeStyles((theme: Theme) =>
     createStyles({
         root: {
-            margin: theme.spacing(1),
-            minWidth: 120,
             fontFamily: "inherit",
             "& .MuiInputBase-root": {
                 color: theme.palette.common.white,
@@ -28,11 +26,18 @@ const useFormStyles = makeStyles((theme: Theme) =>
     }),
 );
 
-export const SearchProducts: React.FunctionComponent = () => {
+export const SearchProducts: React.FunctionComponent<{ className: string }> = props => {
+    const {className} = props;
+
     const formStyles = useFormStyles();
+    const formRef = React.useRef<HTMLDivElement>(null);
+
+    React.useEffect(() => {
+        formRef.current?.classList.add(className)
+    }, [className])
 
     return (
         <TextField color={"secondary"} id="search-products" label="Search" type="search" variant="outlined"
-                   className={formStyles.root}/>
+                   className={formStyles.root} ref={formRef}/>
     )
 }
