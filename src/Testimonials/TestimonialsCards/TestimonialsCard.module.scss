@@ -1,0 +1,41 @@
+$card_container_width: 420px;
+$avatar_square_dimension: 180px;
+$card_padding: 35px;
+
+.card_container {
+    max-width: $card_container_width;
+    position: relative;
+
+    .avatar {
+        position: absolute;
+        left: ($card_container_width / 2) - ($avatar_square_dimension / 2) - $card_padding;
+        bottom: 70%;
+        height: $avatar_square_dimension;
+        width: $avatar_square_dimension;
+        border-radius: 50%;
+        object-fit: cover;
+        object-position: center -20px;
+        border-width: 30px;
+        border-style: solid;
+        box-sizing: content-box;
+    }
+
+    .card_content {
+        text-align: center;
+        padding: 130px $card_padding 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        align-items: center;
+
+        .divider {
+            width: 120px;
+            height: 3px;
+            background-color: black;
+        }
+        .name {
+            opacity: 0.3;
+        }
+    }
+}
+
