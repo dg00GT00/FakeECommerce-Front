@@ -1,23 +1,43 @@
 $card_container_width: 400px;
+$card_container_height: 440px;
 $avatar_square_dimension: 180px;
+$avatar_border: 30px;
 $card_padding: 35px;
+$media_card_content_height: 200px;
 
 .card_container {
     max-width: $card_container_width;
     position: relative;
 
+
+    @media (max-width: 1530px) {
+        $media_max_width: 90%;
+        max-width: $media_max_width;
+        margin-left: 100% - $media_max_width;
+        &:nth-child(2n) {
+            margin-top: 100px;
+            margin-bottom: 100px;
+        }
+    }
+
     .avatar {
         position: absolute;
-        left: ($card_container_width / 2) - ($avatar_square_dimension / 2) - $card_padding;
+        left: ($card_container_width / 2) - (($avatar_square_dimension + 2 * $avatar_border) / 2);
         bottom: 70%;
         height: $avatar_square_dimension;
         width: $avatar_square_dimension;
         border-radius: 50%;
         object-fit: cover;
         object-position: center -20px;
-        border-width: 30px;
+        border-width: $avatar_border;
         border-style: solid;
         box-sizing: content-box;
+
+        @media (max-width: 1530px) {
+            bottom: (($media_card_content_height / 2) - (($avatar_square_dimension + 2 * $avatar_border)/ 2));
+            left: (($avatar_square_dimension + 2 * $avatar_border)/ 2) * -1;
+        }
+
     }
 
     .card_content {
@@ -27,14 +47,22 @@ $card_padding: 35px;
         flex-direction: column;
         justify-content: space-around;
         align-items: center;
+        height: $card_container_height;
+
+        @media (max-width: 1530px){
+            padding: 0 20px 0 120px;
+            height: $media_card_content_height;
+        }
 
         p {
             opacity: 0.7;
         }
+
         .divider {
             width: 120px;
             height: 3px;
             background-color: black;
+            opacity: 0.7;
         }
 
         .name {

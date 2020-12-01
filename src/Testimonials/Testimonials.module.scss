@@ -1,5 +1,6 @@
 .marketing {
     font-size: 2.5rem;
+
     .fakee {
         font-family: "Nothing You Could Do", cursive;
         opacity: 0.5;
@@ -10,5 +11,9 @@
     margin: 200px 0;
     display: flex;
     justify-content: space-between;
+    @media (max-width: 1530px) {
+        flex-direction: column;
+        margin: 80px 0;
+    }
 }
 
