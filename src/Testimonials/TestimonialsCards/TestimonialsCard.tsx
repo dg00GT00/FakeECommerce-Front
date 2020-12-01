@@ -9,7 +9,7 @@ import {useTheme} from "@material-ui/core";
 const useStyles = makeStyles({
     root: {
         backgroundColor: ComplementaryColor.tertiary.main,
-        height: "400px"
+        height: "440px"
     }
 })
 

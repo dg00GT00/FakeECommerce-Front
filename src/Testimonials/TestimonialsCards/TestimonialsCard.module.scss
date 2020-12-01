@@ -1,4 +1,4 @@
-$card_container_width: 420px;
+$card_container_width: 400px;
 $avatar_square_dimension: 180px;
 $card_padding: 35px;
 
@@ -22,20 +22,23 @@ $card_padding: 35px;
 
     .card_content {
         text-align: center;
-        padding: 130px $card_padding 0;
+        padding: 130px $card_padding 15px;
         display: flex;
         flex-direction: column;
         justify-content: space-around;
         align-items: center;
 
+        p {
+            opacity: 0.7;
+        }
         .divider {
             width: 120px;
             height: 3px;
             background-color: black;
         }
+
         .name {
             opacity: 0.3;
         }
     }
 }
-
