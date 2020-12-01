@@ -29,8 +29,16 @@ type HighlightProductType = {
     innerContainer?: { [i: string]: string }
 }
 
+type CardHighlight = {
+    backgroundColor?: string
+    fill?: string
+    color?: string
+}
+
 export const ProductCard: React.FunctionComponent = () => {
     const [highlighted, setHighlight] = React.useState<HighlightProductType>({})
+    const [cardColor, setCardColor] = React.useState<CardHighlight>({})
+
     const theme = useTheme();
 
     let productHighlighted: HighlightProductType = {
@@ -45,6 +53,12 @@ export const ProductCard: React.FunctionComponent = () => {
         }
     }
 
+    let cardHighlighted: CardHighlight = {
+        backgroundColor: theme.palette.primary.main,
+        fill: theme.palette.common.white,
+        color: theme.palette.common.white,
+    }
+
     const cardHeaderStyle = useStyles();
 
     const selectProduct = () => {
@@ -54,19 +68,26 @@ export const ProductCard: React.FunctionComponent = () => {
             }
             return productHighlighted
         })
+        setCardColor(prevHighlight => {
+            if (Object.keys(prevHighlight).length !== 0) {
+                cardHighlighted = {}
+            }
+            return cardHighlighted
+        })
     }
 
     return (
         <div style={highlighted.outerContainer}>
             <div style={highlighted.innerContainer}>
                 <Card className={styles.card}>
+                    <CardHeader title={"Product Title"}
+                                className={[cardHeaderStyle.root, styles.card_title].join(" ")}
+                                style={cardColor}
+                                action={
+                                    <ShareRounded/>
+                                } disableTypography>
+                    </CardHeader>
                     <CardActionArea className={styles.card_action_area}>
-                        <CardHeader title={"Product Title"}
-                                    className={[cardHeaderStyle.root, styles.card_title].join(" ")}
-                                    action={
-                                        <ShareRounded/>
-                                    } disableTypography>
-                        </CardHeader>
                         <CardMedia className={styles.media} title="Placeholder"/>
                         <CardContent>
                             <p>
@@ -75,10 +96,10 @@ export const ProductCard: React.FunctionComponent = () => {
                             </p>
                         </CardContent>
                     </CardActionArea>
-                    <CardActions className={styles.card_actions}>
+                    <CardActions className={styles.card_actions} style={cardColor}>
                         <div className={styles.price}>$ 100.00</div>
                         <ButtonBase className={styles.cart_arrow_down_button} onClick={selectProduct}>
-                            <CartArrowDown className={styles.cart_arrow_down}/>
+                            <CartArrowDown className={styles.cart_arrow_down} style={cardColor}/>
                         </ButtonBase>
                     </CardActions>
                 </Card>
