@@ -30,7 +30,9 @@ export const LandingMarketing: React.FunctionComponent<BorderColorProps> = props
 
     return (
         <div className={styles.marketing}>
-            {props.children}
+            <h1>
+                {props.children}
+            </h1>
             <div className={style.root}/>
         </div>
     );

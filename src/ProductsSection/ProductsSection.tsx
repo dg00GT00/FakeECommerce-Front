@@ -19,9 +19,9 @@ export const ProductsSection: React.FunctionComponent = () => {
     const productGridItems = Array.from(Array(12), (_, index) => <ProductCard key={index}/>)
 
     return (
-        <>
+        <section>
             <LandingMarketing color={"secondary"}>
-                <p>Take a look in our <span className={styles.fakeness}>Fakeness</span></p>
+                Take a look in our <span className={styles.fakeness}>Fakeness</span>
             </LandingMarketing>
             <div className={[style.root, styles.grid_container].join(' ')}>
                 <div className={styles.filter_options}>
@@ -37,6 +37,6 @@ export const ProductsSection: React.FunctionComponent = () => {
                     {productGridItems}
                 </div>
             </div>
-        </>
+        </section>
     )
 }

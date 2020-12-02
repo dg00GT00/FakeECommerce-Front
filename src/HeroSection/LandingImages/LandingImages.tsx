@@ -1,6 +1,6 @@
 import * as React from "react";
-import firstImage from "../../Assets/FrontImages/frontImage1.jpg"
-import secondImage from "../../Assets/FrontImages/frontImage2.jpg"
+import firstImage from "../../Assets/FrontImages/frontImage1.webp"
+import secondImage from "../../Assets/FrontImages/frontImage2.webp"
 import styles from "./LandingImages.module.scss";
 
 

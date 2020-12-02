@@ -3,6 +3,7 @@ import {Header} from "../Header/Header";
 import {MainLanding} from "../HeroSection/MainTextHero/MainLanding";
 import {ProductsSection} from "../ProductsSection/ProductsSection";
 import {Testimonials} from "../Testimonials/Testimonials";
+import {Footer} from "../Footer/Footer";
 
 
 const App = () => {
@@ -12,6 +13,7 @@ const App = () => {
             <MainLanding/>
             <ProductsSection/>
             <Testimonials/>
+            <Footer/>
         </>
     );
 }

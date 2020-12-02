@@ -1,9 +1,9 @@
 import * as React from "react";
 import {LandingMarketing} from "../LandingMarketing/LandingMarketing";
 import {TestimonialsCard} from "./TestimonialsCards/TestimonialsCard";
-import avatar1 from "../Assets/TestimonialsImages/avatar1.jpg";
-import avatar2 from "../Assets/TestimonialsImages/avatar2.jpg";
-import avatar3 from "../Assets/TestimonialsImages/avatar3.jpg";
+import avatar1 from "../Assets/TestimonialsImages/avatar1.webp";
+import avatar2 from "../Assets/TestimonialsImages/avatar2.webp";
+import avatar3 from "../Assets/TestimonialsImages/avatar3.webp";
 
 import styles from "./Testimonials.module.scss";
 
@@ -41,13 +41,13 @@ export const Testimonials: React.FunctionComponent = () => {
     )
 
     return (
-        <>
+        <section>
             <LandingMarketing color={"primary"}>
-                <p className={styles.marketing}>It's <span className={styles.fakee}>unbelievable,</span> right?</p>
+                It's <span className={styles.fakee}>unbelievable,</span> right?
             </LandingMarketing>
             <div className={styles.testimonial_content}>
                 {testimonialsArray}
             </div>
-        </>
+        </section>
     )
 }
