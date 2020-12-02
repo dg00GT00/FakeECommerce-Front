@@ -1,11 +1,13 @@
+@import "../Utilities/LandingPageWidth";
+
 .footer {
-    width: 100vw;
-    margin-left: -8.8%;
+    width: 100%;
 
     .container {
         display: flex;
         justify-content: flex-start;
         align-items: center;
+        @include global-width();
 
         .footer_logo {
             flex: 1;

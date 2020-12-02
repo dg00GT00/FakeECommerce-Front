@@ -1,5 +1,7 @@
+@import "../../Utilities/LandingPageWidth";
+
 .call {
-    margin-left: 7.5%;
+    @include global-width();
 
     .main_call {
         font-size: 2.5rem;

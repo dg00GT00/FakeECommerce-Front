@@ -23,18 +23,20 @@ export const ProductsSection: React.FunctionComponent = () => {
             <LandingMarketing color={"secondary"}>
                 Take a look in our <span className={styles.fakeness}>Fakeness</span>
             </LandingMarketing>
-            <div className={[style.root, styles.grid_container].join(' ')}>
-                <div className={styles.filter_options}>
-                    {/*TODO: Refactor the following components in order to eliminate code repetition*/}
-                    {/*TODO: Implement a media query to cellular phone for leading with position of filter options*/}
-                    {/*TODO: Maybe implement a dedicated button to show the filter options when in mobile version*/}
-                    <TypeProductOptions className={styles.product_type}/>
-                    <BrandProductOptions className={styles.product_brand}/>
-                    <SortProductOptions className={styles.product_sort}/>
-                    <SearchProducts className={styles.product_search}/>
-                </div>
-                <div className={styles.grid_content}>
-                    {productGridItems}
+            <div className={[style.root, styles.grid_background].join(' ')}>
+                <div className={styles.grid_container}>
+                    <div className={styles.filter_options}>
+                        {/*TODO: Refactor the following components in order to eliminate code repetition*/}
+                        {/*TODO: Implement a media query to cellular phone for leading with position of filter options*/}
+                        {/*TODO: Maybe implement a dedicated button to show the filter options when in mobile version*/}
+                        <TypeProductOptions className={styles.product_type}/>
+                        <BrandProductOptions className={styles.product_brand}/>
+                        <SortProductOptions className={styles.product_sort}/>
+                        <SearchProducts className={styles.product_search}/>
+                    </div>
+                    <div className={styles.grid_content}>
+                        {productGridItems}
+                    </div>
                 </div>
             </div>
         </section>

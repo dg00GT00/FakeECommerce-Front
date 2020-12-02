@@ -1,7 +1,8 @@
+@import "../../Utilities/LandingPageWidth";
+
 .front_images {
     max-height: 700px;
-    width: 100vw;
-    margin-left: -8.8%;
+    width: 100%;
     position: relative;
 
     .gradient {
@@ -24,6 +25,7 @@
         object-fit: cover;
         filter: brightness(0.5);
 
+        // Pay attention to this attribute if needed change the variable name when importing the image
         &[src*="frontImage1"] {
             object-position: 330px;
         }

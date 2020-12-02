@@ -1,5 +1,5 @@
-$container-width: 84.8%;
-$margin-left: 7.4%;
+@import "../Utilities/LandingPageWidth";
+
 $column-gap: 6%;
 
 .fakeness {
@@ -7,60 +7,59 @@ $column-gap: 6%;
     opacity: 0.5;
 }
 
-.grid_container {
-    width: 100vw;
-    margin-left: -8.8%;
+.grid_background {
+    width: 100%;
     height: max-content;
 
-    .grid_content {
-        width: $container-width;
-        margin-left: $margin-left;
-        height: inherit;
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-        grid-row-gap: 40px;
-        grid-column-gap: $column-gap;
-        align-items: center;
+    .grid_container {
+        @include global-width();
 
-    }
+        .grid_content {
+            height: inherit;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            grid-row-gap: 40px;
+            grid-column-gap: $column-gap;
+            align-items: center;
 
-    .filter_options {
-        width: $container-width;
-        margin-left: $margin-left;
-        display: grid;
-        grid-template-columns: repeat(4, 1fr);
-        grid-template-areas: "type brand sort search";
-        grid-column-gap: $column-gap;
-        height: 180px;
-        padding-top: 40px;
-        align-items: self-start;
-
-        .product_type {
-            grid-area: type;
         }
 
-        .product_brand {
-            grid-area: brand;
-        }
+        .filter_options {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-template-areas: "type brand sort search";
+            grid-column-gap: $column-gap;
+            height: 180px;
+            padding-top: 40px;
+            align-items: self-start;
 
-        .product_sort {
-            grid-area: sort;
-        }
+            .product_type {
+                grid-area: type;
+            }
 
-        .product_search {
-            grid-area: search;
-        }
+            .product_brand {
+                grid-area: brand;
+            }
 
-        @media (max-width: 1600px) {
-            height: 240px;
-            grid-template-areas: "type type sort sort"
+            .product_sort {
+                grid-area: sort;
+            }
+
+            .product_search {
+                grid-area: search;
+            }
+
+            @media (max-width: 1600px) {
+                height: 240px;
+                grid-template-areas: "type type sort sort"
                                  "brand brand search search";
-        }
-        @media (max-width: 695px) {
-            grid-template-areas: "search search search search"
+            }
+            @media (max-width: 695px) {
+                grid-template-areas: "search search search search"
                                  "sort sort sort sort"
                                  "brand brand brand brand"
                                  "type type type type";
+            }
         }
     }
 }
