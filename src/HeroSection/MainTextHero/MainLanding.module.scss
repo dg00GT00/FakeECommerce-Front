@@ -2,15 +2,22 @@
 
 .call {
     @include global-width();
+    font-size: clamp(1rem, 6vw, 2.3rem);
 
-    .main_call {
-        font-size: 2.5rem;
+    @media (max-width: 1210px) {
+        color: white;
     }
+
     .sub_call {
-        font-size: 1.5rem;
+        font-size: clamp(.8rem, 3vw, 1.5rem);
         opacity: 0.7;
     }
+
     .call_action {
+        span:first-of-type {
+            font-size: clamp(0.6rem, 2vw, 1rem);
+        }
+
         text-transform: uppercase;
         font-weight: bold;
         margin-top: 20px;
