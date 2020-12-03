@@ -2,6 +2,10 @@ import green from '@material-ui/core/colors/green';
 import red from '@material-ui/core/colors/red';
 import createMuiTheme from '@material-ui/core/styles/createMuiTheme';
 
+type ComplementaryColorsType = {
+    tertiary: { main: string }
+}
+
 // A custom theme for this app
 export const customTheme = createMuiTheme({
     palette: {
@@ -28,3 +32,9 @@ export const customTheme = createMuiTheme({
         },
     },
 });
+
+export const ComplementaryColors: ComplementaryColorsType = {
+    tertiary: {
+        main: "#EDEDED"
+    }
+}
