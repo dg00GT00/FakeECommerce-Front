@@ -1,4 +1,5 @@
 @import "../../Utilities/LandingPageWidth";
+@import "../../Utilities/GeneralMediaQueries";
 
 .front_images {
     max-height: 700px;
@@ -17,6 +18,9 @@
         bottom: 0;
         left: 0;
         z-index: 1;
+        @media (max-width: map-get($general-media-queries, "LAPTOP_1024")) {
+            background-image: none;
+        }
     }
 
     .images {
@@ -29,6 +33,9 @@
         // Pay attention to this attribute if needed change the variable name when importing the image
         &[src*="frontImage1"] {
             object-position: 330px;
+            @media (max-width: map-get($general-media-queries, "LAPTOP_1024")) {
+                object-position: right;
+            }
         }
     }
 }

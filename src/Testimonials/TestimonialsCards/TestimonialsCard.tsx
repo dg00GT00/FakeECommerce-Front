@@ -1,14 +1,14 @@
 import * as React from "react";
 import Paper from "@material-ui/core/Paper";
 import {makeStyles} from "@material-ui/core/styles";
-import {ComplementaryColor} from "../../Utilities/Theme/ComplementaryColors";
 import styles from "./TestimonialsCard.module.scss";
 import {useTheme} from "@material-ui/core";
+import {ComplementaryColors} from "../../Utilities/Theme/CustomTheme";
 
 
 const useStyles = makeStyles({
     root: {
-        backgroundColor: ComplementaryColor.tertiary.main,
+        backgroundColor: ComplementaryColors.tertiary.main,
     }
 })
 

@@ -1,17 +1,18 @@
 import * as React from "react";
-import {Logo} from "../../Logo/Logo";
-import styles from "./Header.module.scss"
+import styles from "./HeaderDesktop.module.scss"
 import ShoppingCartRounded from "@material-ui/icons/ShoppingCartRounded";
+import {ReactComponent as Logo} from "../../Assets/eCommerceBaseLogo.svg";
 
-export const Header: React.FunctionComponent = props => {
+import {HeaderProps} from "../HeaderProps";
+
+export const HeaderDesktop: React.FunctionComponent<HeaderProps> = props => {
     return (
         <div className={styles.header}>
             <Logo/>
             <nav className={styles.nav}>
                 <ul>
-                    <li>Home</li>
-                    <li>Login</li>
-                    <li>Signup</li>
+                    <li>{props.login}</li>
+                    <li>{props.signup}</li>
                     <ShoppingCartRounded className={styles.cart}/>
                 </ul>
             </nav>

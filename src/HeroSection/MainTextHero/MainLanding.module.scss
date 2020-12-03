@@ -1,10 +1,11 @@
 @import "../../Utilities/LandingPageWidth";
+@import "../../Utilities/GeneralMediaQueries";
 
 .call {
     @include global-width();
     font-size: clamp(1rem, 6vw, 2.3rem);
 
-    @media (max-width: 1210px) {
+    @media (max-width: map-get($general-media-queries, "LAPTOP_1024")) {
         color: white;
     }
 

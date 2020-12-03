@@ -1,12 +1,14 @@
 import React from 'react';
 import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
-import {ReactComponent as Logo} from "../../Assets/eCommerceFooter.svg";
 import AccountBoxRoundedIcon from '@material-ui/icons/AccountBoxRounded';
 import ShoppingCartRounded from "@material-ui/icons/ShoppingCartRounded";
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
-import styles from "./Header.module.scss";
+import styles from "./HeaderMobile.module.scss";
+import {ReactComponent as Logo} from "../../Assets/eCommerceFooter.svg";
+
 import {Fade, Menu, MenuItem} from "@material-ui/core";
+import {HeaderProps} from "../HeaderProps";
 
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -17,11 +19,7 @@ const useStyles = makeStyles((theme: Theme) =>
     }),
 );
 
-type HeaderProps = {
-    logo: JSX.Element,
-}
-
-export const Header: React.FunctionComponent = () => {
+export const HeaderMobile: React.FunctionComponent<HeaderProps> = props => {
     const style = useStyles();
     const [anchorEl, setAnchorEl] = React.useState<null | SVGElement>(null);
 
@@ -45,8 +43,8 @@ export const Header: React.FunctionComponent = () => {
                     onClose={handleMenuClose}
                     TransitionComponent={Fade}
                 >
-                    <MenuItem>Login</MenuItem>
-                    <MenuItem>Signup</MenuItem>
+                    <MenuItem>{props.login}</MenuItem>
+                    <MenuItem>{props.signup}</MenuItem>
                 </Menu>
                 <div className={styles.menu_actions}>
                     <ShoppingCartRounded className={styles.cart}/>
