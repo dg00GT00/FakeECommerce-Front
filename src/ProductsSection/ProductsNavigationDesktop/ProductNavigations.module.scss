@@ -1,0 +1,39 @@
+@import "../../Utilities/PageGeneralVariables";
+
+.filter_options {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-areas: "type brand sort search";
+    grid-column-gap: product-cards-column-gap();
+    height: 180px;
+    padding-top: 40px;
+    align-items: self-start;
+
+    .product_type {
+        grid-area: type;
+    }
+
+    .product_brand {
+        grid-area: brand;
+    }
+
+    .product_sort {
+        grid-area: sort;
+    }
+
+    .product_search {
+        grid-area: search;
+    }
+
+    @media (max-width: 1600px) {
+        height: 240px;
+        grid-template-areas: "type type sort sort"
+                                 "brand brand search search";
+    }
+    @media (max-width: 695px) {
+        grid-template-areas: "search search search search"
+                                 "sort sort sort sort"
+                                 "brand brand brand brand"
+                                 "type type type type";
+    }
+}

@@ -3,3 +3,7 @@
     width: 85vw;
     margin: auto;
 }
+
+@function product-cards-column-gap() {
+    @return 6%;
+}

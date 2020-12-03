@@ -35,6 +35,7 @@ type CardHighlight = {
     color?: string
 }
 
+// TODO: Adjust the size of the card when in cellular phone mode
 export const ProductCard: React.FunctionComponent = () => {
     const [highlighted, setHighlight] = React.useState<HighlightProductType>({})
     const [cardColor, setCardColor] = React.useState<CardHighlight>({})
