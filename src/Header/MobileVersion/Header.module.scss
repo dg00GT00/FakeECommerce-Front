@@ -1,0 +1,21 @@
+.toolbar {
+    justify-content: space-between;
+    .logo {
+        width: 120px;
+        height: 80px;
+    }
+    .menu_actions {
+        display: flex;
+        width: 110px;
+        height: auto;
+
+        .account {
+            flex: 1;
+            margin-left: 50%;
+        }
+        .cart {
+            flex: 1;
+        }
+    }
+}
+

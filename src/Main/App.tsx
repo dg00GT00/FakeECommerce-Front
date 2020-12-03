@@ -1,5 +1,5 @@
 import * as React from "react";
-import {Header} from "../Header/Header";
+import {Header} from "../Header/MobileVersion/Header";
 import {MainLanding} from "../HeroSection/MainTextHero/MainLanding";
 import {ProductsSection} from "../ProductsSection/ProductsSection";
 import {Testimonials} from "../Testimonials/Testimonials";

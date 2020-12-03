@@ -1,5 +1,5 @@
 import * as React from "react";
-import {Logo} from "../Logo/Logo";
+import {Logo} from "../../Logo/Logo";
 import styles from "./Header.module.scss"
 import ShoppingCartRounded from "@material-ui/icons/ShoppingCartRounded";
 
