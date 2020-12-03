@@ -9,7 +9,6 @@ type BorderColorProps = {
 
 const useStyles = makeStyles<Theme, { color: string }>({
     root: props => ({
-        width: "70px",
         borderBottom: `5px solid ${props.color}`,
     })
 })
@@ -33,7 +32,7 @@ export const LandingMarketing: React.FunctionComponent<BorderColorProps> = props
             <h1>
                 {props.children}
             </h1>
-            <div className={style.root}/>
+            <div className={[style.root, styles.divider].join(" ")}/>
         </div>
     );
 }
