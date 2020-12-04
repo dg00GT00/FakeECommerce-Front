@@ -4,11 +4,12 @@ import Menu from "@material-ui/core/Menu";
 import ListSubheader from "@material-ui/core/ListSubheader";
 import IconButton from "@material-ui/core/IconButton/IconButton";
 import MenuItem from "@material-ui/core/MenuItem/MenuItem";
-import {SearchProducts} from "../ProductsNavigationDesktop/ProductsNavOptions/SearchProducts";
+import SearchRoundedIcon from '@material-ui/icons/SearchRounded';
 import styles from "./ProductNavigationMobile.module.scss";
 import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
+import {InputBase, Paper} from "@material-ui/core";
 
-const useStyles = makeStyles((theme: Theme) => {
+const seeMoreStyle = makeStyles((theme: Theme) => {
     return createStyles({
         root: {
             fill: theme.palette.secondary.main
@@ -16,10 +17,16 @@ const useStyles = makeStyles((theme: Theme) => {
     })
 })
 
+const searchBarStyle = makeStyles({
+    root: {
+        backgroundColor: "#ffd36954", // Change this value if the secondary theme color also change
+    }
+})
 
 export const ProductNavigationMobile: React.FunctionComponent = () => {
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-    const style = useStyles();
+    const moreStyle = seeMoreStyle();
+    const searchStyle = searchBarStyle();
     const open = Boolean(anchorEl);
 
     const handleClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -32,14 +39,18 @@ export const ProductNavigationMobile: React.FunctionComponent = () => {
 
     return (
         <div className={styles.filters_mobile}>
-            <SearchProducts className={styles.product_search}/>
+            <Paper className={[styles.product_search, searchStyle.root].join(" ")}>
+                <IconButton aria-label={"search"}>
+                    <SearchRoundedIcon className={styles.search_icon}/>
+                </IconButton>
+                <InputBase placeholder={"Search"} fullWidth className={styles.input_search_bar}/>
+            </Paper>
             <IconButton
                 aria-label="more"
                 aria-controls="long-menu"
                 aria-haspopup="true"
-                onClick={handleClick}
-            >
-                <MoreVertRoundedIcon className={style.root}/>
+                onClick={handleClick}>
+                <MoreVertRoundedIcon className={moreStyle.root}/>
             </IconButton>
             <Menu
                 id="long-menu"
