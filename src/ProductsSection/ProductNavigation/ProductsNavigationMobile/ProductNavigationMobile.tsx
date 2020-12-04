@@ -23,6 +23,7 @@ const searchBarStyle = makeStyles({
     }
 })
 
+// TODO: Animate the box-shadow so that it only show up when scrolling
 export const ProductNavigationMobile: React.FunctionComponent = () => {
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
     const moreStyle = seeMoreStyle();
