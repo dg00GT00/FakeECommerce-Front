@@ -3,10 +3,10 @@ import {TypeProductOptions} from "./ProductsNavOptions/TypeProductOptions";
 import {BrandProductOptions} from "./ProductsNavOptions/BrandProductOptions";
 import {SortProductOptions} from "./ProductsNavOptions/SortProductOptions";
 import {SearchProducts} from "./ProductsNavOptions/SearchProducts";
-import styles from "./ProductNavigations.module.scss";
+import styles from "./ProductNavigationDesktop.module.scss";
 
 
-export const ProductNavigations: React.FunctionComponent = () => {
+export const ProductNavigationDesktop: React.FunctionComponent = () => {
     return (
         <div className={styles.filter_options}>
             {/*TODO: Refactor the following components in order to eliminate code repetition*/}

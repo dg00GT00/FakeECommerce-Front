@@ -3,7 +3,7 @@ import {LandingMarketing} from "../LandingMarketing/LandingMarketing";
 import styles from "./ProductsSection.module.scss";
 import {ProductCard} from "./ProductCard/ProductCard";
 import {createStyles, makeStyles} from "@material-ui/core/styles";
-import {ProductNavigations} from "./ProductsNavigationDesktop/ProductNavigations";
+import {ProductNavigation} from "./ProductNavigation/ProductNavigation";
 
 const useStyles = makeStyles(theme => createStyles({
     root: {
@@ -22,7 +22,7 @@ export const ProductsSection: React.FunctionComponent = () => {
             </LandingMarketing>
             <div className={[style.root, styles.grid_background].join(' ')}>
                 <div className={styles.grid_container}>
-                    <ProductNavigations/>
+                    <ProductNavigation/>
                     <div className={styles.grid_content}>
                         {productGridItems}
                     </div>
