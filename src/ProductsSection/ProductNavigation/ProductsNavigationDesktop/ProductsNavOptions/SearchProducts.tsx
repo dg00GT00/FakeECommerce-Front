@@ -37,7 +37,12 @@ export const SearchProducts: React.FunctionComponent<{ className: string }> = pr
     }, [className])
 
     return (
-        <TextField color={"secondary"} id="search-products" label="Search" type="search" variant="outlined"
+        <TextField color={"secondary"}
+                   id="search-products"
+                   label="Search"
+                   type="search"
+                   variant="outlined"
+                   size={"small"}
                    className={formStyles.root} ref={formRef}/>
     )
 }

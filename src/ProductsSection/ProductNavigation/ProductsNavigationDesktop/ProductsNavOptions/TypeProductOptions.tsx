@@ -45,7 +45,7 @@ export const TypeProductOptions: React.FunctionComponent<{className: string}> = 
     },[className])
 
     return (
-        <FormControl color={"secondary"} variant="outlined" className={formStyles.root} ref={formRef}>
+        <FormControl size={"small"} color={"secondary"} variant="outlined" className={formStyles.root} ref={formRef}>
             <InputLabel htmlFor="typeIt" id={"typeIt"} classes={{formControl: formStyles.select}}>Product
                 Type</InputLabel>
             <Select

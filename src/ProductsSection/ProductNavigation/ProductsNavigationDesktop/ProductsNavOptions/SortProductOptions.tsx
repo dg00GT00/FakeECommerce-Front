@@ -45,7 +45,7 @@ export const SortProductOptions: React.FunctionComponent<{ className: string }> 
     }, [className])
 
     return (
-        <FormControl fullWidth color={"secondary"} variant="outlined" className={formStyles.root} ref={formRef}>
+        <FormControl size={"small"} fullWidth color={"secondary"} variant="outlined" className={formStyles.root} ref={formRef}>
             <InputLabel htmlFor="sortIt" id={"sortIt"} classes={{formControl: formStyles.select}}>Sort</InputLabel>
             <Select
                 native

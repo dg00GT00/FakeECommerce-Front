@@ -16,7 +16,7 @@ const useFormStyles = makeStyles((theme: Theme) =>
             },
             "& > fieldset": {
                 border: "none",
-            }
+            },
         },
         select: {
             color: theme.palette.common.white,
@@ -45,7 +45,7 @@ export const BrandProductOptions: React.FunctionComponent<{ className: string }>
     }, [className])
 
     return (
-        <FormControl color={"secondary"} variant="outlined" className={formStyles.root} ref={formRef}>
+        <FormControl size={"small"} color={"secondary"} variant="outlined" className={formStyles.root} ref={formRef}>
             <InputLabel htmlFor="brandIt" id={"brandIt"} classes={{formControl: formStyles.select}}>Product
                 Brands</InputLabel>
             <Select
