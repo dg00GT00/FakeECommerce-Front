@@ -25,37 +25,38 @@ const useStyles = makeStyles({
 });
 
 type HighlightProductType = {
-    outerContainer?: { [i: string]: string }
-    innerContainer?: { [i: string]: string }
+    outerContainer: { [i: string]: string, backgroundColor: string },
+    innerContainer: { [i: string]: string, backgroundColor: string },
 }
 
 type CardHighlight = {
-    backgroundColor?: string
-    fill?: string
-    color?: string
+    backgroundColor?: string,
+    fill?: string,
+    color?: string,
 }
 
 // TODO: Adjust the size of the card when in cellular phone mode
 export const ProductCard: React.FunctionComponent = () => {
-    const [highlighted, setHighlight] = React.useState<HighlightProductType>({})
+    const [highlighted, setHighlight] = React.useState<HighlightProductType>()
     const [cardColor, setCardColor] = React.useState<CardHighlight>({})
 
     const theme = useTheme();
+    const primaryColor = theme.palette.primary.main;
 
-    let productHighlighted: HighlightProductType = {
+    const productHighlighted: HighlightProductType = {
         outerContainer: {
             borderRadius: "4px",
-            backgroundColor: theme.palette.secondary.light
+            backgroundColor: theme.palette.secondary.light,
         },
         innerContainer: {
             transform: "scale(.988)",
             borderRadius: "inherit",
-            backgroundColor: "#e0c178"
-        }
+            backgroundColor: "#e0c178",
+        },
     }
 
     let cardHighlighted: CardHighlight = {
-        backgroundColor: theme.palette.primary.main,
+        backgroundColor: primaryColor,
         fill: theme.palette.common.white,
         color: theme.palette.common.white,
     }
@@ -64,10 +65,18 @@ export const ProductCard: React.FunctionComponent = () => {
 
     const selectProduct = () => {
         setHighlight(prevHighlight => {
-            if (Object.keys(prevHighlight).length !== 0) {
-                productHighlighted = {}
+            if (!prevHighlight) {
+                return productHighlighted;
             }
-            return productHighlighted
+            if (prevHighlight.outerContainer.backgroundColor !== primaryColor) {
+                return {
+                    outerContainer: {...prevHighlight.outerContainer, backgroundColor: primaryColor},
+                    innerContainer: {...prevHighlight.innerContainer, backgroundColor: primaryColor}
+                }
+            }
+            if (prevHighlight.outerContainer.backgroundColor === primaryColor) {
+                return productHighlighted;
+            }
         })
         setCardColor(prevHighlight => {
             if (Object.keys(prevHighlight).length !== 0) {
@@ -78,8 +87,8 @@ export const ProductCard: React.FunctionComponent = () => {
     }
 
     return (
-        <div style={highlighted.outerContainer}>
-            <div style={highlighted.innerContainer}>
+        <div style={highlighted?.outerContainer}>
+            <div style={highlighted?.innerContainer}>
                 <Card className={styles.card}>
                     <CardHeader title={"Product Title"}
                                 className={[cardHeaderStyle.root, styles.card_title].join(" ")}
