@@ -27,15 +27,18 @@ export const LandingImages: React.FunctionComponent = props => {
     }, [mediaTablet, theme.palette.primary.dark])
 
     React.useEffect(() => {
-        const interval = setInterval(() => {
-            if (image === firstImage) {
-                changeImage(secondImage);
-            } else {
-                changeImage(firstImage)
-            }
-        }, 5000)
+        let interval: NodeJS.Timeout;
+        if (!mediaTablet) {
+            interval = setInterval(() => {
+                if (image === firstImage) {
+                    changeImage(secondImage);
+                } else {
+                    changeImage(firstImage)
+                }
+            }, 5000)
+        }
         return () => clearInterval(interval)
-    }, [image])
+    }, [image, mediaTablet])
 
     return (
         <div className={styles.front_images}>
