@@ -1,3 +1,6 @@
+@import "../../Utilities/GeneralMediaQueries";
+@import "../../Utilities/PageGeneralVariables";
+
 $card_container_width: 400px;
 $card_container_height: 440px;
 $avatar_square_dimension: 180px;
@@ -9,7 +12,6 @@ $media_card_content_height: 200px;
     max-width: $card_container_width;
     position: relative;
 
-
     @media (max-width: 1530px) {
         max-width: inherit;
         margin-left: 10%;
@@ -17,6 +19,10 @@ $media_card_content_height: 200px;
         &:nth-child(2n) {
             margin-top: 100px;
             margin-bottom: 100px;
+        }
+
+        @media (max-width: map-get($general-media-queries, "LAPTOP_1024")) {
+            @include global-width();
         }
     }
 
@@ -36,11 +42,19 @@ $media_card_content_height: 200px;
         @media (max-width: 1530px) {
             bottom: (($media_card_content_height / 2) - (($avatar_square_dimension + 2 * $avatar_border)/ 2));
             left: (($avatar_square_dimension + 2 * $avatar_border)/ 2) * -1;
-        }
+            width: clamp(50px, 20vw, 180px);
+            height: clamp(50px, 20vw, 180px);
+            border-width: clamp(8px, 3vw, 30px);
 
+            @media (max-width: map-get($general-media-queries, "LAPTOP_1024")) {
+                left: 35%;
+                bottom: clamp(85%, 20vw, 50%);
+            }
+        }
     }
 
     .card_content {
+        font-size: clamp(.8rem, 3vw, 1rem);
         text-align: center;
         padding: 130px $card_padding 15px;
         display: flex;
@@ -49,9 +63,17 @@ $media_card_content_height: 200px;
         align-items: center;
         height: $card_container_height;
 
-        @media (max-width: 1530px){
+        @media (max-width: 1530px) {
             padding: 0 20px 0 120px;
             height: $media_card_content_height;
+
+            @media (max-width: map-get($general-media-queries, "LAPTOP_1024")) {
+                padding: 60px 35px 15px;
+
+                @media (max-width: map-get($general-media-queries, "MOBILE_320")){
+                    height: 250px;
+                }
+            }
         }
 
         p {
@@ -60,12 +82,13 @@ $media_card_content_height: 200px;
 
         .divider {
             width: 120px;
-            height: 3px;
+            height: clamp(0.5px, 0.4vw, 2.6px);
             background-color: black;
-            opacity: 0.6;
+            opacity: 0.5;
         }
 
         .name {
+            font-size: clamp(.6rem, 3vw, 1rem);
             opacity: 0.3;
         }
     }
