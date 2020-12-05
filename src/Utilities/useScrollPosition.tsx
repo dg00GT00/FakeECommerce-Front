@@ -12,12 +12,10 @@ interface IScrollProps {
 
 type ElementRef = MutableRefObject<HTMLElement | null>;
 
-const isBrowser = typeof window !== `undefined`;
+const isBrowser = typeof window !== "undefined";
 const zeroPosition = {x: 0, y: 0};
 
-const getClientRect = (element?: HTMLElement | null) => element?.getBoundingClientRect();
-
-const useIsomorphicLayoutEffect = typeof window !== "undefined" ? useLayoutEffect : useEffect;
+const useIsomorphicLayoutEffect = isBrowser ? useLayoutEffect : useEffect;
 
 const getScrollPosition = ({
                                element,
@@ -32,8 +30,8 @@ const getScrollPosition = ({
         return {x: window.scrollX, y: window.scrollY};
     }
 
-    const targetPosition = getClientRect(element?.current || document.body);
-    const containerPosition = getClientRect(boundingElement?.current);
+    const targetPosition = (element?.current || document.body)?.getBoundingClientRect();
+    const containerPosition = boundingElement?.current?.getBoundingClientRect();
 
     if (!targetPosition) {
         return zeroPosition;
