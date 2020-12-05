@@ -1,4 +1,4 @@
-import React from "react";
+import * as React from "react";
 import MoreVertRoundedIcon from '@material-ui/icons/MoreVertRounded';
 import Menu from "@material-ui/core/Menu";
 import ListSubheader from "@material-ui/core/ListSubheader";
@@ -9,6 +9,7 @@ import styles from "./ProductNavigationMobile.module.scss";
 import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
 import {InputBase, Paper, useTheme} from "@material-ui/core";
 import {useScrollPosition} from "../../../Utilities/useScrollPosition";
+import {ProductFilterDialog} from "./ProductDialog/ProductFilterDialog";
 
 const seeMoreStyle = makeStyles((theme: Theme) => {
     return createStyles({
@@ -24,9 +25,11 @@ const searchBarStyle = makeStyles({
     }
 })
 
-// TODO: Animate the box-shadow so that it only show up when scrolling
+// TODO: Refactor the code in order to eliminate repetition
 export const ProductNavigationMobile: React.FunctionComponent = () => {
-    const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+    const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null);
+    const [openProductType, setProductTypeDialog] = React.useState(false);
+    const [openProductBrand, setProductBrandDialog] = React.useState(false);
     const searchBarAnchor = React.useRef<HTMLDivElement | null>(null);
 
     const moreStyle = seeMoreStyle();
@@ -41,6 +44,16 @@ export const ProductNavigationMobile: React.FunctionComponent = () => {
     const handleClose = () => {
         setAnchorEl(null);
     };
+
+    const handleProductDialog = (event: React.MouseEvent<HTMLElement>) => {
+        if (event.currentTarget.id === "productType") {
+            setProductTypeDialog(true);
+        }
+        if (event.currentTarget.id === "productBrand") {
+            setProductBrandDialog(true);
+        }
+        setAnchorEl(null);
+    }
 
     useScrollPosition(({previousPosition, currentPosition}) => {
         if (currentPosition.y === 0 && searchBarAnchor.current) {
@@ -76,10 +89,24 @@ export const ProductNavigationMobile: React.FunctionComponent = () => {
                     open={open}
                     onClose={handleClose}>
                     <ListSubheader>Filter by</ListSubheader>
-                    <MenuItem value={1}>Option 1</MenuItem>
-                    <MenuItem value={2}>Option 2</MenuItem>
+                    <MenuItem id={"productType"} onClick={handleProductDialog}>Product Type</MenuItem>
+                    <MenuItem id={"productBrand"} onClick={handleProductDialog}>Product Brand</MenuItem>
+                    <ListSubheader>Sort by</ListSubheader>
+                    <MenuItem>Alphabetically</MenuItem>
+                    <MenuItem>Lower Price</MenuItem>
+                    <MenuItem>Higher Price</MenuItem>
                 </Menu>
             </div>
+            <ProductFilterDialog
+                open={openProductType}
+                onClose={(event => setProductTypeDialog(false))}
+                dialogTitle={"Product Type"}
+                dialogItems={["Men Clothing", "Jewelry", "Electronics", "Women Clothing"]}/>
+            <ProductFilterDialog
+                open={openProductBrand}
+                onClose={(event => setProductBrandDialog(false))}
+                dialogTitle={"Product Brands"}
+                dialogItems={["Men Styled Clothing", "New Jewelry", "Super Electronic", "Women Styled Clothing", "Women Loving", "Samsung"]}/>
         </div>
     )
 }
