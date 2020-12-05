@@ -23,10 +23,12 @@ export const TestimonialsCard: React.FunctionComponent<TestimonialsCardProps> = 
 
     return (
         <div className={styles.card_container}>
-            <img src={props.img}
-                 alt={"Beautiful woman"}
-                 className={styles.avatar}
-                 style={{borderColor: theme.palette.secondary.light}}/>
+            <div className={styles.avatar_container}>
+                <img src={props.img}
+                      alt={"Beautiful woman"}
+                      className={styles.avatar}
+                      style={{borderColor: theme.palette.secondary.light}}/>
+            </div>
             <Paper className={[style.root, styles.card_content].join(" ")} elevation={3}>
                 <p>
                     {props.children}
@@ -37,3 +39,5 @@ export const TestimonialsCard: React.FunctionComponent<TestimonialsCardProps> = 
         </div>
     )
 }
+
+// height: min(15vw, 150px)

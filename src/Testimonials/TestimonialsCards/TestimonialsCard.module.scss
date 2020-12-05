@@ -10,11 +10,13 @@ $media_card_content_height: 200px;
 
 .card_container {
     max-width: $card_container_width;
-    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 
     @media (max-width: 1530px) {
         max-width: inherit;
-        margin-left: 10%;
+        flex-direction: row;
 
         &:nth-child(2n) {
             margin-top: 100px;
@@ -22,33 +24,43 @@ $media_card_content_height: 200px;
         }
 
         @media (max-width: map-get($general-media-queries, "LAPTOP_1024")) {
-            @include global-width();
+            flex-direction: column;
         }
     }
 
-    .avatar {
-        position: absolute;
-        left: ($card_container_width / 2) - (($avatar_square_dimension + 2 * $avatar_border) / 2);
-        bottom: 70%;
-        height: $avatar_square_dimension;
-        width: $avatar_square_dimension;
-        border-radius: 50%;
-        object-fit: cover;
-        object-position: center -20px;
-        border-width: $avatar_border;
-        border-style: solid;
-        box-sizing: content-box;
+    .avatar_container {
+        height: ($avatar_square_dimension + 2 * $avatar_border) / 2;
 
         @media (max-width: 1530px) {
-            bottom: (($media_card_content_height / 2) - (($avatar_square_dimension + 2 * $avatar_border)/ 2));
-            left: (($avatar_square_dimension + 2 * $avatar_border)/ 2) * -1;
-            width: clamp(50px, 20vw, 180px);
-            height: clamp(50px, 20vw, 180px);
-            border-width: clamp(8px, 3vw, 30px);
+            height: initial;
+            width: ($avatar_square_dimension + 2 * $avatar_border) / 2;
 
             @media (max-width: map-get($general-media-queries, "LAPTOP_1024")) {
-                left: 35%;
-                bottom: clamp(85%, 20vw, 50%);
+                width: initial;
+                height: 18vw;
+            }
+        }
+
+        .avatar {
+            height: $avatar_square_dimension;
+            width: $avatar_square_dimension;
+            border-radius: 50%;
+            object-fit: cover;
+            object-position: center -20px;
+            border-width: $avatar_border;
+            border-style: solid;
+            box-sizing: content-box;
+            position: relative;
+            z-index: 1;
+
+            @media (max-width: 1530px) {
+                width: clamp(80px, 20vw, 180px);
+                height: clamp(80px, 20vw, 180px);
+                border-width: clamp(8px, 3vw, 30px);
+
+                @media (max-width: map-get($general-media-queries, "LAPTOP_1024")) {
+                    object-position: center clamp(-20px, - 3vw, - 2px);
+                }
             }
         }
     }
@@ -70,7 +82,7 @@ $media_card_content_height: 200px;
             @media (max-width: map-get($general-media-queries, "LAPTOP_1024")) {
                 padding: 60px 35px 15px;
 
-                @media (max-width: map-get($general-media-queries, "MOBILE_320")){
+                @media (max-width: map-get($general-media-queries, "MOBILE_320")) {
                     height: 250px;
                 }
             }
