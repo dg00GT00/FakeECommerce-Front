@@ -54,8 +54,8 @@ export const Footer: React.FunctionComponent = () => {
                     </div>
                 </div>
             </div>
-            <p className={styles.author} style={{backgroundColor: theme.palette.primary.dark}}>done truly by <address
-                style={{color: theme.palette.secondary.main}}>Gledson Duarte da Silva</address>
+            <p className={styles.author} style={{backgroundColor: theme.palette.primary.dark}}>done truly by <span
+                style={{color: theme.palette.secondary.main}}>Gledson Duarte da Silva</span>
             </p>
         </footer>
     )
