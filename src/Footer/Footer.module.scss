@@ -1,7 +1,9 @@
 @import "../Utilities/PageGeneralVariables";
+@import "../Utilities/GeneralMediaQueries";
 
 .footer {
     width: 100%;
+    font-size: clamp(.8rem, 3vw, 1rem);
 
     .container {
         display: flex;
@@ -21,6 +23,10 @@
 
         .footer_logo {
             flex: 1;
+            svg {
+                width: 100%;
+                height: auto;
+            }
         }
 
         .merchandise {
@@ -45,6 +51,10 @@
                     flex-direction: row;
                     margin-left: 0;
                     justify-content: space-between;
+
+                    @media (max-width: map-get($general-media-queries, "MOBILE_320")){
+                        flex-direction: column;
+                    }
                 }
             }
 
@@ -102,6 +112,10 @@
 
     .author {
         text-align: center;
+        .dev {
+            font-style: italic;
+            font-weight: bold;
+        }
     }
 }
 

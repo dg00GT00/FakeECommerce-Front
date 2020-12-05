@@ -55,7 +55,7 @@ export const Footer: React.FunctionComponent = () => {
                 </div>
             </div>
             <p className={styles.author} style={{backgroundColor: theme.palette.primary.dark}}>done truly by <span
-                style={{color: theme.palette.secondary.main}}>Gledson Duarte da Silva</span>
+                style={{color: theme.palette.secondary.main}} className={styles.dev}>Gledson Duarte da Silva</span>
             </p>
         </footer>
     )
