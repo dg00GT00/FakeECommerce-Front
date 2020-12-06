@@ -1,9 +1,8 @@
+$global-viewport-width: 85vw;
+$product-cards-column-gap: 6%;
+
 // The main content global width of the page
 @mixin global-width {
-    width: 85vw;
+    width: $global-viewport-width;
     margin: auto;
-}
-
-@function product-cards-column-gap() {
-    @return 6%;
 }

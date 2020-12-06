@@ -18,7 +18,7 @@
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             grid-row-gap: 40px;
-            grid-column-gap: product-cards-column-gap();
+            grid-column-gap: $product-cards-column-gap;
             align-items: center;
             justify-items: center;
         }

@@ -4,7 +4,7 @@
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     grid-template-areas: "type brand sort search";
-    grid-column-gap: product-cards-column-gap();
+    grid-column-gap: $product-cards-column-gap;
     grid-row-gap: 30px;
     padding-top: 40px;
     padding-bottom: 80px;
