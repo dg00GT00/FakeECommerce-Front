@@ -1,9 +1,9 @@
 import * as React from "react";
 import styles from "./HeaderDesktop.module.scss"
-import ShoppingCartRounded from "@material-ui/icons/ShoppingCartRounded";
 import {ReactComponent as Logo} from "../../Assets/eCommerceBaseLogo.svg";
 
 import {HeaderProps} from "../HeaderProps";
+import {CartDefault} from "../../Cart/CartDefault";
 
 export const HeaderDesktop: React.FunctionComponent<HeaderProps> = props => {
     return (
@@ -13,7 +13,7 @@ export const HeaderDesktop: React.FunctionComponent<HeaderProps> = props => {
                 <ul>
                     <li>{props.login}</li>
                     <li>{props.signup}</li>
-                    <ShoppingCartRounded className={styles.cart}/>
+                    <li><CartDefault className={styles.cart} color={"inherit"}/></li>
                 </ul>
             </nav>
         </div>

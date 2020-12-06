@@ -6,15 +6,14 @@
     }
     .menu_actions {
         display: flex;
-        width: 110px;
+        width: 150px;
         height: auto;
+        align-items: center;
+        justify-content: space-between;
 
         .account {
-            flex: 1;
-            margin-left: 50%;
         }
         .cart {
-            flex: 1;
         }
     }
 }

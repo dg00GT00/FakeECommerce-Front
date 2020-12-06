@@ -4,14 +4,17 @@ import {ProductsSection} from "../ProductsSection/ProductsSection";
 import {Testimonials} from "../Testimonials/Testimonials";
 import {Footer} from "../Footer/Footer";
 import {Header} from "../Header/Header";
+import {CartContextProvider} from "../Cart/CartContext";
 
 
 const App = () => {
     return (
         <>
-            <Header/>
-            <MainLanding/>
-            <ProductsSection/>
+            <CartContextProvider>
+                <Header/>
+                <MainLanding/>
+                <ProductsSection/>
+            </CartContextProvider>
             <Testimonials/>
             <Footer/>
         </>

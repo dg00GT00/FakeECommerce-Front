@@ -1,7 +1,6 @@
 import React from 'react';
 import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
 import AccountBoxRoundedIcon from '@material-ui/icons/AccountBoxRounded';
-import ShoppingCartRounded from "@material-ui/icons/ShoppingCartRounded";
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import styles from "./HeaderMobile.module.scss";
@@ -9,6 +8,7 @@ import {ReactComponent as Logo} from "../../Assets/eCommerceFooter.svg";
 
 import {Fade, Menu, MenuItem} from "@material-ui/core";
 import {HeaderProps} from "../HeaderProps";
+import {CartDefault} from "../../Cart/CartDefault";
 
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -47,7 +47,7 @@ export const HeaderMobile: React.FunctionComponent<HeaderProps> = props => {
                     <MenuItem>{props.signup}</MenuItem>
                 </Menu>
                 <div className={styles.menu_actions}>
-                    <ShoppingCartRounded className={styles.cart}/>
+                    <CartDefault className={styles.cart} color={"inherit"}/>
                     <AccountBoxRoundedIcon className={styles.account} onClick={handleProfileMenuOpen}/>
                 </div>
             </Toolbar>

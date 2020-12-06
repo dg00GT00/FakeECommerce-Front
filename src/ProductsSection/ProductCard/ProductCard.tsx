@@ -10,6 +10,7 @@ import CardHeader from "@material-ui/core/CardHeader";
 import styles from "./ProductCard.module.scss";
 import {ReactComponent as CartArrowDown} from "../../Assets/cartArrowDown.svg";
 import {ButtonBase, useTheme} from "@material-ui/core";
+import {CartContext} from "../../Cart/CartContext";
 
 
 const useStyles = makeStyles({
@@ -25,28 +26,33 @@ const useStyles = makeStyles({
 });
 
 type HighlightProductType = {
-    outerContainer: { [i: string]: string, backgroundColor: string },
-    innerContainer: { [i: string]: string, backgroundColor: string },
+    outerContainer?: { [i: string]: string, backgroundColor: string },
+    innerContainer?: { [i: string]: string, backgroundColor: string },
 }
 
-type CardHighlight = {
+type CardHighlightType = {
     backgroundColor?: string,
     fill?: string,
     color?: string,
 }
 
-// TODO: Adjust the size of the card when in cellular phone mode
 export const ProductCard: React.FunctionComponent = () => {
-    const [highlighted, setHighlight] = React.useState<HighlightProductType>()
-    const [cardColor, setCardColor] = React.useState<CardHighlight>({})
+    const cartContext = React.useContext(CartContext);
+    let [isProductSelected, selectProduct] = React.useState(false);
+    const [productHighlighted, setProductHighlight] = React.useState<HighlightProductType | undefined>();
+    const [cardHighlighted, setCardHighlight] = React.useState<CardHighlightType | undefined>();
 
     const theme = useTheme();
-    const primaryColor = theme.palette.primary.main;
+    const cardHeaderStyle = useStyles();
 
-    const productHighlighted: HighlightProductType = {
+    const primaryColor = theme.palette.primary.main;
+    const secondaryLight = theme.palette.secondary.light;
+    const white = theme.palette.common.white;
+
+    const productHighlightedStyle: HighlightProductType = {
         outerContainer: {
             borderRadius: "4px",
-            backgroundColor: theme.palette.secondary.light,
+            backgroundColor: secondaryLight,
         },
         innerContainer: {
             transform: "scale(.988)",
@@ -55,44 +61,39 @@ export const ProductCard: React.FunctionComponent = () => {
         },
     }
 
-    let cardHighlighted: CardHighlight = {
+    const cardHighlightedStyle: CardHighlightType = {
         backgroundColor: primaryColor,
-        fill: theme.palette.common.white,
-        color: theme.palette.common.white,
+        fill: white,
+        color: white,
     }
 
-    const cardHeaderStyle = useStyles();
+    const productManager = (): void => {
+        if (isProductSelected) {
+            setProductHighlight(productHighlightedStyle);
+            setCardHighlight(cardHighlightedStyle);
+            cartContext.increaseAmount();
+        } else {
+            setProductHighlight({});
+            setCardHighlight({});
+            cartContext.decreaseAmount();
+        }
+    }
 
-    const selectProduct = () => {
-        setHighlight(prevHighlight => {
-            if (!prevHighlight) {
-                return productHighlighted;
-            }
-            if (prevHighlight.outerContainer.backgroundColor !== primaryColor) {
-                return {
-                    outerContainer: {...prevHighlight.outerContainer, backgroundColor: primaryColor},
-                    innerContainer: {...prevHighlight.innerContainer, backgroundColor: primaryColor}
-                }
-            }
-            if (prevHighlight.outerContainer.backgroundColor === primaryColor) {
-                return productHighlighted;
-            }
-        })
-        setCardColor(prevHighlight => {
-            if (Object.keys(prevHighlight).length !== 0) {
-                cardHighlighted = {}
-            }
-            return cardHighlighted
-        })
+    const toggleProductSelection = () => {
+        selectProduct(prevState => {
+            isProductSelected = !prevState
+            productManager();
+            return isProductSelected;
+        });
     }
 
     return (
-        <div style={highlighted?.outerContainer}>
-            <div style={highlighted?.innerContainer}>
+        <div style={productHighlighted?.outerContainer}>
+            <div style={productHighlighted?.innerContainer}>
                 <Card className={styles.card}>
                     <CardHeader title={"Product Title"}
                                 className={[cardHeaderStyle.root, styles.card_title].join(" ")}
-                                style={cardColor}
+                                style={cardHighlighted}
                                 action={
                                     <ShareRounded/>
                                 } disableTypography>
@@ -106,10 +107,10 @@ export const ProductCard: React.FunctionComponent = () => {
                             </p>
                         </CardContent>
                     </CardActionArea>
-                    <CardActions className={styles.card_actions} style={cardColor}>
+                    <CardActions className={styles.card_actions} style={cardHighlighted}>
                         <div className={styles.price}>$ 100.00</div>
-                        <ButtonBase className={styles.cart_arrow_down_button} onClick={selectProduct}>
-                            <CartArrowDown className={styles.cart_arrow_down} style={cardColor}/>
+                        <ButtonBase className={styles.cart_arrow_down_button} onClick={toggleProductSelection}>
+                            <CartArrowDown className={styles.cart_arrow_down} style={cardHighlighted}/>
                         </ButtonBase>
                     </CardActions>
                 </Card>
