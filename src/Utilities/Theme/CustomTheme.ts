@@ -3,7 +3,8 @@ import red from '@material-ui/core/colors/red';
 import createMuiTheme from '@material-ui/core/styles/createMuiTheme';
 
 type ComplementaryColorsType = {
-    tertiary: { main: string }
+    tertiary: { main: string },
+    contrast: string
 }
 
 // A custom theme for this app
@@ -36,5 +37,6 @@ export const customTheme = createMuiTheme({
 export const ComplementaryColors: ComplementaryColorsType = {
     tertiary: {
         main: "#EDEDED"
-    }
+    },
+    contrast: "#00FF7C"
 }
