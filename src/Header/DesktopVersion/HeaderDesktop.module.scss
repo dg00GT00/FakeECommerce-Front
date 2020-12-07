@@ -19,7 +19,10 @@
                 display: inline-block;
             }
             .cart {
-                font-size: 2.7rem;
+                svg {
+                    width: 40px;
+                    height: auto;
+                }
             }
         }
     }
