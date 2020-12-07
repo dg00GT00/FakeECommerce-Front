@@ -7,15 +7,15 @@ import {ProductNavigation} from "./ProductNavigation/ProductNavigation";
 import {CartContext} from "../Cart/CartContext";
 import {FloatingCart} from "../Cart/FloatingCart";
 import {ProductPagination} from "./ProductPagination/ProductPagination";
-import {ProductApi} from "../HttpRequests/AxiosInstance";
-import {FullProductType} from "../Utilities/ProductDtos/FullProductDto";
-import {ProductCardMapper} from "../Utilities/Mappers/ProductCardMapper";
+import {ProductRequestManager} from "../HttpRequests/ProductsRequests";
 
 const useStyles = makeStyles(theme => createStyles({
     root: {
         backgroundColor: theme.palette.primary.main
     }
 }))
+
+const productRequest = new ProductRequestManager(12);
 
 export const ProductsSection: React.FunctionComponent = () => {
     const style = useStyles();
@@ -26,20 +26,19 @@ export const ProductsSection: React.FunctionComponent = () => {
     const floatingCart = React.useRef<JSX.Element | null>(null);
 
     React.useEffect(() => {
-        ProductApi
-            .get<FullProductType>("/Products?PageSize=12")
-            .then(product => {
-                const productGridItems = ProductCardMapper(product.data)
-                    .map(product => {
-                        const {name, description, pictureUrl, price, id} = product
-                        return <ProductCard
-                            key={id}
-                            name={name}
-                            description={description}
-                            pictureUrl={pictureUrl}
-                            price={price}/>
-                    })
-                setProductGrid(productGridItems);
+        productRequest
+            .getFullProductList()
+            .then(productList => {
+                const productItems = productList?.map(product => {
+                    const {name, description, pictureUrl, price, id} = product
+                    return <ProductCard
+                        key={id}
+                        name={name}
+                        description={description}
+                        pictureUrl={pictureUrl}
+                        price={price}/>
+                })
+                setProductGrid(productItems ? productItems : null);
             })
     }, [])
 

@@ -1,9 +1,9 @@
 import {FullProductType} from "../ProductDtos/FullProductDto";
 import {ProductCardProps} from "../ProductProps/ProductCardProps";
 
-type ProductCartType = ProductCardProps & {id: number}
+export type ProductCartType = ProductCardProps & {id: number}
 
-export const ProductCardMapper = (fullProduct: FullProductType): ProductCartType[] => {
+export const productCardMapper = (fullProduct: FullProductType): ProductCartType[] => {
     return fullProduct.data.map(product => {
         return {
             id: product.id,
