@@ -7,23 +7,36 @@
 
     .card_action_area {
         flex: 1;
+        padding: 0 16px;
         display: flex;
         flex-direction: column;
-        justify-content: space-between;
+        justify-content: center;
+
+        .card_content {
+            max-height: 100px;
+            overflow: hidden;
+            padding: 8px 0 0 0;
+        }
     }
 
     p {
-        font-size: .8rem;
+        font-size: .7rem;
     }
 
     .media {
-        height: 140px;
+        height: 275px;
+        width: 100%;
+        background-size: contain;
     }
 
     .card_title {
         font-size: 1rem;
         font-weight: bold;
         width: 100%;
+        div {
+            max-height: 30px;
+            overflow: hidden;
+        }
     }
 
     .card_actions {

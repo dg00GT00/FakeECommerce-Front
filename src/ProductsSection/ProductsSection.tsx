@@ -7,6 +7,9 @@ import {ProductNavigation} from "./ProductNavigation/ProductNavigation";
 import {CartContext} from "../Cart/CartContext";
 import {FloatingCart} from "../Cart/FloatingCart";
 import {ProductPagination} from "./ProductPagination/ProductPagination";
+import {ProductApi} from "../HttpRequests/AxiosInstance";
+import {FullProductType} from "../Utilities/ProductDtos/FullProductDto";
+import {ProductCardMapper} from "../Utilities/Mappers/ProductCardMapper";
 
 const useStyles = makeStyles(theme => createStyles({
     root: {
@@ -18,9 +21,26 @@ export const ProductsSection: React.FunctionComponent = () => {
     const style = useStyles();
     const productContext = React.useContext(CartContext);
     const [_, setCartStyle] = React.useState({});
+    const [productGridItems, setProductGrid] = React.useState<JSX.Element[] | null>(null);
 
-    const productGridItems = Array.from(Array(12), (_, index) => <ProductCard key={index}/>)
     const floatingCart = React.useRef<JSX.Element | null>(null);
+
+    React.useEffect(() => {
+        ProductApi
+            .get<FullProductType>("/Products?PageSize=12")
+            .then(product => {
+                const productGridItems = ProductCardMapper(product.data)
+                    .map(product => {
+                        const {name, description, pictureUrl, price} = product
+                        return <ProductCard
+                            name={name}
+                            description={description}
+                            pictureUrl={pictureUrl}
+                            price={price}/>
+                    })
+                setProductGrid(productGridItems);
+            })
+    }, [])
 
     React.useEffect(() => {
         const cartStyle = {

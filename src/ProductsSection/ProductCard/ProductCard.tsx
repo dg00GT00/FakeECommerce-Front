@@ -11,6 +11,7 @@ import styles from "./ProductCard.module.scss";
 import {ReactComponent as CartArrowDown} from "../../Assets/cartArrowDown.svg";
 import {ButtonBase, useTheme} from "@material-ui/core";
 import {CartContext} from "../../Cart/CartContext";
+import {ProductCardProps} from '../../Utilities/ProductProps/ProductCardProps';
 
 
 const useStyles = makeStyles({
@@ -36,7 +37,7 @@ type CardHighlightType = {
     color?: string,
 }
 
-export const ProductCard: React.FunctionComponent = () => {
+export const ProductCard: React.FunctionComponent<ProductCardProps> = props => {
     const cartContext = React.useContext(CartContext);
     let [isProductSelected, selectProduct] = React.useState(false);
     const [productHighlighted, setProductHighlight] = React.useState<HighlightProductType | undefined>();
@@ -67,7 +68,7 @@ export const ProductCard: React.FunctionComponent = () => {
         color: white,
     }
 
-    const productManager = (): void => {
+    const productSelectionManager = (): void => {
         if (isProductSelected) {
             setProductHighlight(productHighlightedStyle);
             setCardHighlight(cardHighlightedStyle);
@@ -82,7 +83,7 @@ export const ProductCard: React.FunctionComponent = () => {
     const toggleProductSelection = () => {
         selectProduct(prevState => {
             isProductSelected = !prevState
-            productManager();
+            productSelectionManager();
             return isProductSelected;
         });
     }
@@ -91,7 +92,7 @@ export const ProductCard: React.FunctionComponent = () => {
         <div style={productHighlighted?.outerContainer}>
             <div style={productHighlighted?.innerContainer}>
                 <Card className={styles.card}>
-                    <CardHeader title={"Product Title"}
+                    <CardHeader title={props.name}
                                 className={[cardHeaderStyle.root, styles.card_title].join(" ")}
                                 style={cardHighlighted}
                                 action={
@@ -99,16 +100,15 @@ export const ProductCard: React.FunctionComponent = () => {
                                 } disableTypography>
                     </CardHeader>
                     <CardActionArea className={styles.card_action_area}>
-                        <CardMedia className={styles.media} title="Placeholder"/>
-                        <CardContent>
+                        <CardMedia className={styles.media} image={props.pictureUrl}/>
+                        <CardContent className={styles.card_content}>
                             <p>
-                                Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging
-                                across all continents except Antarctica
+                                {props.description}
                             </p>
                         </CardContent>
                     </CardActionArea>
                     <CardActions className={styles.card_actions} style={cardHighlighted}>
-                        <div className={styles.price}>$ 100.00</div>
+                        <div className={styles.price}>{`$ ${props.price}`}</div>
                         <ButtonBase className={styles.cart_arrow_down_button} onClick={toggleProductSelection}>
                             <CartArrowDown className={styles.cart_arrow_down} style={cardHighlighted}/>
                         </ButtonBase>
