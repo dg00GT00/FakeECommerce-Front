@@ -6,6 +6,7 @@ import {createStyles, makeStyles} from "@material-ui/core/styles";
 import {ProductNavigation} from "./ProductNavigation/ProductNavigation";
 import {CartContext} from "../Cart/CartContext";
 import {FloatingCart} from "../Cart/FloatingCart";
+import {ProductPagination} from "./ProductPagination/ProductPagination";
 
 const useStyles = makeStyles(theme => createStyles({
     root: {
@@ -57,6 +58,9 @@ export const ProductsSection: React.FunctionComponent = () => {
                 <div className={styles.floating_cart}>
                     {floatingCart.current}
                 </div>
+            </div>
+            <div className={[styles.pagination, style.root].join(" ")}>
+                <ProductPagination/>
             </div>
         </section>
     )

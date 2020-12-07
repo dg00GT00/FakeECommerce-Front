@@ -14,10 +14,10 @@
 
     .floating_cart {
         width: 7.5vw;
-        margin: 165px 0;
+        margin-top: 165px;
 
         @media (max-width: map-get($general-media-queries, "LAPTOP_1440")) {
-            margin: 240px 0;
+            margin-top: 240px;
         }
 
         button {
@@ -42,4 +42,11 @@
             justify-items: center;
         }
     }
+}
+
+.pagination {
+    height: 190px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
