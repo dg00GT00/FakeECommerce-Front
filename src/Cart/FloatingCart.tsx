@@ -18,12 +18,12 @@ const cartStyle = makeStyles((theme: Theme) => {
     })
 })
 
-export const FloatingCard: React.FunctionComponent = () => {
+export const FloatingCard: React.FunctionComponent<{style: {[i: string]: string | number}}> = props => {
     const cartContext = React.useContext(CartContext);
     const style = cartStyle();
 
     return (
-        <IconButton className={style.root} aria-label={"shopping cart"} color={"primary"}>
+        <IconButton className={style.root} aria-label={"shopping cart"} color={"primary"} style={props.style}>
             <Badge badgeContent={cartContext.amount}>
                 <ShoppingCartRounded/>
             </Badge>

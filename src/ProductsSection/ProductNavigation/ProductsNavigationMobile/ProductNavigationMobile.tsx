@@ -62,7 +62,7 @@ export const ProductNavigationMobile: React.FunctionComponent = () => {
         if (currentPosition.y > 0 && searchBarAnchor.current) {
             searchBarAnchor.current.style.boxShadow = "none"
         }
-    }, searchBarAnchor)
+    }, {element: searchBarAnchor})
 
     return (
         <div className={styles.mobile_filters_container}

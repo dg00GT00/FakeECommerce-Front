@@ -14,12 +14,33 @@ const useStyles = makeStyles(theme => createStyles({
 }))
 
 export const ProductsSection: React.FunctionComponent = () => {
-    const style = useStyles()
+    const style = useStyles();
     const productContext = React.useContext(CartContext);
+    const [_, setCartStyle] = React.useState({});
 
     const productGridItems = Array.from(Array(12), (_, index) => <ProductCard key={index}/>)
-    const floatingCard = productContext.amount > 0 ? <FloatingCard/> : null
+    const floatingCart = React.useRef<JSX.Element | null>(null);
 
+    React.useEffect(() => {
+        const cartStyle = {
+            position: "sticky",
+            top: document.documentElement.clientHeight / 2
+        }
+        setCartStyle(prevState => {
+            if (productContext.amount > 0) {
+                setCartStyle(_ => {
+                    floatingCart.current = <FloatingCard style={cartStyle}/>;
+                    return cartStyle;
+                });
+            }
+            if (productContext.amount === 0) {
+                setCartStyle(_ => {
+                    floatingCart.current = null;
+                    return {}
+                });
+            }
+        })
+    }, [productContext.amount])
 
     return (
         <section>
@@ -34,7 +55,7 @@ export const ProductsSection: React.FunctionComponent = () => {
                     </div>
                 </div>
                 <div className={styles.floating_cart}>
-                    {floatingCard}
+                    {floatingCart.current}
                 </div>
             </div>
         </section>
