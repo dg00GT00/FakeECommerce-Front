@@ -1,4 +1,4 @@
-import {MutableRefObject, useEffect, useLayoutEffect, useRef} from "react";
+import {DependencyList, MutableRefObject, useEffect, useLayoutEffect, useRef} from "react";
 
 interface IPosition {
     x: number;
@@ -19,8 +19,8 @@ const useIsomorphicLayoutEffect = isBrowser ? useLayoutEffect : useEffect;
 
 const getScrollPosition = ({
                                element,
-                               useWindow,
-                               boundingElement
+                               boundingElement,
+                               useWindow
                            }: { element?: ElementRef; boundingElement?: ElementRef; useWindow?: boolean; }): IPosition => {
     if (!isBrowser) {
         return zeroPosition;
@@ -30,7 +30,7 @@ const getScrollPosition = ({
         return {x: window.scrollX, y: window.scrollY};
     }
 
-    const targetPosition = (element?.current || document.body)?.getBoundingClientRect();
+    const targetPosition = (element?.current || document.body).getBoundingClientRect();
     const containerPosition = boundingElement?.current?.getBoundingClientRect();
 
     if (!targetPosition) {
@@ -45,18 +45,20 @@ const getScrollPosition = ({
 
 export const useScrollPosition = (
     effect: (props: IScrollProps) => void,
-    element?: ElementRef,
-    useWindow?: boolean,
-    wait?: number,
-    boundingElement?: ElementRef
+    {
+        element,
+        boundingElement,
+        wait,
+        useWindow,
+        deps
+    }: { element?: ElementRef, boundingElement?: ElementRef, wait?: number, useWindow?: boolean, deps?: DependencyList }
 ): void => {
-
-    const position = useRef(getScrollPosition({useWindow, boundingElement}));
+    const position = useRef(getScrollPosition({useWindow}));
 
     let throttleTimeout: number | null = null;
 
     const callBack = () => {
-        const currentPosition = getScrollPosition({element, useWindow, boundingElement});
+        const currentPosition = getScrollPosition({element, boundingElement, useWindow});
         effect({previousPosition: position.current, currentPosition});
         position.current = currentPosition;
         throttleTimeout = null;
@@ -76,22 +78,12 @@ export const useScrollPosition = (
         if (!isBrowser) {
             return undefined;
         }
-        if (boundingElement) {
-            boundingElement.current?.addEventListener("scroll", handleScroll, {passive: true});
-        } else {
-            window.addEventListener("scroll", handleScroll, {passive: true});
-        }
-
+        window.addEventListener("scroll", handleScroll, {passive: true});
         return () => {
-            if (boundingElement) {
-                boundingElement.current?.removeEventListener("scroll", handleScroll);
-            } else {
-                window.removeEventListener("scroll", handleScroll);
-            }
-
+            window.removeEventListener("scroll", handleScroll);
             if (throttleTimeout) {
                 clearTimeout(throttleTimeout);
             }
         };
-    });
+    }, deps);
 };
