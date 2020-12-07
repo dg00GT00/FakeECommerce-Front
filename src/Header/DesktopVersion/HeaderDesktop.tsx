@@ -13,7 +13,7 @@ export const HeaderDesktop: React.FunctionComponent<HeaderProps> = props => {
                 <ul>
                     <li>{props.login}</li>
                     <li>{props.signup}</li>
-                    <li><CartDefault className={styles.cart} color={"inherit"}/></li>
+                    <li><CartDefault classNameButton={styles.cart} colorButton={"inherit"}/></li>
                 </ul>
             </nav>
         </div>

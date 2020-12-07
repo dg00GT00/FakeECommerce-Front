@@ -47,7 +47,7 @@ export const HeaderMobile: React.FunctionComponent<HeaderProps> = props => {
                     <MenuItem>{props.signup}</MenuItem>
                 </Menu>
                 <div className={styles.menu_actions}>
-                    <CartDefault className={styles.cart} color={"inherit"}/>
+                    <CartDefault classNameButton={styles.cart} colorButton={"inherit"}/>
                     <AccountBoxRoundedIcon className={styles.account} onClick={handleProfileMenuOpen}/>
                 </div>
             </Toolbar>

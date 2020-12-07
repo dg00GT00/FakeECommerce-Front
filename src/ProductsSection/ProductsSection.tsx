@@ -4,8 +4,8 @@ import styles from "./ProductsSection.module.scss";
 import {ProductCard} from "./ProductCard/ProductCard";
 import {createStyles, makeStyles} from "@material-ui/core/styles";
 import {ProductNavigation} from "./ProductNavigation/ProductNavigation";
-import {FloatingCard} from "../Cart/FloatingCart";
 import {CartContext} from "../Cart/CartContext";
+import {FloatingCart} from "../Cart/FloatingCart";
 
 const useStyles = makeStyles(theme => createStyles({
     root: {
@@ -29,7 +29,7 @@ export const ProductsSection: React.FunctionComponent = () => {
         setCartStyle(prevState => {
             if (productContext.amount > 0) {
                 setCartStyle(_ => {
-                    floatingCart.current = <FloatingCard style={cartStyle}/>;
+                    floatingCart.current = <FloatingCart style={cartStyle}/>;
                     return cartStyle;
                 });
             }
