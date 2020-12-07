@@ -20,7 +20,7 @@ const useStyles = makeStyles(theme => createStyles({
 export const ProductsSection: React.FunctionComponent = () => {
     const style = useStyles();
     const productContext = React.useContext(CartContext);
-    const [_, setCartStyle] = React.useState({});
+    const setCartStyle = React.useState({})[1];
     const [productGridItems, setProductGrid] = React.useState<JSX.Element[] | null>(null);
 
     const floatingCart = React.useRef<JSX.Element | null>(null);
@@ -31,8 +31,9 @@ export const ProductsSection: React.FunctionComponent = () => {
             .then(product => {
                 const productGridItems = ProductCardMapper(product.data)
                     .map(product => {
-                        const {name, description, pictureUrl, price} = product
+                        const {name, description, pictureUrl, price, id} = product
                         return <ProductCard
+                            key={id}
                             name={name}
                             description={description}
                             pictureUrl={pictureUrl}
@@ -61,14 +62,14 @@ export const ProductsSection: React.FunctionComponent = () => {
                 });
             }
         })
-    }, [productContext.amount])
+    }, [setCartStyle, productContext.amount])
 
     return (
         <section>
             <LandingMarketing color={"secondary"}>
                 Take a look in our <span className={styles.fakeness}>Fakeness</span>
             </LandingMarketing>
-            <div className={[style.root, styles.grid_background].join(' ')}>
+            <div className={[style.root, styles.grid_background].join(" ")}>
                 <div className={styles.grid_container}>
                     <ProductNavigation/>
                     <div className={styles.grid_content}>
