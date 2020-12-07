@@ -10,11 +10,15 @@ import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
 import {InputBase, Paper, useTheme} from "@material-ui/core";
 import {useScrollPosition} from "../../../Utilities/useScrollPosition";
 import {ProductFilterDialog} from "./ProductDialog/ProductFilterDialog";
+import {CartDefault} from "../../../Cart/CartDefault";
 
 const seeMoreStyle = makeStyles((theme: Theme) => {
     return createStyles({
         root: {
-            fill: theme.palette.secondary.main
+            fill: theme.palette.secondary.main,
+        },
+        button: {
+            paddingRight: 0
         }
     })
 })
@@ -75,7 +79,9 @@ export const ProductNavigationMobile: React.FunctionComponent = () => {
                     </IconButton>
                     <InputBase placeholder={"Search"} fullWidth className={styles.input_search_bar}/>
                 </Paper>
+                <CartDefault classNameButton={styles.cart} hideWhenZero/>
                 <IconButton
+                    classes={{root: moreStyle.button}}
                     aria-label="more"
                     aria-controls="long-menu"
                     aria-haspopup="true"
