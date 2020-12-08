@@ -3,10 +3,11 @@ import {ProductRequestManager} from "../../HttpRequests/ProductsRequests";
 import {ProductCard} from "../ProductCard/ProductCard";
 import {ProductRouteValidation} from "../../Utilities/RouterValidation/ProductRouteValidation";
 
-const productRequest = new ProductRequestManager(12);
+// const productRequest = new ProductRequestManager(12);
 
 export const ProductGrid: React.FunctionComponent = () => {
     const [productGridItems, setProductGrid] = React.useState<React.FunctionComponentElement<typeof ProductRouteValidation> | null>(null);
+    const productRequest = React.useRef(new ProductRequestManager(12)).current;
 
     React.useEffect(() => {
         productRequest
@@ -29,7 +30,7 @@ export const ProductGrid: React.FunctionComponent = () => {
                     )
                 });
             })
-    }, []);
+    }, [productRequest]);
 
     return <>{productGridItems}</>
 }

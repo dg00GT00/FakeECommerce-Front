@@ -2,12 +2,9 @@ import * as React from "react";
 import {LandingMarketing} from "../LandingMarketing/LandingMarketing";
 import styles from "./ProductsSection.module.scss";
 import {createStyles, makeStyles} from "@material-ui/core/styles";
-import {ProductNavigation} from "./ProductNavigation/ProductNavigation";
 import {CartContext} from "../Cart/CartContext";
 import {FloatingCart} from "../Cart/FloatingCart";
-import {ProductPagination} from "./ProductPagination/ProductPagination";
-import {Route} from "react-router-dom";
-import {ProductGrid} from "./ProductGrid/ProductGrid";
+import {ProductPaginationManager} from "./ProductPaginationManager/ProductPaginationManager";
 
 const useStyles = makeStyles(theme => createStyles({
     root: {
@@ -49,20 +46,10 @@ export const ProductsSection: React.FunctionComponent = () => {
                 Take a look in our <span className={styles.fakeness}>Fakeness</span>
             </LandingMarketing>
             <div className={[style.root, styles.grid_background].join(" ")}>
-                <div className={styles.grid_container}>
-                    <ProductNavigation/>
-                    <div className={styles.grid_content}>
-                        <Route path={"/products&page=:pageNumber"}>
-                            <ProductGrid/>
-                        </Route>
-                    </div>
-                </div>
+                <ProductPaginationManager/>
                 <div className={styles.floating_cart}>
                     {floatingCart.current}
                 </div>
-            </div>
-            <div className={[styles.pagination, style.root].join(" ")}>
-                <ProductPagination/>
             </div>
         </section>
     )

@@ -1,5 +1,5 @@
 import {ProductApi} from "./AxiosInstance";
-import {FullProductType} from "../Utilities/ProductDtos/FullProductDto";
+import {FullProductType} from "../Utilities/ProductModels/FullProductDto";
 import {productCardMapper, ProductCartType} from "../Utilities/Mappers/ProductCardMapper";
 
 export class ProductRequestManager {
