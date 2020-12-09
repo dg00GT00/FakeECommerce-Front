@@ -21,7 +21,7 @@ type RouteValidationProps = {
 }
 
 const RouteValidation: React.FunctionComponent<RouteComponentProps<{ pageNumber: string }> & RouteValidationProps> = props => {
-    if (props.validateHome !== undefined && !props.validateHome ) {
+    if (props.validateHome !== undefined && props.validateHome ) {
         if (!isPageNumber(props.match.params)) {
             return <NotFound/>
         } else {
