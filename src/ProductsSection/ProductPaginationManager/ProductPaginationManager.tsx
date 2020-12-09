@@ -2,10 +2,11 @@ import * as React from 'react';
 import {createStyles, makeStyles} from '@material-ui/core/styles';
 import Pagination from '@material-ui/lab/Pagination';
 import {ProductNavigation} from "../ProductNavigation/ProductNavigation";
-import {Route} from "react-router-dom";
+import {NavLink, Route} from "react-router-dom";
 import {ProductGrid} from "../ProductGrid/ProductGrid";
 import styles from "./ProductPaginationManager.module.scss";
-
+import {ProductRequestManager} from "../../HttpRequests/ProductsRequests";
+import {PaginationItem} from "@material-ui/lab";
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -24,9 +25,12 @@ const useStyles = makeStyles((theme) =>
     }),
 );
 
+const productReq = new ProductRequestManager();
+const {getFullProductList, getProductPageAmount} = productReq;
+
 export const ProductPaginationManager = () => {
     const style = useStyles();
-    const [page, setPage] = React.useState(1);
+    const [pageNumber, setPage] = React.useState(1);
 
     const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
         setPage(value);
@@ -36,17 +40,25 @@ export const ProductPaginationManager = () => {
         <div className={styles.grid_container}>
             <ProductNavigation/>
             <div className={styles.grid_content}>
-                <Route path={"/products&page=:pageNumber"}>
-                    <ProductGrid/>
+                <Route path={`/products&page=:pageNumber`}>
+                    <ProductGrid productRequest={getFullProductList.bind(productReq, 12, pageNumber)}
+                                 pageAmount={getProductPageAmount.bind(productReq)}/>
                 </Route>
             </div>
             <Pagination size={"large"}
                         showFirstButton
                         showLastButton
                         count={10}
-                        page={page}
+                        page={pageNumber}
                         onChange={handleChange}
-                        className={[style.root, styles.pagination].join(" ")}/>
+                        className={[style.root, styles.pagination].join(" ")}
+                        renderItem={params => (
+                            <PaginationItem
+                                component={NavLink}
+                                to={`/products&page=${params.page}`}
+                                {...params}/>
+                        )}
+            />
         </div>
-    );
+    )
 }

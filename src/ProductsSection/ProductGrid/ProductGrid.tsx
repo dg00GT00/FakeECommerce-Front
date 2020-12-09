@@ -1,17 +1,19 @@
 import * as React from "react";
-import {ProductRequestManager} from "../../HttpRequests/ProductsRequests";
 import {ProductCard} from "../ProductCard/ProductCard";
 import {ProductRouteValidation} from "../../Utilities/RouterValidation/ProductRouteValidation";
+import {ProductCartType} from "../../Utilities/Mappers/ProductCardMapper";
 
-// const productRequest = new ProductRequestManager(12);
+type ProductGridProps = {
+    pageAmount: () => number,
+    productRequest: () => Promise<ProductCartType[] | null>
+}
 
-export const ProductGrid: React.FunctionComponent = () => {
+export const ProductGrid: React.FunctionComponent<ProductGridProps> = props => {
     const [productGridItems, setProductGrid] = React.useState<React.FunctionComponentElement<typeof ProductRouteValidation> | null>(null);
-    const productRequest = React.useRef(new ProductRequestManager(12)).current;
+    const {productRequest, pageAmount} = props;
 
     React.useEffect(() => {
-        productRequest
-            .getFullProductList()
+        productRequest()
             .then(productList => {
                 const productItems = productList?.map(product => {
                     const {name, description, pictureUrl, price, id} = product
@@ -24,13 +26,13 @@ export const ProductGrid: React.FunctionComponent = () => {
                 })
                 setProductGrid(_ => {
                     return (
-                        <ProductRouteValidation pageAmount={productRequest.getPageAmount()}>
+                        <ProductRouteValidation pageAmount={pageAmount()}>
                             {productItems}
                         </ProductRouteValidation>
                     )
                 });
             })
-    }, [productRequest]);
+    }, [pageAmount, productRequest]);
 
     return <>{productGridItems}</>
 }
