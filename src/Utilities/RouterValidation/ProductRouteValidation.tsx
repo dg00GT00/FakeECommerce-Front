@@ -16,16 +16,19 @@ const filterInt = (value: string): number | typeof NaN => {
 }
 
 type RouteValidationProps = {
-    pageAmount: number
+    pageAmount: number,
+    validateHome?: boolean
 }
 
-const RouteValidation: React.FunctionComponent<RouteComponentProps<{pageNumber: string}> & RouteValidationProps> = props => {
-    if (!isPageNumber(props.match.params)) {
-        return <NotFound/>
-    } else {
-        const pageNumber = filterInt(props.match.params.pageNumber);
-        if (isNaN(pageNumber) || pageNumber > props.pageAmount || pageNumber === 0) {
+const RouteValidation: React.FunctionComponent<RouteComponentProps<{ pageNumber: string }> & RouteValidationProps> = props => {
+    if (props.validateHome !== undefined && !props.validateHome ) {
+        if (!isPageNumber(props.match.params)) {
             return <NotFound/>
+        } else {
+            const pageNumber = filterInt(props.match.params.pageNumber);
+            if (isNaN(pageNumber) || pageNumber > props.pageAmount || pageNumber === 0) {
+                return <NotFound/>
+            }
         }
     }
     return <>{props.children}</>

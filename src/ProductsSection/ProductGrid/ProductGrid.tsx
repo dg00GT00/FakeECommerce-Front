@@ -4,11 +4,12 @@ import {ProductRouteValidation} from "../../Utilities/RouterValidation/ProductRo
 import {ProductCartType} from "../../Utilities/Mappers/ProductCardMapper";
 
 type ProductGridProps = {
+    validateHome?: boolean,
     pageAmount: () => number,
     productRequest: () => Promise<ProductCartType[] | null>
 }
 
-export const ProductGrid: React.FunctionComponent<ProductGridProps> = props => {
+export const ProductGrid: React.FunctionComponent<ProductGridProps> = ({validateHome = true, ...props}) => {
     const [productGridItems, setProductGrid] = React.useState<React.FunctionComponentElement<typeof ProductRouteValidation> | null>(null);
     const {productRequest, pageAmount} = props;
 
@@ -16,17 +17,11 @@ export const ProductGrid: React.FunctionComponent<ProductGridProps> = props => {
         productRequest()
             .then(productList => {
                 const productItems = productList?.map(product => {
-                    const {name, description, pictureUrl, price, id} = product
-                    return <ProductCard
-                        key={id}
-                        name={name}
-                        description={description}
-                        pictureUrl={pictureUrl}
-                        price={price}/>
+                    return <ProductCard {...product}/>
                 })
                 setProductGrid(_ => {
                     return (
-                        <ProductRouteValidation pageAmount={pageAmount()}>
+                        <ProductRouteValidation validateHome pageAmount={pageAmount()}>
                             {productItems}
                         </ProductRouteValidation>
                     )
