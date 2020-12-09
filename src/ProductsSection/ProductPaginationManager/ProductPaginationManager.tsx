@@ -14,7 +14,7 @@ const useStyles = makeStyles((theme) =>
             "& svg": {
                 fill: theme.palette.common.white
             },
-            "& button, div": {
+            "& button, a": {
                 color: theme.palette.common.white
             },
             "& .Mui-selected": {
@@ -40,9 +40,10 @@ export const ProductPaginationManager = () => {
         <div className={styles.grid_container}>
             <ProductNavigation/>
             <div className={styles.grid_content}>
-                <Route path={`/products&page=:pageNumber`}>
-                    <ProductGrid productRequest={getFullProductList.bind(productReq, 12, pageNumber)}
+                <Route path={`/products&page=:pageNumber`} render={({match}) => (
+                    <ProductGrid productRequest={getFullProductList.bind(productReq, 12, match.params.pageNumber)}
                                  pageAmount={getProductPageAmount.bind(productReq)}/>
+                )}>
                 </Route>
             </div>
             <Pagination size={"large"}

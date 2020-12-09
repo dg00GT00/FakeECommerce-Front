@@ -19,7 +19,7 @@ type RouteValidationProps = {
     pageAmount: number
 }
 
-const RouteValidation: React.FunctionComponent<RouteComponentProps & RouteValidationProps> = props => {
+const RouteValidation: React.FunctionComponent<RouteComponentProps<{pageNumber: string}> & RouteValidationProps> = props => {
     if (!isPageNumber(props.match.params)) {
         return <NotFound/>
     } else {
