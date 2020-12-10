@@ -3,15 +3,22 @@ import {ProductCard} from "../ProductCard/ProductCard";
 import {NotFound} from "../../Utilities/RouterValidation/NotFound";
 import {ProductsContext} from "../ProductContext/ProductsContext";
 import {ProductGridSkeleton} from "../ProductGridSkeleton/ProductGridSkeleton";
+import {RouteComponentProps, withRouter} from "react-router-dom";
 
 type GridItemsType =
     React.FunctionComponentElement<typeof ProductCard>[]
     | React.FunctionComponentElement<typeof NotFound>;
 
-export const ProductGridItems: React.FunctionComponent<{ pageNumber: number }> = ({pageNumber}) => {
-    const {productReq, setPageCount, setPageNumber} = React.useContext(ProductsContext);
+const ProductGrid: React.FunctionComponent<RouteComponentProps & { pageNumber: number }> = ({pageNumber, ...props}) => {
+    const {productReq, setPageCount, setPageNumber, checkHomePageToggle} = React.useContext(ProductsContext);
     const [productGridItems, setProductGrid] = React.useState<GridItemsType | null>(null);
     const [isLoading, toggleLoading] = React.useState(true);
+
+    if (props.location.pathname === "/") {
+        checkHomePageToggle(true);
+    } else {
+        checkHomePageToggle(false);
+    }
 
     React.useEffect(() => {
         productReq
@@ -32,3 +39,5 @@ export const ProductGridItems: React.FunctionComponent<{ pageNumber: number }> =
 
     return <>{isLoading ? <ProductGridSkeleton skeletonItems={productReq.pageSize}/> : productGridItems}</>
 }
+
+export const ProductGridItems = withRouter(ProductGrid);

@@ -27,14 +27,17 @@ const useStyles = makeStyles((theme) =>
 
 export const ProductPaginationManager: React.FunctionComponent = () => {
     const style = useStyles();
-    const {pageCount, pageNumber: urlPageNumber} = React.useContext(ProductsContext);
+    const {pageCount, isHomePage, pageNumber: urlPageNumber} = React.useContext(ProductsContext);
     const [pageNumber, setPageNumber] = React.useState(1);
     const [scrollToGrid, setScroll] = React.useState(false);
 
     React.useEffect(() => {
-        const timer = setTimeout(handleScrollGridItems, 300);
+        let timer: NodeJS.Timeout;
+        if (!isHomePage){
+            timer = setTimeout(handleScrollGridItems, 300);
+        }
         return () => clearTimeout(timer);
-    }, [scrollToGrid])
+    }, [scrollToGrid, isHomePage])
 
     const handleScrollGridItems = () => {
         const productFiltersBar = document.getElementById("productsContent");
