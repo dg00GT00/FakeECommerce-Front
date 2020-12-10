@@ -6,7 +6,7 @@
     position: relative;
 
     .grid_content {
-        height: 1580px;
+        min-height: 1580px;
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
         grid-row-gap: 40px;

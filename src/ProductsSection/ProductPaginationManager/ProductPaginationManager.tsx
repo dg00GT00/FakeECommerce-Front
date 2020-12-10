@@ -32,12 +32,14 @@ export const ProductPaginationManager: React.FunctionComponent = () => {
 
     const handleChange = (event: React.ChangeEvent<unknown>, value: number): void => {
         setPageNumber(value);
+        const productFiltersBar = document.getElementById("productsContent");
+        productFiltersBar?.scrollIntoView({behavior: "smooth"});
     };
 
     return (
         <div className={styles.grid_container}>
             <ProductNavigation/>
-            <div className={styles.grid_content}>
+            <div className={styles.grid_content} id={"productsContent"}>
                 <Route exact path={"/"}>
                     <ProductGridItems pageNumber={pageNumber}/>
                 </Route>
