@@ -19,7 +19,13 @@ export const ProductsContextProvider: React.FunctionComponent = props => {
 
     return (
         <ProductsContext.Provider
-            value={{productReq: productRequest, pageCount, setPageCount, pageNumber, setPageNumber}}>
+            value={{
+                productReq: productRequest,
+                pageCount,
+                setPageCount,
+                pageNumber,
+                setPageNumber
+            }}>
             {props.children}
         </ProductsContext.Provider>
     )

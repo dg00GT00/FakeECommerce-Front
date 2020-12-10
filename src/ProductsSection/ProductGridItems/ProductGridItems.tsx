@@ -2,6 +2,7 @@ import * as React from "react";
 import {ProductCard} from "../ProductCard/ProductCard";
 import {NotFound} from "../../Utilities/RouterValidation/NotFound";
 import {ProductsContext} from "../ProductContext/ProductsContext";
+import {ProductGridSkeleton} from "../ProductGridSkeleton/ProductGridSkeleton";
 
 type GridItemsType =
     React.FunctionComponentElement<typeof ProductCard>[]
@@ -10,6 +11,7 @@ type GridItemsType =
 export const ProductGridItems: React.FunctionComponent<{ pageNumber: number }> = ({pageNumber}) => {
     const {productReq, setPageCount, setPageNumber} = React.useContext(ProductsContext);
     const [productGridItems, setProductGrid] = React.useState<GridItemsType | null>(null);
+    const [isLoading, toggleLoading] = React.useState(true);
 
     React.useEffect(() => {
         productReq
@@ -20,6 +22,7 @@ export const ProductGridItems: React.FunctionComponent<{ pageNumber: number }> =
                 })
                 setPageCount(productReq.getProductPageAmount());
                 setPageNumber(pageNumber);
+                toggleLoading(false);
                 setProductGrid(productItems ?? null);
             })
             .catch(() => {
@@ -27,5 +30,5 @@ export const ProductGridItems: React.FunctionComponent<{ pageNumber: number }> =
             })
     }, [productReq, pageNumber, setPageCount, setPageNumber]);
 
-    return <>{productGridItems}</>
+    return <>{isLoading ? <ProductGridSkeleton skeletonItems={productReq.pageSize}/> : productGridItems}</>
 }

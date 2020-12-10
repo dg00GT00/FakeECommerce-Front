@@ -6,7 +6,7 @@ import {productCardMapper, ProductCartType} from "../Utilities/Mappers/ProductCa
 export class ProductRequestManager {
     private productAmount = 0
 
-    constructor(private pageSize: number) {
+    constructor(public pageSize: number) {
     }
 
     public async getFullProductList(pageIndex: number): Promise<ProductCartType[] | null> {
