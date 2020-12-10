@@ -27,13 +27,23 @@ const useStyles = makeStyles((theme) =>
 
 export const ProductPaginationManager: React.FunctionComponent = () => {
     const style = useStyles();
-    const {pageCount, pageNumber: routePageNumber} = React.useContext(ProductsContext);
+    const {pageCount, pageNumber: urlPageNumber} = React.useContext(ProductsContext);
     const [pageNumber, setPageNumber] = React.useState(1);
+    const [scrollToGrid, setScroll] = React.useState(false);
+
+    React.useEffect(() => {
+        const timer = setTimeout(handleScrollGridItems, 300);
+        return () => clearTimeout(timer);
+    }, [scrollToGrid])
+
+    const handleScrollGridItems = () => {
+        const productFiltersBar = document.getElementById("productsContent");
+        productFiltersBar?.scrollIntoView({behavior: "smooth"});
+    }
 
     const handleChange = (event: React.ChangeEvent<unknown>, value: number): void => {
         setPageNumber(value);
-        const productFiltersBar = document.getElementById("productsContent");
-        productFiltersBar?.scrollIntoView({behavior: "smooth"});
+        setScroll(prevState => !prevState);
     };
 
     return (
@@ -51,7 +61,7 @@ export const ProductPaginationManager: React.FunctionComponent = () => {
                         showFirstButton
                         showLastButton
                         count={pageCount}
-                        page={routePageNumber || pageNumber}
+                        page={urlPageNumber || pageNumber}
                         onChange={handleChange}
                         className={[style.root, styles.pagination].join(" ")}
                         renderItem={params => (
