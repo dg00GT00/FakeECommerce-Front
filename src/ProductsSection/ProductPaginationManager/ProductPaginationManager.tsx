@@ -7,6 +7,8 @@ import {NavLink, Route} from "react-router-dom";
 import {createStyles, makeStyles} from "@material-ui/core/styles";
 import {ProductsContext} from "../ProductContext/ProductsContext";
 import {ProductGridItems} from "../ProductGridItems/ProductGridItems";
+import {handleScrollGridItems, PRODUCT_GRID_ID} from "../../Utilities/ProductGridScroll";
+
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -39,11 +41,6 @@ export const ProductPaginationManager: React.FunctionComponent = () => {
         return () => clearTimeout(timer);
     }, [scrollToGrid, isHomePage])
 
-    const handleScrollGridItems = () => {
-        const productFiltersBar = document.getElementById("productsContent");
-        productFiltersBar?.scrollIntoView({behavior: "smooth"});
-    }
-
     const handleChange = (event: React.ChangeEvent<unknown>, value: number): void => {
         setPageNumber(value);
         setScroll(prevState => !prevState);
@@ -52,7 +49,7 @@ export const ProductPaginationManager: React.FunctionComponent = () => {
     return (
         <div className={styles.grid_container}>
             <ProductNavigation/>
-            <div className={styles.grid_content} id={"productsContent"}>
+            <div className={styles.grid_content} id={PRODUCT_GRID_ID}>
                 <Route exact path={"/"}>
                     <ProductGridItems pageNumber={pageNumber}/>
                 </Route>
