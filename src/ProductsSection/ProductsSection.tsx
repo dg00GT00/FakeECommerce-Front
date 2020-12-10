@@ -5,6 +5,7 @@ import {createStyles, makeStyles} from "@material-ui/core/styles";
 import {CartContext} from "../Cart/CartContext";
 import {FloatingCart} from "../Cart/FloatingCart";
 import {ProductPaginationManager} from "./ProductPaginationManager/ProductPaginationManager";
+import {ProductsContextProvider} from "./ProductContext/ProductsContext";
 
 const useStyles = makeStyles(theme => createStyles({
     root: {
@@ -45,12 +46,14 @@ export const ProductsSection: React.FunctionComponent = () => {
             <LandingMarketing color={"secondary"}>
                 Take a look in our <span className={styles.fakeness}>Fakeness</span>
             </LandingMarketing>
-            <div className={[style.root, styles.grid_background].join(" ")}>
-                <ProductPaginationManager/>
-                <div className={styles.floating_cart}>
-                    {floatingCart.current}
+            <ProductsContextProvider>
+                <div className={[style.root, styles.grid_background].join(" ")}>
+                    <ProductPaginationManager/>
+                    <div className={styles.floating_cart}>
+                        {floatingCart.current}
+                    </div>
                 </div>
-            </div>
+            </ProductsContextProvider>
         </section>
     )
 }

@@ -5,14 +5,13 @@ import {productCardMapper, ProductCartType} from "../Utilities/Mappers/ProductCa
 
 export class ProductRequestManager {
     private productAmount = 0
-    private pageSize = 0
 
-    public async getFullProductList(pageSize: number, pageIndex: number): Promise<ProductCartType[] | null> {
-        this.pageSize = pageSize;
-        const response = await ProductApi.get<FullProductType>(`/Products?PageSize=${pageSize}&PageIndex=${pageIndex}`);
-        if (!this.productAmount) {
-            this.productAmount = response.data.count;
-        }
+    constructor(private pageSize: number) {
+    }
+
+    public async getFullProductList(pageIndex: number): Promise<ProductCartType[] | null> {
+        const response = await ProductApi.get<FullProductType>(`/Products?PageSize=${this.pageSize}&PageIndex=${pageIndex}`);
+        this.productAmount = response.data.count;
         return (response.data.data.length === 0) ? null : productCardMapper(response.data);
     }
 
