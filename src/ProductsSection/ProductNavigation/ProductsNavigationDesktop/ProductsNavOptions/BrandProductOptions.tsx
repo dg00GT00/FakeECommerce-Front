@@ -4,6 +4,8 @@ import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import {ProductBrands} from "../../../../Utilities/ProductModels/ProductFilters";
+import {ProductFilterEnum} from "../../../ProductRouteManager/ProductRouteManager";
+import {useHistory} from "react-router-dom";
 
 
 const useFormStyles = makeStyles((theme: Theme) =>
@@ -34,11 +36,17 @@ export const BrandProductOptions: React.FunctionComponent<{ className: string }>
     const {className} = props
 
     const formStyles = useFormStyles();
+    const history = useHistory();
     const [brand, setBrand] = React.useState<number | undefined>(0);
     const formRef = React.useRef<HTMLDivElement>(null)
 
     const handleChange = (event: React.ChangeEvent<{ name?: string; value: unknown }>) => {
-        setBrand(event.target.value as number)
+        setBrand(event.target.value as number);
+        history.push({
+            pathname: '/products',
+            search: `brand=${event.target.value as number}`,
+            state: {filter: ProductFilterEnum.FilterBrand}
+        });
     };
 
     React.useEffect(() => {

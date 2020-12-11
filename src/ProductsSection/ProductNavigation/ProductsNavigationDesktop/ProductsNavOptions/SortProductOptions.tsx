@@ -4,6 +4,8 @@ import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import {ProductSortBy} from "../../../../Utilities/ProductModels/ProductFilters";
+import {useHistory} from "react-router-dom";
+import {ProductFilterEnum} from "../../../ProductRouteManager/ProductRouteManager";
 
 
 const useFormStyles = makeStyles((theme: Theme) =>
@@ -33,12 +35,18 @@ const useFormStyles = makeStyles((theme: Theme) =>
 export const SortProductOptions: React.FunctionComponent<{ className: string }> = props => {
     const {className} = props
 
+    const history = useHistory();
     const formStyles = useFormStyles();
     const [sortedBy, setSort] = React.useState<number | undefined>(undefined);
     const formRef = React.useRef<HTMLDivElement>(null);
 
     const handleChange = (event: React.ChangeEvent<{ name?: string; value: unknown }>) => {
         setSort(event.target.value as number);
+        history.push({
+            pathname: '/products',
+            search: `sort=${event.target.value as number}`,
+            state: {filter: ProductFilterEnum.FilterSort}
+        })
     };
 
     React.useEffect(() => {
@@ -60,8 +68,8 @@ export const SortProductOptions: React.FunctionComponent<{ className: string }> 
                 <option/>
                 <option value={ProductSortBy.NameAsc}>Product Name Alphabetically</option>
                 <option value={ProductSortBy.NameDesc}>Product Name Alphabetically Reverse</option>
-                <option value={ProductSortBy.PriceDesc}>Lower Price</option>
-                <option value={ProductSortBy.PriceAsc}>Higher Price</option>
+                <option value={ProductSortBy.PriceAsc}>Lower Price</option>
+                <option value={ProductSortBy.PriceDesc}>Higher Price</option>
             </Select>
         </FormControl>
     );
