@@ -9,18 +9,21 @@ type GridItemsType =
     React.FunctionComponentElement<typeof ProductCard>[]
     | React.FunctionComponentElement<typeof NotFound>;
 
-const ProductGrid: React.FunctionComponent<RouteComponentProps & { pageNumber: number }> = ({pageNumber, ...props}) => {
+const ProductGrid: React.FunctionComponent<RouteComponentProps & { pageNumber: number }> = ({
+                                                                                                pageNumber,
+                                                                                                location: {pathname},
+                                                                                            }) => {
     const {productReq, setPageCount, setPageNumber, checkHomePageToggle} = React.useContext(ProductsContext);
     const [productGridItems, setProductGrid] = React.useState<GridItemsType | null>(null);
     const [isLoading, toggleLoading] = React.useState(true);
 
-    if (props.location.pathname === "/") {
-        checkHomePageToggle(true);
-    } else {
-        checkHomePageToggle(false);
-    }
 
     React.useEffect(() => {
+        if (pathname === "/") {
+            checkHomePageToggle(true);
+        } else {
+            checkHomePageToggle(false);
+        }
         productReq
             .getFullProductList(pageNumber)
             .then(productList => {
@@ -30,12 +33,13 @@ const ProductGrid: React.FunctionComponent<RouteComponentProps & { pageNumber: n
                 setPageCount(productReq.getProductPageAmount());
                 setPageNumber(pageNumber);
                 toggleLoading(false);
-                setProductGrid(productItems ?? null);
+                setProductGrid(productItems ?? <NotFound/>);
             })
             .catch(() => {
+                toggleLoading(false);
                 setProductGrid(<NotFound/>);
             })
-    }, [productReq, pageNumber, setPageCount, setPageNumber]);
+    }, [pathname, productReq, pageNumber, setPageCount, setPageNumber, checkHomePageToggle]);
 
     return <>{isLoading ? <ProductGridSkeleton skeletonItems={productReq.pageSize}/> : productGridItems}</>
 }
