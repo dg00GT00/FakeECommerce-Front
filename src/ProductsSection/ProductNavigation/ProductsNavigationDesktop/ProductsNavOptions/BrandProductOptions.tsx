@@ -3,6 +3,7 @@ import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
 import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
+import {ProductBrands} from "../../../../Utilities/ProductModels/ProductFilters";
 
 
 const useFormStyles = makeStyles((theme: Theme) =>
@@ -33,11 +34,11 @@ export const BrandProductOptions: React.FunctionComponent<{ className: string }>
     const {className} = props
 
     const formStyles = useFormStyles();
-    const [brand, setBrand] = React.useState("");
+    const [brand, setBrand] = React.useState<number | undefined>(0);
     const formRef = React.useRef<HTMLDivElement>(null)
 
     const handleChange = (event: React.ChangeEvent<{ name?: string; value: unknown }>) => {
-        setBrand(event.target.value as string)
+        setBrand(event.target.value as number)
     };
 
     React.useEffect(() => {
@@ -58,12 +59,12 @@ export const BrandProductOptions: React.FunctionComponent<{ className: string }>
                 labelId={"brandIt"}
             >
                 <option/>
-                <option value={"Men Styled Clothing"}>Men Styled Clothing</option>
-                <option value={"New Jewelry"}>New Jewelry</option>
-                <option value={"Super Electronic"}>Super Electronic</option>
-                <option value={"Women Styled Clothing"}>Women Styled Clothing</option>
-                <option value={"Women Loving"}>Women Loving</option>
-                <option value={"Samsung"}>Samsung</option>
+                <option value={ProductBrands.MenStyledClothing}>Men Styled Clothing</option>
+                <option value={ProductBrands.NewJewelry}>New Jewelry</option>
+                <option value={ProductBrands.SuperElectronic}>Super Electronic</option>
+                <option value={ProductBrands.WomenStyledClothing}>Women Styled Clothing</option>
+                <option value={ProductBrands.WomenLoving}>Women Loving</option>
+                <option value={ProductBrands.Samsung}>Samsung</option>
             </Select>
         </FormControl>
     );

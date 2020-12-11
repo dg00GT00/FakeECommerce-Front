@@ -3,6 +3,7 @@ import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
 import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
+import {ProductSortBy} from "../../../../Utilities/ProductModels/ProductFilters";
 
 
 const useFormStyles = makeStyles((theme: Theme) =>
@@ -33,11 +34,11 @@ export const SortProductOptions: React.FunctionComponent<{ className: string }> 
     const {className} = props
 
     const formStyles = useFormStyles();
-    const [sortedBy, setSort] = React.useState("");
+    const [sortedBy, setSort] = React.useState<number | undefined>(undefined);
     const formRef = React.useRef<HTMLDivElement>(null);
 
     const handleChange = (event: React.ChangeEvent<{ name?: string; value: unknown }>) => {
-        setSort(event.target.value as string)
+        setSort(event.target.value as number);
     };
 
     React.useEffect(() => {
@@ -57,9 +58,10 @@ export const SortProductOptions: React.FunctionComponent<{ className: string }> 
                 labelId={"sortIt"}
             >
                 <option/>
-                <option value={"Alphabetically"}>Alphabetically</option>
-                <option value={"Lower Price"}>Lower Price</option>
-                <option value={"Higher Price"}>Higher Price</option>
+                <option value={ProductSortBy.NameAsc}>Product Name Alphabetically</option>
+                <option value={ProductSortBy.NameDesc}>Product Name Alphabetically Reverse</option>
+                <option value={ProductSortBy.PriceDesc}>Lower Price</option>
+                <option value={ProductSortBy.PriceAsc}>Higher Price</option>
             </Select>
         </FormControl>
     );

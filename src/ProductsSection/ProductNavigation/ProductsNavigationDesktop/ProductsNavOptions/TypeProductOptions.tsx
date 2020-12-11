@@ -3,6 +3,7 @@ import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
 import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
+import {ProductTypes} from '../../../../Utilities/ProductModels/ProductFilters';
 
 
 const useFormStyles = makeStyles((theme: Theme) =>
@@ -34,10 +35,10 @@ export const TypeProductOptions: React.FunctionComponent<{className: string}> = 
 
     const formStyles = useFormStyles();
     const formRef = useRef<HTMLDivElement>(null)
-    const [type, setType] = React.useState("");
+    const [type, setType] = React.useState(0);
 
     const handleChange = (event: React.ChangeEvent<{ name?: string; value: unknown }>) => {
-        setType(event.target.value as string)
+        setType(event.target.value as number);
     };
 
     React.useEffect(() => {
@@ -58,10 +59,10 @@ export const TypeProductOptions: React.FunctionComponent<{className: string}> = 
                 labelId={"typeIt"}
             >
                 <option/>
-                <option value={"Men Clothing"}>Men Clothing</option>
-                <option value={"Jewelry"}>Jewelry</option>
-                <option value={"Electronics"}>Electronics</option>
-                <option value={"Women Clothing"}>Women Clothing</option>
+                <option value={ProductTypes.MenClothing}>Men Clothing</option>
+                <option value={ProductTypes.Jewelry}>Jewelry</option>
+                <option value={ProductTypes.Electronics}>Electronics</option>
+                <option value={ProductTypes.WomenClothing}>Women Clothing</option>
             </Select>
         </FormControl>
     );
