@@ -1,16 +1,43 @@
 import {ProductApi} from "./AxiosInstance";
-import {FullProductType} from "../Utilities/ProductModels/FullProductDto";
+import {FullProductType} from "../Utilities/ProductModels/FullProductModel";
 import {productCardMapper, ProductCartType} from "../Utilities/Mappers/ProductCardMapper";
+import {ProductSortBy} from "../Utilities/ProductModels/ProductFilters";
 
+type ProductFilterType = {
+    sortFilter?: ProductSortBy,
+    productType?: string,
+    productBrand?: string,
+    searchFrag?: string
+}
+
+export type ProductListType = { pageNumber: number } & ProductFilterType;
 
 export class ProductRequestManager {
     private productAmount = 0
+    private readonly baseApiUrl: string | undefined;
 
     constructor(public pageSize: number) {
+        this.baseApiUrl = `/Products?PageSize=${pageSize}`;
     }
 
-    public async getFullProductList(pageIndex: number): Promise<ProductCartType[] | null> {
-        const response = await ProductApi.get<FullProductType>(`/Products?PageSize=${this.pageSize}&PageIndex=${pageIndex}`);
+    public async getProductList({
+                                    pageNumber,
+                                    sortFilter,
+                                    productType,
+                                    productBrand,
+                                    searchFrag
+                                }: ProductListType): Promise<ProductCartType[] | null> {
+
+        const productListUrl = [
+            this.baseApiUrl,
+            `&PageIndex=${pageNumber}`,
+            sortFilter ? `&Sort=${sortFilter}` : "",
+            productType ? `&TypeId=${productType}` : "",
+            productBrand ? `&BrandId=${productBrand}` : "",
+            searchFrag ? `&Search=${searchFrag}` : "",
+        ].join("");
+
+        const response = await ProductApi.get<FullProductType>(productListUrl);
         this.productAmount = response.data.count;
         return (response.data.data.length === 0) ? null : productCardMapper(response.data);
     }

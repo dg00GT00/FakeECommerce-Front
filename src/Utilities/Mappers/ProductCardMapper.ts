@@ -1,4 +1,4 @@
-import {FullProductType} from "../ProductModels/FullProductDto";
+import {FullProductType} from "../ProductModels/FullProductModel";
 import {ProductCardProps} from "../ProductProps/ProductCardProps";
 
 export type ProductCartType = ProductCardProps & {id: number}
