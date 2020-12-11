@@ -4,6 +4,9 @@ import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import {ProductTypes} from '../../../../Utilities/ProductModels/ProductFilters';
+import {MenuItem} from "@material-ui/core";
+import {NavLink} from 'react-router-dom';
+import {ProductFilterEnum} from "../../../ProductRouteManager/ProductRouteManager";
 
 
 const useFormStyles = makeStyles((theme: Theme) =>
@@ -22,7 +25,7 @@ const useFormStyles = makeStyles((theme: Theme) =>
         select: {
             color: theme.palette.common.white,
             fontFamily: "inherit",
-            "&:not([multiple]) option": {
+            "&:not([multiple]) MenuItem": {
                 backgroundColor: theme.palette.primary.light,
                 color: "white",
             },
@@ -30,12 +33,12 @@ const useFormStyles = makeStyles((theme: Theme) =>
     }),
 );
 
-export const TypeProductOptions: React.FunctionComponent<{className: string}> = props => {
+export const TypeProductOptions: React.FunctionComponent<{ className: string }> = props => {
     const {className} = props;
 
     const formStyles = useFormStyles();
     const formRef = useRef<HTMLDivElement>(null)
-    const [type, setType] = React.useState(0);
+    const [type, setType] = React.useState<number | string>("");
 
     const handleChange = (event: React.ChangeEvent<{ name?: string; value: unknown }>) => {
         setType(event.target.value as number);
@@ -43,14 +46,13 @@ export const TypeProductOptions: React.FunctionComponent<{className: string}> = 
 
     React.useEffect(() => {
         formRef.current?.classList.add(className)
-    },[className])
+    }, [className])
 
     return (
         <FormControl size={"small"} color={"secondary"} variant="outlined" className={formStyles.root} ref={formRef}>
             <InputLabel htmlFor="typeIt" id={"typeIt"} classes={{formControl: formStyles.select}}>Product
                 Type</InputLabel>
             <Select
-                native
                 className={formStyles.select}
                 value={type}
                 id={"typeIt"}
@@ -58,11 +60,32 @@ export const TypeProductOptions: React.FunctionComponent<{className: string}> = 
                 label="Product Type"
                 labelId={"typeIt"}
             >
-                <option/>
-                <option value={ProductTypes.MenClothing}>Men Clothing</option>
-                <option value={ProductTypes.Jewelry}>Jewelry</option>
-                <option value={ProductTypes.Electronics}>Electronics</option>
-                <option value={ProductTypes.WomenClothing}>Women Clothing</option>
+                <MenuItem/>
+                <MenuItem value={ProductTypes.MenClothing}>
+                    <NavLink to={{
+                        pathname: '/products',
+                        search: `type=${type}`,
+                        state: {filter: ProductFilterEnum.FilterType}
+                    }}>Men Clothing</NavLink>
+                </MenuItem>
+                <MenuItem value={ProductTypes.Jewelry}>
+                    <NavLink to={{
+                        pathname: '/products',
+                        search: `type=${type}`,
+                        state: {filter: ProductFilterEnum.FilterType}
+                    }}>Jewelry</NavLink></MenuItem>
+                <MenuItem value={ProductTypes.Electronics}>
+                    <NavLink to={{
+                        pathname: '/products',
+                        search: `type=${type}`,
+                        state: {filter: ProductFilterEnum.FilterType}
+                    }}>Electronics</NavLink></MenuItem>
+                <MenuItem value={ProductTypes.WomenClothing}>
+                    <NavLink to={{
+                        pathname: '/products',
+                        search: `type=${type}`,
+                        state: {filter: ProductFilterEnum.FilterType}
+                    }}>Women Clothing</NavLink></MenuItem>
             </Select>
         </FormControl>
     );

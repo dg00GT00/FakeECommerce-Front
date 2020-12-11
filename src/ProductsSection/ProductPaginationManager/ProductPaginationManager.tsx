@@ -3,11 +3,11 @@ import styles from "../ProductPaginationManager/ProductPaginationManager.module.
 import {ProductNavigation} from "../ProductNavigation/ProductNavigation";
 import Pagination from "@material-ui/lab/Pagination";
 import PaginationItem from "@material-ui/lab/PaginationItem";
-import {NavLink, Route} from "react-router-dom";
+import {NavLink} from "react-router-dom";
 import {createStyles, makeStyles} from "@material-ui/core/styles";
 import {ProductsContext} from "../ProductContext/ProductsContext";
-import {ProductGridItems} from "../ProductGridItems/ProductGridItems";
 import {handleScrollGridItems, PRODUCT_GRID_ID} from "../../Utilities/ProductGridScroll";
+import {ProductFilterEnum, ProductRouteManager} from "../ProductRouteManager/ProductRouteManager";
 
 
 const useStyles = makeStyles((theme) =>
@@ -35,7 +35,7 @@ export const ProductPaginationManager: React.FunctionComponent = () => {
 
     React.useEffect(() => {
         let timer: NodeJS.Timeout;
-        if (!isHomePage){
+        if (!isHomePage) {
             timer = setTimeout(handleScrollGridItems, 300);
         }
         return () => clearTimeout(timer);
@@ -50,12 +50,7 @@ export const ProductPaginationManager: React.FunctionComponent = () => {
         <div className={styles.grid_container}>
             <ProductNavigation/>
             <div className={styles.grid_content} id={PRODUCT_GRID_ID}>
-                <Route exact path={"/"}>
-                    <ProductGridItems pageNumber={pageNumber}/>
-                </Route>
-                <Route path={"/products&page=:pageNumber"} render={({match}) => (
-                    <ProductGridItems pageNumber={+match.params.pageNumber}/>
-                )}/>
+                <ProductRouteManager pageNumber={pageNumber}/>
             </div>
             <Pagination size={"large"}
                         showFirstButton
@@ -67,8 +62,11 @@ export const ProductPaginationManager: React.FunctionComponent = () => {
                         renderItem={params => (
                             <PaginationItem
                                 component={NavLink}
-                                to={`/products&page=${params.page}`}
-                                {...params}/>
+                                to={{
+                                    pathname: "/products",
+                                    search: `page=${params.page}`,
+                                    state: {filter: ProductFilterEnum.FilterPageNumber}
+                                }}{...params}/>
                         )}
             />
         </div>

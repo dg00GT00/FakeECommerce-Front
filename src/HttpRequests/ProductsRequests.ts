@@ -3,14 +3,13 @@ import {FullProductType} from "../Utilities/ProductModels/FullProductModel";
 import {productCardMapper, ProductCartType} from "../Utilities/Mappers/ProductCardMapper";
 import {ProductSortBy} from "../Utilities/ProductModels/ProductFilters";
 
-type ProductFilterType = {
+export type ProductFilterType = {
     sortFilter?: ProductSortBy,
     productType?: string,
     productBrand?: string,
-    searchFrag?: string
+    searchFrag?: string,
+    pageNumber: number
 }
-
-export type ProductListType = { pageNumber: number } & ProductFilterType;
 
 export class ProductRequestManager {
     private productAmount = 0
@@ -26,7 +25,7 @@ export class ProductRequestManager {
                                     productType,
                                     productBrand,
                                     searchFrag
-                                }: ProductListType): Promise<ProductCartType[] | null> {
+                                }: ProductFilterType): Promise<ProductCartType[] | null> {
 
         const productListUrl = [
             this.baseApiUrl,
