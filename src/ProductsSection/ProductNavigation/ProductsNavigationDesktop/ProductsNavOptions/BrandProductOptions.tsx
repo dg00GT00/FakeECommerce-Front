@@ -4,7 +4,7 @@ import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import {ProductBrands} from "../../../../Utilities/ProductModels/ProductFilters";
-import {ProductFilterEnum} from "../../../ProductRouteManager/ProductRouteManager";
+import {ProductFilterEnum, UrlQueryFilter} from "../../../ProductRouteManager/ProductRouteManager";
 import {useHistory} from "react-router-dom";
 
 
@@ -44,7 +44,7 @@ export const BrandProductOptions: React.FunctionComponent<{ className: string }>
         setBrand(event.target.value as number);
         history.push({
             pathname: '/products',
-            search: `brand=${event.target.value as number}`,
+            search: `${UrlQueryFilter.Brand}=${event.target.value as number}`,
             state: {filter: ProductFilterEnum.FilterBrand}
         });
     };

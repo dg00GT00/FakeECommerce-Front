@@ -11,18 +11,33 @@ export enum ProductFilterEnum {
     FilterPageNumber
 }
 
+export enum UrlQueryFilter {
+    Search = "search",
+    Type = "type",
+    Sort = "sort",
+    Brand = "brand"
+}
+
 type ProductFilterState = {
     filter: ProductFilterEnum
 }
 
 type SearchParams = Omit<ProductFilterType, "pageNumber"> & { pageNumber?: number }
 
-function pageNumberParams(searchParams: string) {
-    const pageNumber = new URLSearchParams(searchParams)?.get("page");
-    return {pageNumber: pageNumber ? +pageNumber : 0};
-}
-
 const parseSearchParams = (locationState: ProductFilterState, searchParams: string): SearchParams => {
+    if (!locationState) {
+        if (searchParams.includes("search")) {
+            locationState = {filter: ProductFilterEnum.FilterSearch};
+        } else if (searchParams.includes("type")) {
+            locationState = {filter: ProductFilterEnum.FilterType};
+        } else if (searchParams.includes("sort")) {
+            locationState = {filter: ProductFilterEnum.FilterSort};
+        } else if (searchParams.includes("brand")) {
+            locationState = {filter: ProductFilterEnum.FilterBrand};
+        } else {
+            locationState = {filter: ProductFilterEnum.FilterPageNumber};
+        }
+    }
     switch (locationState.filter) {
         case ProductFilterEnum.FilterSearch:
             return {searchFrag: new URLSearchParams(searchParams)?.get("search") ?? ""};
@@ -34,7 +49,8 @@ const parseSearchParams = (locationState: ProductFilterState, searchParams: stri
         case ProductFilterEnum.FilterBrand:
             return {productBrand: new URLSearchParams(searchParams)?.get("brand") ?? ""};
         case ProductFilterEnum.FilterPageNumber:
-            return pageNumberParams(searchParams);
+            const pageNumber = new URLSearchParams(searchParams)?.get("page");
+            return {pageNumber: pageNumber ? +pageNumber : 0};
     }
 }
 

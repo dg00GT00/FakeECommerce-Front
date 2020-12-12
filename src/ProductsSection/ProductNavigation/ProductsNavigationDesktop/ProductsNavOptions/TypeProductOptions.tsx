@@ -5,7 +5,7 @@ import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import {ProductTypes} from '../../../../Utilities/ProductModels/ProductFilters';
 import {useHistory} from 'react-router-dom';
-import {ProductFilterEnum} from "../../../ProductRouteManager/ProductRouteManager";
+import {ProductFilterEnum, UrlQueryFilter} from "../../../ProductRouteManager/ProductRouteManager";
 
 
 const useFormStyles = makeStyles((theme: Theme) =>
@@ -44,7 +44,7 @@ export const TypeProductOptions: React.FunctionComponent<{ className: string }> 
         setType(event.target.value as number);
         history.push({
             pathname: '/products',
-            search: `type=${event.target.value as number}`,
+            search: `${UrlQueryFilter.Type}=${event.target.value as number}`,
             state: {filter: ProductFilterEnum.FilterType}
         })
     };
