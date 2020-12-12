@@ -24,6 +24,8 @@ type ProductFilterState = {
 
 type SearchParams = Omit<ProductFilterType, "pageNumber"> & { pageNumber?: number }
 
+let filterParams = {};
+
 const parseSearchParams = (locationState: ProductFilterState, searchParams: string): SearchParams => {
     if (!locationState) {
         if (searchParams.includes(UrlQueryFilter.Search)) {
@@ -40,18 +42,33 @@ const parseSearchParams = (locationState: ProductFilterState, searchParams: stri
     }
     switch (locationState.filter) {
         case ProductFilterEnum.FilterSearch:
-            return {searchFrag: new URLSearchParams(searchParams)?.get(UrlQueryFilter.Search) ?? ""};
+            filterParams = {
+                ...filterParams,
+                searchFrag: new URLSearchParams(searchParams)?.get(UrlQueryFilter.Search) ?? ""
+            };
+            break;
         case ProductFilterEnum.FilterType:
-            return {productType: new URLSearchParams(searchParams)?.get(UrlQueryFilter.Type) ?? ""};
+            filterParams = {
+                ...filterParams,
+                productType: new URLSearchParams(searchParams)?.get(UrlQueryFilter.Type) ?? ""
+            };
+            break;
         case ProductFilterEnum.FilterSort:
             const sort = new URLSearchParams(searchParams)?.get(UrlQueryFilter.Sort);
-            return {sortFilter: sort ? +sort : 0};
+            filterParams = {...filterParams, sortFilter: sort ? +sort : 0};
+            break;
         case ProductFilterEnum.FilterBrand:
-            return {productBrand: new URLSearchParams(searchParams)?.get(UrlQueryFilter.Brand) ?? ""};
+            filterParams = {
+                ...filterParams,
+                productBrand: new URLSearchParams(searchParams)?.get(UrlQueryFilter.Brand) ?? ""
+            };
+            break;
         case ProductFilterEnum.FilterPageNumber:
             const pageNumber = new URLSearchParams(searchParams)?.get("page");
-            return {pageNumber: pageNumber ? +pageNumber : 0};
+            filterParams = {...filterParams, pageNumber: pageNumber ? +pageNumber : 0};
+            break;
     }
+    return filterParams;
 }
 
 export const ProductRouteManager: React.FunctionComponent<ProductFilterType> = props => {
