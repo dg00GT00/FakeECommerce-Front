@@ -26,13 +26,13 @@ type SearchParams = Omit<ProductFilterType, "pageNumber"> & { pageNumber?: numbe
 
 const parseSearchParams = (locationState: ProductFilterState, searchParams: string): SearchParams => {
     if (!locationState) {
-        if (searchParams.includes("search")) {
+        if (searchParams.includes(UrlQueryFilter.Search)) {
             locationState = {filter: ProductFilterEnum.FilterSearch};
-        } else if (searchParams.includes("type")) {
+        } else if (searchParams.includes(UrlQueryFilter.Type)) {
             locationState = {filter: ProductFilterEnum.FilterType};
-        } else if (searchParams.includes("sort")) {
+        } else if (searchParams.includes(UrlQueryFilter.Sort)) {
             locationState = {filter: ProductFilterEnum.FilterSort};
-        } else if (searchParams.includes("brand")) {
+        } else if (searchParams.includes(UrlQueryFilter.Brand)) {
             locationState = {filter: ProductFilterEnum.FilterBrand};
         } else {
             locationState = {filter: ProductFilterEnum.FilterPageNumber};
@@ -40,14 +40,14 @@ const parseSearchParams = (locationState: ProductFilterState, searchParams: stri
     }
     switch (locationState.filter) {
         case ProductFilterEnum.FilterSearch:
-            return {searchFrag: new URLSearchParams(searchParams)?.get("search") ?? ""};
+            return {searchFrag: new URLSearchParams(searchParams)?.get(UrlQueryFilter.Search) ?? ""};
         case ProductFilterEnum.FilterType:
-            return {productType: new URLSearchParams(searchParams)?.get("type") ?? ""};
+            return {productType: new URLSearchParams(searchParams)?.get(UrlQueryFilter.Type) ?? ""};
         case ProductFilterEnum.FilterSort:
-            const sort = new URLSearchParams(searchParams)?.get("sort");
+            const sort = new URLSearchParams(searchParams)?.get(UrlQueryFilter.Sort);
             return {sortFilter: sort ? +sort : 0};
         case ProductFilterEnum.FilterBrand:
-            return {productBrand: new URLSearchParams(searchParams)?.get("brand") ?? ""};
+            return {productBrand: new URLSearchParams(searchParams)?.get(UrlQueryFilter.Brand) ?? ""};
         case ProductFilterEnum.FilterPageNumber:
             const pageNumber = new URLSearchParams(searchParams)?.get("page");
             return {pageNumber: pageNumber ? +pageNumber : 0};

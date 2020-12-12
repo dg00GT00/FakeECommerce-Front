@@ -39,5 +39,3 @@ export const TestimonialsCard: React.FunctionComponent<TestimonialsCardProps> = 
         </div>
     )
 }
-
-// height: min(15vw, 150px)
