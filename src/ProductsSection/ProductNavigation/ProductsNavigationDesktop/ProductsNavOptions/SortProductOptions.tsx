@@ -7,7 +7,7 @@ import {ProductSortBy} from "../../../../Utilities/ProductModels/ProductFilters"
 import {useHistory} from "react-router-dom";
 import {ProductFilterEnum, UrlQueryFilter} from "../../../ProductRouteManager/ProductRouteManager";
 import {ProductNavDesktopProps} from "../../ProductNavigationTypes";
-import {parsePath} from "history";
+import {useFilterByQueryParams} from "../../../../Utilities/CustomHooks/useFilterByQueryParams";
 
 
 const useFormStyles = makeStyles((theme: Theme) =>
@@ -38,10 +38,10 @@ export const SortProductOptions: React.FunctionComponent<ProductNavDesktopProps>
     const {className, clearFilter} = props
 
     const formStyles = useFormStyles();
-    const {push, location: {search}} = useHistory();
+    const {push} = useHistory();
     const [sortedBy, setSort] = React.useState<number | string>("");
-    const [inputValue, setInputValue] = React.useState(-1);
     const formRef = React.useRef<HTMLDivElement>(null);
+    const {inputValue, clearFilterFromParams} = useFilterByQueryParams(UrlQueryFilter.Sort, formRef, setSort);
 
     const handleChange = (event: React.ChangeEvent<{ name?: string; value: unknown }>) => {
         setSort(event.target.value as number);
@@ -53,54 +53,10 @@ export const SortProductOptions: React.FunctionComponent<ProductNavDesktopProps>
         });
     };
 
-    const clearInput = React.useCallback(() => {
-        let callSubsequentTime = false;
-        return () => {
-            if (callSubsequentTime) {
-                setInputValue(_ => {
-                    const label = formRef.current?.querySelector("label");
-                    if (label) {
-                        label.setAttribute("data-shrink", "true");
-                        label.classList.remove("MuiInputLabel-shrink", "MuiFormLabel-filled")
-                    }
-                    const legend = formRef.current?.querySelector("legend");
-                    if (legend) {
-                        legend.classList.remove("PrivateNotchedOutline-legendNotched-12");
-                    }
-                    return -1;
-                });
-            } else {
-                callSubsequentTime = true;
-            }
-        }
-    }, []);
-
-    const [clearCallback] = React.useState<() => void>(() => clearInput());
-
-    React.useEffect(() => {
-        if (search.includes(UrlQueryFilter.Sort)) {
-            const searchParams = parsePath(search).search;
-            const queryValue = new URLSearchParams(searchParams)?.get(UrlQueryFilter.Sort);
-            setSort(_ => {
-                const label = formRef.current?.querySelector("label");
-                if (label) {
-                    label.setAttribute("data-shrink", "true");
-                    label.classList.add("MuiInputLabel-shrink", "MuiFormLabel-filled")
-                }
-                const legend = formRef.current?.querySelector("legend");
-                if (legend) {
-                    legend.classList.add("PrivateNotchedOutline-legendNotched-12");
-                }
-                setInputValue(parseInt(queryValue ?? "0"));
-                return queryValue ?? "";
-            });
-        }
-    }, [search])
-
     React.useEffect(() => {
         setSort("");
-        clearCallback();
-    }, [clearFilter, clearCallback]);
+        clearFilterFromParams();
+    }, [clearFilter, clearFilterFromParams]);
 
     React.useEffect(() => {
         formRef.current?.classList.add(className);

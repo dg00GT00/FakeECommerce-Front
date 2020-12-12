@@ -8,7 +8,7 @@ import SearchRoundedIcon from '@material-ui/icons/SearchRounded';
 import styles from "./ProductNavigationMobile.module.scss";
 import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
 import {InputBase, Paper, useTheme} from "@material-ui/core";
-import {useScrollPosition} from "../../../Utilities/useScrollPosition";
+import {useScrollPosition} from "../../../Utilities/CustomHooks/useScrollPosition";
 import {ProductFilterDialog} from "./ProductDialog/ProductFilterDialog";
 import {CartDefault} from "../../../Cart/CartDefault";
 

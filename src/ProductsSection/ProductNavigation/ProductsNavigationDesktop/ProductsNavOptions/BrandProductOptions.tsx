@@ -7,6 +7,7 @@ import {ProductBrands} from "../../../../Utilities/ProductModels/ProductFilters"
 import {ProductFilterEnum, UrlQueryFilter} from "../../../ProductRouteManager/ProductRouteManager";
 import {useHistory} from "react-router-dom";
 import {ProductNavDesktopProps} from "../../ProductNavigationTypes";
+import {useFilterByQueryParams} from "../../../../Utilities/CustomHooks/useFilterByQueryParams";
 
 
 const useFormStyles = makeStyles((theme: Theme) =>
@@ -40,6 +41,7 @@ export const BrandProductOptions: React.FunctionComponent<ProductNavDesktopProps
     const history = useHistory();
     const [brand, setBrand] = React.useState<number | string>("");
     const formRef = React.useRef<HTMLDivElement>(null)
+    const {inputValue, clearFilterFromParams} = useFilterByQueryParams(UrlQueryFilter.Brand, formRef, setBrand);
 
     const handleChange = (event: React.ChangeEvent<{ name?: string; value: unknown }>) => {
         setBrand(event.target.value as number);
@@ -52,7 +54,8 @@ export const BrandProductOptions: React.FunctionComponent<ProductNavDesktopProps
 
     React.useEffect(() => {
         setBrand("");
-    }, [clearFilter]);
+        clearFilterFromParams();
+    }, [clearFilter, clearFilterFromParams]);
 
     React.useEffect(() => {
         formRef.current?.classList.add(className)
@@ -70,6 +73,7 @@ export const BrandProductOptions: React.FunctionComponent<ProductNavDesktopProps
                 onChange={handleChange}
                 label="Product Brands"
                 labelId={"brandIt"}
+                inputProps={{value: inputValue}}
             >
                 <option/>
                 <option value={ProductBrands.MenStyledClothing}>Men Styled Clothing</option>
