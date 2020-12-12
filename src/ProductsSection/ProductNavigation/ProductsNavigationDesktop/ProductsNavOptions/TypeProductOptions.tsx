@@ -7,6 +7,7 @@ import {ProductTypes} from '../../../../Utilities/ProductModels/ProductFilters';
 import {useHistory} from 'react-router-dom';
 import {ProductFilterEnum, UrlQueryFilter} from "../../../ProductRouteManager/ProductRouteManager";
 import {ProductNavDesktopProps} from "../../ProductNavigationTypes";
+import {parsePath} from "history";
 
 
 const useFormStyles = makeStyles((theme: Theme) =>
@@ -36,19 +37,42 @@ const useFormStyles = makeStyles((theme: Theme) =>
 
 export const TypeProductOptions: React.FunctionComponent<ProductNavDesktopProps> = props => {
     const {className, clearFilter} = props;
-    const history = useHistory();
+    const {push, location: {search}} = useHistory();
+    const [inputValue, setInputValue] = React.useState(0)
+
     const formStyles = useFormStyles();
     const formRef = useRef<HTMLDivElement>(null)
     const [type, setType] = React.useState<number | string>("");
 
+
     const handleChange = (event: React.ChangeEvent<{ name?: string; value: unknown }>) => {
         setType(event.target.value as number);
-        history.push({
+        push({
             pathname: '/products',
             search: `${UrlQueryFilter.Type}=${event.target.value as number}`,
             state: {filter: ProductFilterEnum.FilterType}
         })
     };
+
+    React.useEffect(() => {
+        if (search.includes(UrlQueryFilter.Type)) {
+            const searchParams = parsePath(search).search;
+            const queryValue = new URLSearchParams(searchParams)?.get(UrlQueryFilter.Type);
+            setType(_ => {
+                const label = formRef.current?.querySelector("label");
+                if (label) {
+                    label.setAttribute("data-shrink", "true");
+                    label.classList.add("MuiInputLabel-shrink", "MuiFormLabel-filled")
+                }
+                const legend = formRef.current?.querySelector("legend");
+                if (legend) {
+                    legend.classList.add("PrivateNotchedOutline-legendNotched-12");
+                }
+                setInputValue(parseInt(queryValue ?? "0"));
+                return queryValue ?? "";
+            });
+        }
+    }, [search])
 
     React.useEffect(() => {
         setType("");
@@ -70,6 +94,7 @@ export const TypeProductOptions: React.FunctionComponent<ProductNavDesktopProps>
                 onChange={handleChange}
                 label="Product Type"
                 labelId={"typeIt"}
+                inputProps={{value: inputValue}}
             >
                 <option/>
                 <option value={ProductTypes.MenClothing}>Men Clothing</option>
