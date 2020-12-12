@@ -7,7 +7,7 @@ import {NavLink} from "react-router-dom";
 import {createStyles, makeStyles} from "@material-ui/core/styles";
 import {ProductsContext} from "../ProductContext/ProductsContext";
 import {handleScrollGridItems, PRODUCT_GRID_ID} from "../../Utilities/ProductGridScroll";
-import {ProductFilterEnum, ProductRouteManager} from "../ProductRouteManager/ProductRouteManager";
+import {ProductFilterEnum, ProductRouteManager, UrlQueryFilter} from "../ProductRouteManager/ProductRouteManager";
 
 
 const useStyles = makeStyles((theme) =>
@@ -64,7 +64,7 @@ export const ProductPaginationManager: React.FunctionComponent = () => {
                                 component={NavLink}
                                 to={{
                                     pathname: "/products",
-                                    search: `page=${params.page}`,
+                                    search: `${UrlQueryFilter.Page}=${params.page}`,
                                     state: {filter: ProductFilterEnum.FilterPageNumber}
                                 }}{...params}/>
                         )}

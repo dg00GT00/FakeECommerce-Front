@@ -1,6 +1,7 @@
 import React from 'react';
 import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
 import {TextField} from "@material-ui/core";
+import {ProductNavDesktopProps} from "../../ProductNavigationTypes";
 
 
 const useFormStyles = makeStyles((theme: Theme) =>
@@ -26,11 +27,18 @@ const useFormStyles = makeStyles((theme: Theme) =>
     }),
 );
 
-export const SearchProducts: React.FunctionComponent<{ className: string }> = props => {
-    const {className} = props;
+export const SearchProducts: React.FunctionComponent<ProductNavDesktopProps> = props => {
+    const {className, clearFilter} = props;
 
     const formStyles = useFormStyles();
     const formRef = React.useRef<HTMLDivElement>(null);
+    const inputRef = React.useRef<HTMLInputElement>(null);
+
+    React.useEffect(() => {
+        if (inputRef.current) {
+            inputRef.current.value = ""
+        }
+    }, [clearFilter])
 
     React.useEffect(() => {
         formRef.current?.classList.add(className)
@@ -43,6 +51,8 @@ export const SearchProducts: React.FunctionComponent<{ className: string }> = pr
                    type="search"
                    variant="outlined"
                    size={"small"}
-                   className={formStyles.root} ref={formRef}/>
+                   className={formStyles.root}
+                   inputRef={inputRef}
+                   ref={formRef}/>
     )
 }

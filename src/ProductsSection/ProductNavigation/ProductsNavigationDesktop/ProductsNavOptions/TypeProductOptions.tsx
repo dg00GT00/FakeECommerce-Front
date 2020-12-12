@@ -6,6 +6,7 @@ import Select from '@material-ui/core/Select';
 import {ProductTypes} from '../../../../Utilities/ProductModels/ProductFilters';
 import {useHistory} from 'react-router-dom';
 import {ProductFilterEnum, UrlQueryFilter} from "../../../ProductRouteManager/ProductRouteManager";
+import {ProductNavDesktopProps} from "../../ProductNavigationTypes";
 
 
 const useFormStyles = makeStyles((theme: Theme) =>
@@ -32,9 +33,9 @@ const useFormStyles = makeStyles((theme: Theme) =>
     }),
 );
 
-export const TypeProductOptions: React.FunctionComponent<{ className: string }> = props => {
-    const {className} = props;
 
+export const TypeProductOptions: React.FunctionComponent<ProductNavDesktopProps> = props => {
+    const {className, clearFilter} = props;
     const history = useHistory();
     const formStyles = useFormStyles();
     const formRef = useRef<HTMLDivElement>(null)
@@ -50,8 +51,12 @@ export const TypeProductOptions: React.FunctionComponent<{ className: string }> 
     };
 
     React.useEffect(() => {
+        setType("");
+    }, [clearFilter]);
+
+    React.useEffect(() => {
         formRef.current?.classList.add(className)
-    }, [className])
+    }, [className]);
 
     return (
         <FormControl size={"small"} color={"secondary"} variant="outlined" className={formStyles.root} ref={formRef}>

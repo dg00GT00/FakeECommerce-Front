@@ -6,6 +6,7 @@ import Select from '@material-ui/core/Select';
 import {ProductBrands} from "../../../../Utilities/ProductModels/ProductFilters";
 import {ProductFilterEnum, UrlQueryFilter} from "../../../ProductRouteManager/ProductRouteManager";
 import {useHistory} from "react-router-dom";
+import {ProductNavDesktopProps} from "../../ProductNavigationTypes";
 
 
 const useFormStyles = makeStyles((theme: Theme) =>
@@ -32,12 +33,12 @@ const useFormStyles = makeStyles((theme: Theme) =>
     }),
 );
 
-export const BrandProductOptions: React.FunctionComponent<{ className: string }> = props => {
-    const {className} = props
+export const BrandProductOptions: React.FunctionComponent<ProductNavDesktopProps> = props => {
+    const {className, clearFilter} = props
 
     const formStyles = useFormStyles();
     const history = useHistory();
-    const [brand, setBrand] = React.useState<number | undefined>(0);
+    const [brand, setBrand] = React.useState<number | string>("");
     const formRef = React.useRef<HTMLDivElement>(null)
 
     const handleChange = (event: React.ChangeEvent<{ name?: string; value: unknown }>) => {
@@ -48,6 +49,10 @@ export const BrandProductOptions: React.FunctionComponent<{ className: string }>
             state: {filter: ProductFilterEnum.FilterBrand}
         });
     };
+
+    React.useEffect(() => {
+        setBrand("");
+    }, [clearFilter]);
 
     React.useEffect(() => {
         formRef.current?.classList.add(className)

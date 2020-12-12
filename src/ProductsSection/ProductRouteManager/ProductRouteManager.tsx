@@ -8,14 +8,17 @@ export enum ProductFilterEnum {
     FilterType,
     FilterSort,
     FilterBrand,
-    FilterPageNumber
+    FilterPageNumber,
+    Clear
 }
 
 export enum UrlQueryFilter {
     Search = "search",
     Type = "type",
     Sort = "sort",
-    Brand = "brand"
+    Brand = "brand",
+    Page = "page",
+    Clear = "clear"
 }
 
 type ProductFilterState = {
@@ -24,9 +27,10 @@ type ProductFilterState = {
 
 type SearchParams = Omit<ProductFilterType, "pageNumber"> & { pageNumber?: number }
 
-let filterParams = {};
+let filterParams: SearchParams = {};
 
 const parseSearchParams = (locationState: ProductFilterState, searchParams: string): SearchParams => {
+    // Need to check if the state is defined case the user input url search parameter direct to the url
     if (!locationState) {
         if (searchParams.includes(UrlQueryFilter.Search)) {
             locationState = {filter: ProductFilterEnum.FilterSearch};
@@ -36,8 +40,13 @@ const parseSearchParams = (locationState: ProductFilterState, searchParams: stri
             locationState = {filter: ProductFilterEnum.FilterSort};
         } else if (searchParams.includes(UrlQueryFilter.Brand)) {
             locationState = {filter: ProductFilterEnum.FilterBrand};
-        } else {
+        } else if (searchParams === `?${UrlQueryFilter.Clear}`) {
+            locationState = {filter: ProductFilterEnum.Clear}
+        } else if (searchParams.includes(UrlQueryFilter.Page)) {
             locationState = {filter: ProductFilterEnum.FilterPageNumber};
+        } else {
+            // Case any of previous checks succeed, case an error on url validation
+            return {pageNumber: Infinity};
         }
     }
     switch (locationState.filter) {
@@ -64,9 +73,11 @@ const parseSearchParams = (locationState: ProductFilterState, searchParams: stri
             };
             break;
         case ProductFilterEnum.FilterPageNumber:
-            const pageNumber = new URLSearchParams(searchParams)?.get("page");
+            const pageNumber = new URLSearchParams(searchParams)?.get(UrlQueryFilter.Page);
             filterParams = {...filterParams, pageNumber: pageNumber ? +pageNumber : 0};
             break;
+        case ProductFilterEnum.Clear:
+            filterParams = filterParams.pageNumber ? {pageNumber: filterParams.pageNumber} : {};
     }
     return filterParams;
 }
