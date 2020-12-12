@@ -1,39 +1,53 @@
 @import "../../../Utilities/PageGeneralVariables";
 
-.filter_options {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    grid-template-areas: "type brand sort search";
-    grid-column-gap: $product-cards-column-gap;
-    grid-row-gap: 30px;
-    padding-top: 40px;
-    padding-bottom: 80px;
-    align-items: self-start;
+.filter_bar {
+    display: flex;
+    justify-content: space-evenly;
 
-    .product_type {
-        grid-area: type;
+    .clear {
+        grid-area: clear;
+        margin-left: 2%;
+        margin-top: 40px;
+        margin-bottom: 80px;
     }
 
-    .product_brand {
-        grid-area: brand;
-    }
+    .filter_options {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        grid-template-areas: "type brand sort search";
+        grid-column-gap: $product-cards-column-gap;
+        grid-row-gap: 30px;
+        padding-top: 40px;
+        padding-bottom: 80px;
+        align-items: self-start;
 
-    .product_sort {
-        grid-area: sort;
-    }
+        .product_type {
+            grid-area: type;
+        }
 
-    .product_search {
-        grid-area: search;
-    }
+        .product_brand {
+            grid-area: brand;
+        }
 
-    @media (max-width: 1600px) {
-        grid-template-areas: "type type sort sort"
-                                 "brand brand search search";
-    }
-    @media (max-width: 695px) {
-        grid-template-areas: "search search search search"
+        .product_sort {
+            grid-area: sort;
+        }
+
+        .product_search {
+            grid-area: search;
+        }
+
+        @media (max-width: 1600px) {
+            grid-template-areas: "type type sort sort"
+                            "brand brand search search";
+        }
+
+        @media (max-width: 695px) {
+            grid-template-areas: "search search search search"
                                  "sort sort sort sort"
                                  "brand brand brand brand"
                                  "type type type type";
+        }
     }
 }
+
