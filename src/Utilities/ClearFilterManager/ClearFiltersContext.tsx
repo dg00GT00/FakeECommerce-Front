@@ -1,6 +1,6 @@
 import * as React from "react";
 import {useHistory} from "react-router-dom";
-import {ProductFilterEnum} from "../ProductRouteManager/ProductRouteManager";
+import {ProductFilterEnum} from "../Routes/ProductRouteManager/ProductRouteManager";
 
 export const ClearFiltersContext = React.createContext({
     clear: 0,
@@ -19,13 +19,13 @@ export const ClearFiltersProvider: React.FunctionComponent = props => {
             } else {
                 clear = 0;
             }
+            history.push({
+                pathname: "/products",
+                search: "clear",
+                state: {filter: [ProductFilterEnum.Clear]}
+            });
             return clear;
         })
-        history.push({
-            pathname: "/products",
-            search: "clear",
-            state: {filter: [ProductFilterEnum.Clear]}
-        });
     }
 
     return (

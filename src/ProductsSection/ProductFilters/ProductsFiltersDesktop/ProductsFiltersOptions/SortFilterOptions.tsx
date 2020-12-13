@@ -5,9 +5,10 @@ import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import {ProductSortBy} from "../../../../Utilities/ProductModels/ProductFilters";
 import {useHistory} from "react-router-dom";
-import {ProductFilterEnum, UrlQueryFilter} from "../../../ProductRouteManager/ProductRouteManager";
-import {ProductNavDesktopProps} from "../../ProductNavigationTypes";
+import {ProductFilterEnum, UrlQueryFilter} from "../../../../Utilities/Routes/ProductRouteManager/ProductRouteManager";
+import {ProductNavDesktopProps} from "../../ProductFiltersTypes";
 import {useFilterByQueryParams} from "../../../../Utilities/CustomHooks/useFilterByQueryParams";
+import {productRouteNavigation} from "../../../../Utilities/Routes/ProductRouteManager/ProductRouteNavigation";
 
 
 const useFormStyles = makeStyles((theme: Theme) =>
@@ -34,7 +35,7 @@ const useFormStyles = makeStyles((theme: Theme) =>
     }),
 );
 
-export const SortProductOptions: React.FunctionComponent<ProductNavDesktopProps> = props => {
+export const SortFilterOptions: React.FunctionComponent<ProductNavDesktopProps> = props => {
     const {className, clearFilter} = props
 
     const formStyles = useFormStyles();
@@ -44,12 +45,9 @@ export const SortProductOptions: React.FunctionComponent<ProductNavDesktopProps>
     const {inputValue, clearFilterFromParams} = useFilterByQueryParams(UrlQueryFilter.Sort, formRef, setSort);
 
     const handleChange = (event: React.ChangeEvent<{ name?: string; value: unknown }>) => {
-        setSort(event.target.value as number);
-        push({
-            pathname: '/products',
-            search: `${UrlQueryFilter.Sort}=${event.target.value as number}`,
-            state: {filter: [ProductFilterEnum.FilterSort]}
-        });
+        const queryValue = event.target.value as number;
+        setSort(queryValue);
+        productRouteNavigation(UrlQueryFilter.Sort, ProductFilterEnum.FilterSort, queryValue, push);
     };
 
     React.useEffect(() => {

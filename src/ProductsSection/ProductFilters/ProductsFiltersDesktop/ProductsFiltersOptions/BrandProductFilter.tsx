@@ -4,10 +4,11 @@ import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import {ProductBrands} from "../../../../Utilities/ProductModels/ProductFilters";
-import {ProductFilterEnum, UrlQueryFilter} from "../../../ProductRouteManager/ProductRouteManager";
+import {ProductFilterEnum, UrlQueryFilter} from "../../../../Utilities/Routes/ProductRouteManager/ProductRouteManager";
 import {useHistory} from "react-router-dom";
-import {ProductNavDesktopProps} from "../../ProductNavigationTypes";
+import {ProductNavDesktopProps} from "../../ProductFiltersTypes";
 import {useFilterByQueryParams} from "../../../../Utilities/CustomHooks/useFilterByQueryParams";
+import {productRouteNavigation} from "../../../../Utilities/Routes/ProductRouteManager/ProductRouteNavigation";
 
 
 const useFormStyles = makeStyles((theme: Theme) =>
@@ -34,22 +35,19 @@ const useFormStyles = makeStyles((theme: Theme) =>
     }),
 );
 
-export const BrandProductOptions: React.FunctionComponent<ProductNavDesktopProps> = props => {
+export const BrandProductFilter: React.FunctionComponent<ProductNavDesktopProps> = props => {
     const {className, clearFilter} = props
 
     const formStyles = useFormStyles();
-    const history = useHistory();
+    const {push} = useHistory();
     const [brand, setBrand] = React.useState<number | string>("");
     const formRef = React.useRef<HTMLDivElement>(null)
     const {inputValue, clearFilterFromParams} = useFilterByQueryParams(UrlQueryFilter.Brand, formRef, setBrand);
 
     const handleChange = (event: React.ChangeEvent<{ name?: string; value: unknown }>) => {
-        setBrand(event.target.value as number);
-        history.push({
-            pathname: '/products',
-            search: `${UrlQueryFilter.Brand}=${event.target.value as number}`,
-            state: {filter: [ProductFilterEnum.FilterBrand]}
-        });
+        const queryValue = event.target.value as number;
+        setBrand(queryValue);
+        productRouteNavigation(UrlQueryFilter.Brand, ProductFilterEnum.FilterBrand, queryValue, push);
     };
 
     React.useEffect(() => {

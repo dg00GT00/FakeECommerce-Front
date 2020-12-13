@@ -1,7 +1,7 @@
 import * as React from "react";
 import {Route} from "react-router-dom";
-import {ProductGridItems} from "../ProductGridItems/ProductGridItems";
-import {ProductFilterType} from "../../HttpRequests/ProductsRequests";
+import {ProductGridItems} from "../../../ProductsSection/ProductGridItems/ProductGridItems";
+import {ProductFilterType} from "../../../HttpRequests/ProductsRequests";
 
 export enum ProductFilterEnum {
     FilterSearch,

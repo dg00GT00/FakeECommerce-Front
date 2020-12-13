@@ -1,9 +1,10 @@
 import React from 'react';
 import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
 import {TextField} from "@material-ui/core";
-import {ProductNavDesktopProps} from "../../ProductNavigationTypes";
-import {ProductFilterEnum, UrlQueryFilter} from "../../../ProductRouteManager/ProductRouteManager";
+import {ProductNavDesktopProps} from "../../ProductFiltersTypes";
+import {ProductFilterEnum, UrlQueryFilter} from "../../../../Utilities/Routes/ProductRouteManager/ProductRouteManager";
 import {useHistory} from "react-router-dom";
+import {productRouteNavigation} from "../../../../Utilities/Routes/ProductRouteManager/ProductRouteNavigation";
 
 
 const useFormStyles = makeStyles((theme: Theme) =>
@@ -29,7 +30,7 @@ const useFormStyles = makeStyles((theme: Theme) =>
     }),
 );
 
-export const SearchProducts: React.FunctionComponent<ProductNavDesktopProps> = props => {
+export const SearchFilter: React.FunctionComponent<ProductNavDesktopProps> = props => {
     const {className, clearFilter} = props;
     const formStyles = useFormStyles();
 
@@ -40,11 +41,7 @@ export const SearchProducts: React.FunctionComponent<ProductNavDesktopProps> = p
 
     const onInputResult = React.useCallback((): void => {
         if (inputResult !== "" && inputResult === inputRef.current?.value) {
-            push({
-                pathname: '/products',
-                search: `${UrlQueryFilter.Search}=${inputResult}`,
-                state: {filter: [ProductFilterEnum.FilterSearch]}
-            });
+            productRouteNavigation(UrlQueryFilter.Search, ProductFilterEnum.FilterSearch, inputResult, push);
         }
         if (inputResult === "" && inputResult === inputRef.current?.value) {
             replace("/");

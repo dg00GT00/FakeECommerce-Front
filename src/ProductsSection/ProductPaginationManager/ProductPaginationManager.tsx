@@ -1,13 +1,17 @@
 import * as React from "react";
 import styles from "../ProductPaginationManager/ProductPaginationManager.module.scss";
-import {ProductNavigation} from "../ProductNavigation/ProductNavigation";
+import {ProductFilters} from "../ProductFilters/ProductFilters";
 import Pagination from "@material-ui/lab/Pagination";
 import PaginationItem from "@material-ui/lab/PaginationItem";
 import {NavLink} from "react-router-dom";
 import {createStyles, makeStyles} from "@material-ui/core/styles";
 import {ProductsContext} from "../ProductContext/ProductsContext";
 import {handleScrollGridItems, PRODUCT_GRID_ID} from "../../Utilities/ProductGridScroll";
-import {ProductFilterEnum, ProductRouteManager, UrlQueryFilter} from "../ProductRouteManager/ProductRouteManager";
+import {
+    ProductFilterEnum,
+    ProductRouteManager,
+    UrlQueryFilter
+} from "../../Utilities/Routes/ProductRouteManager/ProductRouteManager";
 
 
 const useStyles = makeStyles((theme) =>
@@ -48,7 +52,7 @@ export const ProductPaginationManager: React.FunctionComponent = () => {
 
     return (
         <div className={styles.grid_container}>
-            <ProductNavigation/>
+            <ProductFilters/>
             <div className={styles.grid_content} id={PRODUCT_GRID_ID}>
                 <ProductRouteManager pageNumber={pageNumber}/>
             </div>

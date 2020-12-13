@@ -1,10 +1,8 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import * as React from "react";
-import {SetStateAction} from "react";
 import {parsePath} from "history";
-import {UrlQueryFilter} from "../../ProductsSection/ProductRouteManager/ProductRouteManager";
+import {UrlQueryFilter} from "../Routes/ProductRouteManager/ProductRouteManager";
 import {useHistory} from "react-router-dom";
-
 
 const manageSelectClassList = (action: "remove" | "add", divAnchor: React.RefObject<HTMLDivElement>): void => {
     const label = divAnchor.current?.querySelector("label");
@@ -20,15 +18,16 @@ const manageSelectClassList = (action: "remove" | "add", divAnchor: React.RefObj
 
 type FilterByParamsHook = {
     inputValue: number,
+    filterValue: string,
     clearFilterFromParams: () => void
 }
 
 export const useFilterByQueryParams = (
     queryFilterType: UrlQueryFilter,
     divAnchor: React.RefObject<HTMLDivElement>,
-    setFilterValue: React.Dispatch<SetStateAction<number | string>>
 ): FilterByParamsHook => {
     const [inputValue, setInputValue] = React.useState(-1);
+    const [filterValue, setFilterValue] = React.useState("");
     const {location: {search}} = useHistory();
 
     // It must return -1 due to technical reasons
@@ -58,7 +57,7 @@ export const useFilterByQueryParams = (
                 return queryValue ?? "";
             });
         }
-    }, [search, divAnchor, setFilterValue, queryFilterType])
+    }, [search, divAnchor, setFilterValue, queryFilterType]);
 
-    return {inputValue: inputValue, clearFilterFromParams: clearCallback};
+    return {inputValue, filterValue, clearFilterFromParams: clearCallback};
 }

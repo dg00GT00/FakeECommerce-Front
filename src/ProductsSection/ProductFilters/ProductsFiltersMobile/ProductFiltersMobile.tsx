@@ -1,16 +1,20 @@
 import * as React from "react";
-import MoreVertRoundedIcon from '@material-ui/icons/MoreVertRounded';
 import Menu from "@material-ui/core/Menu";
 import ListSubheader from "@material-ui/core/ListSubheader";
 import IconButton from "@material-ui/core/IconButton/IconButton";
 import MenuItem from "@material-ui/core/MenuItem/MenuItem";
 import SearchRoundedIcon from '@material-ui/icons/SearchRounded';
-import styles from "./ProductNavigationMobile.module.scss";
+import styles from "./ProductFiltersMobile.module.scss";
 import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
-import {InputBase, Paper, useTheme} from "@material-ui/core";
+import {InputBase, Paper, SvgIcon, useTheme} from "@material-ui/core";
 import {useScrollPosition} from "../../../Utilities/CustomHooks/useScrollPosition";
 import {ProductFilterDialog} from "./ProductDialog/ProductFilterDialog";
 import {CartDefault} from "../../../Cart/CartDefault";
+import {ClearButton} from "../../../Utilities/ClearFilterManager/ClearButton";
+import {useHistory} from "react-router-dom";
+import {productRouteNavigation} from "../../../Utilities/Routes/ProductRouteManager/ProductRouteNavigation";
+import {ProductFilterEnum, UrlQueryFilter} from "../../../Utilities/Routes/ProductRouteManager/ProductRouteManager";
+import {ProductSortBy} from "../../../Utilities/ProductModels/ProductFilters";
 
 const seeMoreStyle = makeStyles((theme: Theme) => {
     return createStyles({
@@ -18,7 +22,8 @@ const seeMoreStyle = makeStyles((theme: Theme) => {
             fill: theme.palette.secondary.main,
         },
         button: {
-            paddingRight: 0
+            paddingRight: 0,
+            paddingLeft: "5%"
         }
     })
 })
@@ -29,8 +34,21 @@ const searchBarStyle = makeStyles({
     }
 })
 
+const FilterIcon: React.FunctionComponent<{ className: string }> = props => {
+    return (
+        <SvgIcon className={props.className}>
+            <svg viewBox="0 0 24 24">
+                <path fill="currentColor"
+                      d="M11 11L16.76 3.62A1 1 0 0 0 16.59 2.22A1 1 0 0 0 16 2H2A1 1 0 0 0 1.38 2.22A1 1 0 0 0 1.21 3.62L7 11V16.87A1 1 0 0 0 7.29 17.7L9.29 19.7A1 1 0 0 0 10.7 19.7A1 1 0 0 0 11 18.87V11M13 16L18 21L23 16Z"/>
+            </svg>
+        </SvgIcon>
+    )
+}
+
+
 // TODO: Refactor the code in order to eliminate repetition
-export const ProductNavigationMobile: React.FunctionComponent = () => {
+export const ProductFiltersMobile: React.FunctionComponent = () => {
+    const {push} = useHistory();
     const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null);
     const [openProductType, setProductTypeDialog] = React.useState(false);
     const [openProductBrand, setProductBrandDialog] = React.useState(false);
@@ -86,7 +104,7 @@ export const ProductNavigationMobile: React.FunctionComponent = () => {
                     aria-controls="long-menu"
                     aria-haspopup="true"
                     onClick={handleClick}>
-                    <MoreVertRoundedIcon className={moreStyle.root}/>
+                    <FilterIcon className={moreStyle.root}/>
                 </IconButton>
                 <Menu
                     id="long-menu"
@@ -100,7 +118,15 @@ export const ProductNavigationMobile: React.FunctionComponent = () => {
                     <ListSubheader>Sort by</ListSubheader>
                     <MenuItem>Alphabetically</MenuItem>
                     <MenuItem>Lower Price</MenuItem>
-                    <MenuItem>Higher Price</MenuItem>
+                    <MenuItem
+                        onClick={() => productRouteNavigation(UrlQueryFilter.Sort, ProductFilterEnum.FilterSort, ProductSortBy.PriceDesc, push)}>Higher
+                        Price</MenuItem>
+                    <MenuItem>
+                        <ClearButton
+                            onClick={handleClose}
+                            // className={styles.clear}
+                            style={{width: "100%", display: "block", marginTop: "5px"}}/>
+                    </MenuItem>
                 </Menu>
             </div>
             <ProductFilterDialog

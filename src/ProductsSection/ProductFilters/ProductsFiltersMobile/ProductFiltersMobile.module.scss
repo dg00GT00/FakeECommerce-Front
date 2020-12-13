@@ -11,6 +11,11 @@
         align-items: center;
         padding: 30px 5px;
 
+        .clear {
+            position: relative;
+            z-index: 10;
+        }
+
         .cart {
             margin-left: 10px;
             svg {

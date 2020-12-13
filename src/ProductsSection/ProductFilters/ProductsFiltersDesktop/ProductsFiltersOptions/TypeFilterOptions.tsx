@@ -5,9 +5,10 @@ import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import {ProductTypes} from '../../../../Utilities/ProductModels/ProductFilters';
 import {useHistory} from 'react-router-dom';
-import {ProductFilterEnum, UrlQueryFilter} from "../../../ProductRouteManager/ProductRouteManager";
-import {ProductNavDesktopProps} from "../../ProductNavigationTypes";
+import {ProductFilterEnum, UrlQueryFilter} from "../../../../Utilities/Routes/ProductRouteManager/ProductRouteManager";
+import {ProductNavDesktopProps} from "../../ProductFiltersTypes";
 import {useFilterByQueryParams} from "../../../../Utilities/CustomHooks/useFilterByQueryParams";
+import {productRouteNavigation} from "../../../../Utilities/Routes/ProductRouteManager/ProductRouteNavigation";
 
 
 const useFormStyles = makeStyles((theme: Theme) =>
@@ -35,8 +36,9 @@ const useFormStyles = makeStyles((theme: Theme) =>
 );
 
 
-export const TypeProductOptions: React.FunctionComponent<ProductNavDesktopProps> = props => {
+export const TypeFilterOptions: React.FunctionComponent<ProductNavDesktopProps> = props => {
     const {className, clearFilter} = props;
+
     const {push} = useHistory();
     const formStyles = useFormStyles();
     const formRef = useRef<HTMLDivElement>(null)
@@ -44,12 +46,9 @@ export const TypeProductOptions: React.FunctionComponent<ProductNavDesktopProps>
     const {inputValue, clearFilterFromParams} = useFilterByQueryParams(UrlQueryFilter.Type, formRef, setType);
 
     const handleChange = (event: React.ChangeEvent<{ name?: string; value: unknown }>) => {
-        setType(event.target.value as number);
-        push({
-            pathname: '/products',
-            search: `${UrlQueryFilter.Type}=${event.target.value as number}`,
-            state: {filter: [ProductFilterEnum.FilterType]}
-        })
+        const queryValue = event.target.value as number;
+        setType(queryValue);
+        productRouteNavigation(UrlQueryFilter.Type, ProductFilterEnum.FilterType, queryValue, push);
     };
 
     React.useEffect(() => {

@@ -4,7 +4,7 @@ import {NotFound} from "../../Utilities/RouterValidation/NotFound";
 import {ProductsContext} from "../ProductContext/ProductsContext";
 import {ProductGridSkeleton} from "../ProductGridSkeleton/ProductGridSkeleton";
 import {withRouter} from "react-router-dom";
-import {ProductRouteManagerProps} from "../ProductRouteManager/ProductRouteManagerProps";
+import {ProductRouteManagerProps} from "../../Utilities/Routes/ProductRouteManager/ProductRouteManagerProps";
 
 type GridItemsType =
     React.FunctionComponentElement<typeof ProductCard>[]

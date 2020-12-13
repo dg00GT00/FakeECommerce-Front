@@ -2,7 +2,7 @@
 
 .filter_bar {
     display: flex;
-    justify-content: space-evenly;
+    justify-content: space-between;
 
     .clear {
         grid-area: clear;
@@ -13,6 +13,7 @@
 
     .filter_options {
         display: grid;
+        flex: 1;
         grid-template-columns: repeat(4, 1fr);
         grid-template-areas: "type brand sort search";
         grid-column-gap: $product-cards-column-gap;
