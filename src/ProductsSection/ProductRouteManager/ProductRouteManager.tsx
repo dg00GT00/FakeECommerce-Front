@@ -53,14 +53,9 @@ function parseSearchParams(locationState: ProductFilterState, searchParams: stri
         }
         if (searchParams.includes(UrlQueryFilter.Page)) {
             newLocationState.filter.push(ProductFilterEnum.FilterPageNumber);
-        } else {
-            // Case any of previous checks succeed, case an error on url validation
-            return {pageNumber: Infinity};
         }
     }
-    locationState.filter = newLocationState.filter.length !== 0 ? newLocationState.filter : locationState.filter;
-
-    locationState.filter.forEach(filter => {
+    (locationState ?? newLocationState).filter.forEach(filter => {
         if (filter === ProductFilterEnum.FilterSearch) {
             filterParams = {
                 ...filterParams,
