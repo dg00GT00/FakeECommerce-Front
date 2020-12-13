@@ -65,7 +65,7 @@ export const ProductPaginationManager: React.FunctionComponent = () => {
                                 to={{
                                     pathname: "/products",
                                     search: `${UrlQueryFilter.Page}=${params.page}`,
-                                    state: {filter: ProductFilterEnum.FilterPageNumber}
+                                    state: {filter: [ProductFilterEnum.FilterPageNumber]}
                                 }}{...params}/>
                         )}
             />

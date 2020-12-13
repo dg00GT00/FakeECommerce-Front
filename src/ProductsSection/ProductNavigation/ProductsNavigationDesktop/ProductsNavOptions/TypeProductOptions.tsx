@@ -48,7 +48,7 @@ export const TypeProductOptions: React.FunctionComponent<ProductNavDesktopProps>
         push({
             pathname: '/products',
             search: `${UrlQueryFilter.Type}=${event.target.value as number}`,
-            state: {filter: ProductFilterEnum.FilterType}
+            state: {filter: [ProductFilterEnum.FilterType]}
         })
     };
 

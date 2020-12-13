@@ -22,63 +22,78 @@ export enum UrlQueryFilter {
 }
 
 type ProductFilterState = {
-    filter: ProductFilterEnum
+    filter: ProductFilterEnum[]
 }
 
 type SearchParams = Omit<ProductFilterType, "pageNumber"> & { pageNumber?: number }
 
 let filterParams: SearchParams = {};
 
-const parseSearchParams = (locationState: ProductFilterState, searchParams: string): SearchParams => {
+const newLocationState: ProductFilterState = {filter: []};
+
+const resetPageNumber: SearchParams = {pageNumber: undefined};
+
+function parseSearchParams(locationState: ProductFilterState, searchParams: string): SearchParams {
     // Need to check if the state is defined case the user input url search parameter direct to the url
     if (!locationState) {
         if (searchParams.includes(UrlQueryFilter.Search)) {
-            locationState = {filter: ProductFilterEnum.FilterSearch};
-        } else if (searchParams.includes(UrlQueryFilter.Type)) {
-            locationState = {filter: ProductFilterEnum.FilterType};
-        } else if (searchParams.includes(UrlQueryFilter.Sort)) {
-            locationState = {filter: ProductFilterEnum.FilterSort};
-        } else if (searchParams.includes(UrlQueryFilter.Brand)) {
-            locationState = {filter: ProductFilterEnum.FilterBrand};
-        } else if (searchParams === `?${UrlQueryFilter.Clear}`) {
-            locationState = {filter: ProductFilterEnum.Clear}
-        } else if (searchParams.includes(UrlQueryFilter.Page)) {
-            locationState = {filter: ProductFilterEnum.FilterPageNumber};
+            newLocationState.filter.push(ProductFilterEnum.FilterSearch);
+        }
+        if (searchParams.includes(UrlQueryFilter.Type)) {
+            newLocationState.filter.push(ProductFilterEnum.FilterType);
+        }
+        if (searchParams.includes(UrlQueryFilter.Sort)) {
+            newLocationState.filter.push(ProductFilterEnum.FilterSort);
+        }
+        if (searchParams.includes(UrlQueryFilter.Brand)) {
+            newLocationState.filter.push(ProductFilterEnum.FilterBrand);
+        }
+        if (searchParams === `?${UrlQueryFilter.Clear}`) {
+            newLocationState.filter.push(ProductFilterEnum.Clear);
+        }
+        if (searchParams.includes(UrlQueryFilter.Page)) {
+            newLocationState.filter.push(ProductFilterEnum.FilterPageNumber);
         } else {
             // Case any of previous checks succeed, case an error on url validation
             return {pageNumber: Infinity};
         }
     }
-    switch (locationState.filter) {
-        case ProductFilterEnum.FilterSearch:
+    locationState.filter = newLocationState.filter.length !== 0 ? newLocationState.filter : locationState.filter;
+
+    locationState.filter.forEach(filter => {
+        if (filter === ProductFilterEnum.FilterSearch) {
             filterParams = {
                 ...filterParams,
-                searchFrag: new URLSearchParams(searchParams)?.get(UrlQueryFilter.Search) ?? ""
+                ...resetPageNumber,
+                searchFrag: new URLSearchParams(searchParams)?.get(UrlQueryFilter.Search) ?? filterParams.searchFrag
             };
-            break;
-        case ProductFilterEnum.FilterType:
+        }
+        if (filter === ProductFilterEnum.FilterType) {
             filterParams = {
                 ...filterParams,
-                productType: new URLSearchParams(searchParams)?.get(UrlQueryFilter.Type) ?? ""
+                ...resetPageNumber,
+                productType: new URLSearchParams(searchParams)?.get(UrlQueryFilter.Type) ?? filterParams.productType
             };
-            break;
-        case ProductFilterEnum.FilterSort:
+        }
+        if (filter === ProductFilterEnum.FilterSort) {
             const sort = new URLSearchParams(searchParams)?.get(UrlQueryFilter.Sort);
-            filterParams = {...filterParams, sortFilter: sort ? +sort : 0};
-            break;
-        case ProductFilterEnum.FilterBrand:
+            filterParams = {...filterParams, sortFilter: sort ? +sort : filterParams.sortFilter};
+        }
+        if (filter === ProductFilterEnum.FilterBrand) {
             filterParams = {
                 ...filterParams,
-                productBrand: new URLSearchParams(searchParams)?.get(UrlQueryFilter.Brand) ?? ""
+                ...resetPageNumber,
+                productBrand: new URLSearchParams(searchParams)?.get(UrlQueryFilter.Brand) ?? filterParams.productBrand
             };
-            break;
-        case ProductFilterEnum.FilterPageNumber:
+        }
+        if (filter === ProductFilterEnum.FilterPageNumber) {
             const pageNumber = new URLSearchParams(searchParams)?.get(UrlQueryFilter.Page);
-            filterParams = {...filterParams, pageNumber: pageNumber ? +pageNumber : 0};
-            break;
-        case ProductFilterEnum.Clear:
+            filterParams = {...filterParams, pageNumber: pageNumber ? +pageNumber : undefined};
+        }
+        if (filter === ProductFilterEnum.Clear) {
             filterParams = filterParams.pageNumber ? {pageNumber: filterParams.pageNumber} : {};
-    }
+        }
+    });
     return filterParams;
 }
 

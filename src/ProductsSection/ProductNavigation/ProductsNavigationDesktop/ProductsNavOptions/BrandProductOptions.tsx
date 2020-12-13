@@ -48,7 +48,7 @@ export const BrandProductOptions: React.FunctionComponent<ProductNavDesktopProps
         history.push({
             pathname: '/products',
             search: `${UrlQueryFilter.Brand}=${event.target.value as number}`,
-            state: {filter: ProductFilterEnum.FilterBrand}
+            state: {filter: [ProductFilterEnum.FilterBrand]}
         });
     };
 

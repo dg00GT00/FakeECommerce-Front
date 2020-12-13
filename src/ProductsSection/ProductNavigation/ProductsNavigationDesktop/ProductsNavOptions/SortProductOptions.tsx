@@ -45,11 +45,10 @@ export const SortProductOptions: React.FunctionComponent<ProductNavDesktopProps>
 
     const handleChange = (event: React.ChangeEvent<{ name?: string; value: unknown }>) => {
         setSort(event.target.value as number);
-        console.log(event);
         push({
             pathname: '/products',
             search: `${UrlQueryFilter.Sort}=${event.target.value as number}`,
-            state: {filter: ProductFilterEnum.FilterSort}
+            state: {filter: [ProductFilterEnum.FilterSort]}
         });
     };
 

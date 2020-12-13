@@ -24,9 +24,7 @@ export const ClearFiltersProvider: React.FunctionComponent = props => {
         history.push({
             pathname: "/products",
             search: "clear",
-            state: {
-                filter: ProductFilterEnum.Clear
-            }
+            state: {filter: [ProductFilterEnum.Clear]}
         });
     }
 

@@ -8,13 +8,7 @@ import {ClearFiltersProvider} from "./ClearFiltersContext";
 export const ProductNavigation: React.FunctionComponent = () => {
     const mediaQuery = useMediaQuery(`(max-width: ${GeneralMediaQueries.TABLET}`)
 
-    let nav = mediaQuery ?
-        <ProductNavigationMobile/> :
-        <ProductNavigationDesktop/>
+    let nav = mediaQuery ? <ProductNavigationMobile/> : <ProductNavigationDesktop/>;
 
-    return (
-            <ClearFiltersProvider>
-                {nav}
-            </ClearFiltersProvider>
-    )
+    return <ClearFiltersProvider>{nav}</ClearFiltersProvider>;
 }
