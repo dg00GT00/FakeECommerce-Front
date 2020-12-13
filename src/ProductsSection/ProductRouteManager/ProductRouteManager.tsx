@@ -31,6 +31,7 @@ let filterParams: SearchParams = {};
 
 const newLocationState: ProductFilterState = {filter: []};
 
+// Eliminates the 'pageNumber' object key in order to let the product filter values act on the whole set of products
 const resetPageNumber: SearchParams = {pageNumber: undefined};
 
 function parseSearchParams(locationState: ProductFilterState, searchParams: string): SearchParams {

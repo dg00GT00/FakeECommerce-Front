@@ -31,6 +31,7 @@ export const useFilterByQueryParams = (
     const [inputValue, setInputValue] = React.useState(-1);
     const {location: {search}} = useHistory();
 
+    // It must return -1 due to technical reasons
     const clearInput = React.useCallback(() => {
         let callSubsequentTime = false;
         return () => {
