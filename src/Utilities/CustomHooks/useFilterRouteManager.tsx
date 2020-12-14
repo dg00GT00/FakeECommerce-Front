@@ -15,7 +15,7 @@ export const useFilterRouteManager = (
     const {setClearFunction} = React.useContext(ClearFiltersContext);
 
     const pushToRoute = useProductFilterRoute(urlFilterType, productFilterType, filterSetValue);
-    const {inputValue, clearFilterFromParams} = useProductFilterRouteByQuery(UrlQueryFilter.Type, formRef);
+    const {inputValue, clearFilterFromParams} = useProductFilterRouteByQuery(urlFilterType, formRef);
     setClearFunction({clearInputFunction: filterSetValue, clearFilterFromParams});
 
     return {inputValue, pushToRoute}

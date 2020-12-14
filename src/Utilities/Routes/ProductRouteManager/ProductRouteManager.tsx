@@ -49,7 +49,7 @@ function parseSearchParams(locationState: ProductFilterState, searchParams: stri
         if (searchParams.includes(UrlQueryFilter.Brand)) {
             newLocationState.filter.push(ProductFilterEnum.FilterBrand);
         }
-        if (searchParams === `?${UrlQueryFilter.Clear}`) {
+        if (searchParams.includes(UrlQueryFilter.Clear)) {
             newLocationState.filter.push(ProductFilterEnum.Clear);
         }
         if (searchParams.includes(UrlQueryFilter.Page)) {
