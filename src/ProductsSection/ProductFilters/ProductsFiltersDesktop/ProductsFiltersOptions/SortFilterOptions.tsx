@@ -54,7 +54,10 @@ export const SortFilterOptions: React.FunctionComponent<ProductFilterProps> = pr
     return (
         <FormControl size={"small"} fullWidth color={"secondary"} variant="outlined" className={formStyles.root}
                      ref={formRef}>
-            <InputLabel htmlFor="sortIt" id={"sortIt"} classes={{formControl: formStyles.select}}>Sort</InputLabel>
+            <InputLabel
+                htmlFor="sortIt"
+                id={"sortIt"}
+                classes={{formControl: formStyles.select}}>Sort</InputLabel>
             <Select
                 native
                 className={formStyles.select}

@@ -52,8 +52,10 @@ export const BrandProductFilter: React.FunctionComponent<ProductFilterProps> = p
 
     return (
         <FormControl size={"small"} color={"secondary"} variant="outlined" className={formStyles.root} ref={formRef}>
-            <InputLabel htmlFor="brandIt" id={"brandIt"} classes={{formControl: formStyles.select}}>Product
-                Brands</InputLabel>
+            <InputLabel
+                htmlFor="brandIt"
+                id={"brandIt"}
+                classes={{formControl: formStyles.select}}>Product Brands</InputLabel>
             <Select
                 native
                 className={formStyles.select}
@@ -62,8 +64,7 @@ export const BrandProductFilter: React.FunctionComponent<ProductFilterProps> = p
                 onChange={handleChange}
                 label="Product Brands"
                 labelId={"brandIt"}
-                inputProps={{value: inputValue}}
-            >
+                inputProps={{value: inputValue}}>
                 <option/>
                 <option value={ProductBrands.MenStyledClothing}>Men Styled Clothing</option>
                 <option value={ProductBrands.NewJewelry}>New Jewelry</option>

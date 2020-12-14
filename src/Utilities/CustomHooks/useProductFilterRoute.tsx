@@ -19,7 +19,6 @@ export const useProductFilterRoute = (
 
         if (queryValue && setFilterValue) {
             queryObj = {...queryObj, [queryType]: queryValue.toString()};
-            console.log("Query: ", queryObj);
             setFilterValue(queryValue);
             search = new URLSearchParams(queryObj).toString();
         } else {

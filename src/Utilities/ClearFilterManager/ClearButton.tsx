@@ -12,7 +12,6 @@ export const ClearButton: React.FunctionComponent<ClearButtonProps> = props => {
     const {setClear} = React.useContext(ClearFiltersContext);
 
     const onClick = (...args: any[]): void => {
-        console.log("Set clear");
         setClear();
         if (props.onClick) {
             props.onClick(args);

@@ -45,7 +45,6 @@ export const useProductFilterRouteByQuery = (
 
     React.useEffect(() => {
         if (search.includes(queryFilterType)) {
-            console.log("Search: ", search);
             const searchParams = parsePath(search).search;
             const queryValue = new URLSearchParams(searchParams)?.get(queryFilterType);
             manageSelectClassList("add", divAnchor)
