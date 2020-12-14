@@ -4,11 +4,9 @@ import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import {ProductTypes} from '../../../../Utilities/ProductModels/ProductFilters';
-import {useHistory} from 'react-router-dom';
 import {ProductFilterEnum, UrlQueryFilter} from "../../../../Utilities/Routes/ProductRouteManager/ProductRouteManager";
-import {ProductNavDesktopProps} from "../../ProductFiltersTypes";
-import {useFilterByQueryParams} from "../../../../Utilities/CustomHooks/useFilterByQueryParams";
-import {productRouteNavigation} from "../../../../Utilities/Routes/ProductRouteManager/ProductRouteNavigation";
+import {ProductFilterProps} from "../../ProductFilterTypes";
+import {useFilterRouteManager} from "../../../../Utilities/CustomHooks/useFilterRouteManager";
 
 
 const useFormStyles = makeStyles((theme: Theme) =>
@@ -36,25 +34,18 @@ const useFormStyles = makeStyles((theme: Theme) =>
 );
 
 
-export const TypeFilterOptions: React.FunctionComponent<ProductNavDesktopProps> = props => {
-    const {className, clearFilter} = props;
-
-    const {push} = useHistory();
+export const TypeFilterOptions: React.FunctionComponent<ProductFilterProps> = props => {
+    const {className} = props;
     const formStyles = useFormStyles();
     const formRef = useRef<HTMLDivElement>(null)
     const [type, setType] = React.useState<number | string>("");
-    const {inputValue, clearFilterFromParams} = useFilterByQueryParams(UrlQueryFilter.Type, formRef, setType);
+
+    const {inputValue, pushToRoute} = useFilterRouteManager(UrlQueryFilter.Type, ProductFilterEnum.FilterType, formRef, setType);
 
     const handleChange = (event: React.ChangeEvent<{ name?: string; value: unknown }>) => {
         const queryValue = event.target.value as number;
-        setType(queryValue);
-        productRouteNavigation(UrlQueryFilter.Type, ProductFilterEnum.FilterType, queryValue, push);
+        pushToRoute(queryValue);
     };
-
-    React.useEffect(() => {
-        setType("");
-        clearFilterFromParams();
-    }, [clearFilter, clearFilterFromParams]);
 
     React.useEffect(() => {
         formRef.current?.classList.add(className)
@@ -62,8 +53,10 @@ export const TypeFilterOptions: React.FunctionComponent<ProductNavDesktopProps> 
 
     return (
         <FormControl size={"small"} color={"secondary"} variant="outlined" className={formStyles.root} ref={formRef}>
-            <InputLabel htmlFor="typeIt" id={"typeIt"} classes={{formControl: formStyles.select}}>Product
-                Type</InputLabel>
+            <InputLabel
+                htmlFor="typeIt"
+                id={"typeIt"}
+                classes={{formControl: formStyles.select}}>Product Type</InputLabel>
             <Select
                 native
                 className={formStyles.select}
@@ -72,8 +65,7 @@ export const TypeFilterOptions: React.FunctionComponent<ProductNavDesktopProps> 
                 onChange={handleChange}
                 label="Product Type"
                 labelId={"typeIt"}
-                inputProps={{value: inputValue}}
-            >
+                inputProps={{value: inputValue}}>
                 <option/>
                 <option value={ProductTypes.MenClothing}>Men Clothing</option>
                 <option value={ProductTypes.Jewelry}>Jewelry</option>

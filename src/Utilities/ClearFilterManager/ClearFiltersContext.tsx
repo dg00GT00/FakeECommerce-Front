@@ -2,34 +2,41 @@ import * as React from "react";
 import {useHistory} from "react-router-dom";
 import {ProductFilterEnum} from "../Routes/ProductRouteManager/ProductRouteManager";
 
+export type ClearFilterType = {
+    clearInputFunction: React.Dispatch<React.SetStateAction<string | number>>,
+    clearFilterFromParams: () => void
+}
+
 export const ClearFiltersContext = React.createContext({
-    clear: 0,
     setClear: () => {
+    },
+    setClearFunction: (clearProps: ClearFilterType) => {
     }
 });
 
+const clearPropsArray: ClearFilterType[] = [];
+
 export const ClearFiltersProvider: React.FunctionComponent = props => {
-    let [clear, setClear] = React.useState(0);
     const history = useHistory();
 
-    const managerClear = () => {
-        setClear(_ => {
-            if (clear === 0) {
-                clear = 1;
-            } else {
-                clear = 0;
-            }
-            history.push({
-                pathname: "/products",
-                search: "clear",
-                state: {filter: [ProductFilterEnum.Clear]}
-            });
-            return clear;
-        })
+    const setClearFunction = (clearProps: ClearFilterType) => {
+        clearPropsArray.push(clearProps);
+    }
+
+    const setClear = () => {
+        clearPropsArray?.forEach(clearProp => {
+            clearProp.clearInputFunction("");
+            clearProp.clearFilterFromParams();
+        });
+        history.push({
+            pathname: "/products",
+            search: "clear",
+            state: {filter: [ProductFilterEnum.Clear]}
+        });
     }
 
     return (
-        <ClearFiltersContext.Provider value={{clear, setClear: managerClear}}>
+        <ClearFiltersContext.Provider value={{setClear, setClearFunction}}>
             {props.children}
         </ClearFiltersContext.Provider>
     );

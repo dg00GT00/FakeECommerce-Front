@@ -12,6 +12,7 @@ import {
     ProductRouteManager,
     UrlQueryFilter
 } from "../../Utilities/Routes/ProductRouteManager/ProductRouteManager";
+import {ClearFiltersProvider} from "../../Utilities/ClearFilterManager/ClearFiltersContext";
 
 
 const useStyles = makeStyles((theme) =>
@@ -52,7 +53,9 @@ export const ProductPaginationManager: React.FunctionComponent = () => {
 
     return (
         <div className={styles.grid_container}>
-            <ProductFilters/>
+            <ClearFiltersProvider>
+                <ProductFilters/>
+            </ClearFiltersProvider>
             <div className={styles.grid_content} id={PRODUCT_GRID_ID}>
                 <ProductRouteManager pageNumber={pageNumber}/>
             </div>

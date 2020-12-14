@@ -18,16 +18,14 @@ const manageSelectClassList = (action: "remove" | "add", divAnchor: React.RefObj
 
 type FilterByParamsHook = {
     inputValue: number,
-    filterValue: string,
     clearFilterFromParams: () => void
 }
 
-export const useFilterByQueryParams = (
+export const useProductFilterRouteByQuery = (
     queryFilterType: UrlQueryFilter,
     divAnchor: React.RefObject<HTMLDivElement>,
 ): FilterByParamsHook => {
     const [inputValue, setInputValue] = React.useState(-1);
-    const [filterValue, setFilterValue] = React.useState("");
     const {location: {search}} = useHistory();
 
     // It must return -1 due to technical reasons
@@ -35,29 +33,25 @@ export const useFilterByQueryParams = (
         let callSubsequentTime = false;
         return () => {
             if (callSubsequentTime) {
-                setInputValue(_ => {
-                    manageSelectClassList("remove", divAnchor);
-                    return -1;
-                });
+                manageSelectClassList("remove", divAnchor);
+                setInputValue(-1);
             } else {
                 callSubsequentTime = true;
             }
         }
     }, [divAnchor]);
 
-    const [clearCallback] = React.useState<() => void>(() => clearInput());
+    const [clearFilterFromParams] = React.useState<() => void>(() => clearInput());
 
     React.useEffect(() => {
         if (search.includes(queryFilterType)) {
+            console.log("Search: ", search);
             const searchParams = parsePath(search).search;
             const queryValue = new URLSearchParams(searchParams)?.get(queryFilterType);
-            setFilterValue(_ => {
-                manageSelectClassList("add", divAnchor)
-                setInputValue(parseInt(queryValue ?? "0"));
-                return queryValue ?? "";
-            });
+            manageSelectClassList("add", divAnchor)
+            setInputValue(parseInt(queryValue ?? "0"));
         }
-    }, [search, divAnchor, setFilterValue, queryFilterType]);
+    }, [search, divAnchor, queryFilterType]);
 
-    return {inputValue, filterValue, clearFilterFromParams: clearCallback};
+    return {inputValue, clearFilterFromParams};
 }

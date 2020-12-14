@@ -1,10 +1,6 @@
 import React from 'react';
 import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
-import {TextField} from "@material-ui/core";
-import {ProductNavDesktopProps} from "../../ProductFiltersTypes";
-import {ProductFilterEnum, UrlQueryFilter} from "../../../../Utilities/Routes/ProductRouteManager/ProductRouteManager";
-import {useHistory} from "react-router-dom";
-import {productRouteNavigation} from "../../../../Utilities/Routes/ProductRouteManager/ProductRouteNavigation";
+import {ProductFilterProps} from '../../ProductFilterTypes';
 
 
 const useFormStyles = makeStyles((theme: Theme) =>
@@ -30,50 +26,45 @@ const useFormStyles = makeStyles((theme: Theme) =>
     }),
 );
 
-export const SearchFilter: React.FunctionComponent<ProductNavDesktopProps> = props => {
-    const {className, clearFilter} = props;
-    const formStyles = useFormStyles();
+export const SearchFilter: React.FunctionComponent<ProductFilterProps> = props => {
+    // const {className} = props;
+    // const formStyles = useFormStyles();
+    //
+    // const {push, replace, location: {search, pathname}} = useHistory();
+    // const [inputResult, setInputResult] = React.useState("");
+    // const formRef = React.useRef<HTMLDivElement>(null);
+    // const inputRef = React.useRef<HTMLInputElement>(null);
+    //
+    // const onInputResult = React.useCallback((): void => {
+    //     if (inputResult !== "" && inputResult === inputRef.current?.value) {
+    //         const fullPathName = (pathname ? pathname : "/products") + search;
+    //         productRouteNavigation(UrlQueryFilter.Search, ProductFilterEnum.FilterSearch, inputResult, push, fullPathName);
+    //     }
+    //     // if (inputResult === "" && inputResult === inputRef.current?.value) {
+    //     //     replace("/");
+    //     // }
+    // }, [inputResult, inputRef, push, replace])
+    //
+    // React.useEffect(() => {
+    //     const timer = setTimeout(() => onInputResult(), 500);
+    //     return () => clearTimeout(timer);
+    //
+    // }, [onInputResult]);
+    //
+    // React.useEffect(() => {
+    //     formRef.current?.classList.add(className)
+    // }, [className])
 
-    const {push, replace} = useHistory();
-    const [inputResult, setInputResult] = React.useState("");
-    const formRef = React.useRef<HTMLDivElement>(null);
-    const inputRef = React.useRef<HTMLInputElement>(null);
-
-    const onInputResult = React.useCallback((): void => {
-        if (inputResult !== "" && inputResult === inputRef.current?.value) {
-            productRouteNavigation(UrlQueryFilter.Search, ProductFilterEnum.FilterSearch, inputResult, push);
-        }
-        if (inputResult === "" && inputResult === inputRef.current?.value) {
-            replace("/");
-        }
-    }, [inputResult, inputRef, push, replace])
-
-    React.useEffect(() => {
-        const timer = setTimeout(() => onInputResult(), 500);
-        return () => clearTimeout(timer);
-
-    }, [onInputResult]);
-
-    React.useEffect(() => {
-        if (inputRef.current) {
-            inputRef.current.value = ""
-        }
-    }, [clearFilter])
-
-    React.useEffect(() => {
-        formRef.current?.classList.add(className)
-    }, [className])
-
-    return (
-        <TextField color={"secondary"}
-                   id="search-products"
-                   label="Search"
-                   type="search"
-                   variant="outlined"
-                   size={"small"}
-                   onChange={(event => setInputResult(event.target.value))}
-                   className={formStyles.root}
-                   inputRef={inputRef}
-                   ref={formRef}/>
+    return ( <div/>
+        // <TextField color={"secondary"}
+        //            id="search-products"
+        //            label="Search"
+        //            type="search"
+        //            variant="outlined"
+        //            size={"small"}
+        //            onChange={(event => setInputResult(event.target.value))}
+        //            className={formStyles.root}
+        //            inputRef={inputRef}
+        //            ref={formRef}/>
     )
 }

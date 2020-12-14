@@ -6,10 +6,11 @@ export const productRouteNavigation = (
     queryType: UrlQueryFilter,
     filterType: ProductFilterEnum,
     queryValue: string | number | ProductTypes | ProductBrands | ProductSortBy,
-    routeAction: (options: LocationDescriptor) => void
+    routeAction: (options: LocationDescriptor) => void,
+    pathname: string
 ): void => {
     routeAction({
-        pathname: '/products',
+        pathname: pathname,
         search: `${queryType}=${queryValue}`,
         state: {filter: [filterType]}
     });

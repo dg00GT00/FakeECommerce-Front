@@ -3,12 +3,11 @@ import {useMediaQuery} from "@material-ui/core";
 import {GeneralMediaQueries} from "../../Utilities/Theme/GeneralMediaQueries";
 import {ProductFiltersMobile} from "./ProductsFiltersMobile/ProductFiltersMobile";
 import {ProductFiltersDesktop} from "./ProductsFiltersDesktop/ProductFiltersDesktop";
-import {ClearFiltersProvider} from "../../Utilities/ClearFilterManager/ClearFiltersContext";
+import {ClearFiltersContext} from "../../Utilities/ClearFilterManager/ClearFiltersContext";
 
 export const ProductFilters: React.FunctionComponent = () => {
     const mediaQuery = useMediaQuery(`(max-width: ${GeneralMediaQueries.TABLET}`)
+    const {setClearFunction} = React.useContext(ClearFiltersContext)
 
-    let nav = mediaQuery ? <ProductFiltersMobile/> : <ProductFiltersDesktop/>;
-
-    return <ClearFiltersProvider>{nav}</ClearFiltersProvider>;
+    return mediaQuery ? <ProductFiltersMobile/> : <ProductFiltersDesktop setClearFunction={setClearFunction}/>;
 }

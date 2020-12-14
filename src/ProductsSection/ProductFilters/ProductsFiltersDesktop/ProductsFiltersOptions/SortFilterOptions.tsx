@@ -4,11 +4,9 @@ import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import {ProductSortBy} from "../../../../Utilities/ProductModels/ProductFilters";
-import {useHistory} from "react-router-dom";
 import {ProductFilterEnum, UrlQueryFilter} from "../../../../Utilities/Routes/ProductRouteManager/ProductRouteManager";
-import {ProductNavDesktopProps} from "../../ProductFiltersTypes";
-import {useFilterByQueryParams} from "../../../../Utilities/CustomHooks/useFilterByQueryParams";
-import {productRouteNavigation} from "../../../../Utilities/Routes/ProductRouteManager/ProductRouteNavigation";
+import {ProductFilterProps} from "../../ProductFilterTypes";
+import {useFilterRouteManager} from "../../../../Utilities/CustomHooks/useFilterRouteManager";
 
 
 const useFormStyles = makeStyles((theme: Theme) =>
@@ -35,25 +33,19 @@ const useFormStyles = makeStyles((theme: Theme) =>
     }),
 );
 
-export const SortFilterOptions: React.FunctionComponent<ProductNavDesktopProps> = props => {
-    const {className, clearFilter} = props
+export const SortFilterOptions: React.FunctionComponent<ProductFilterProps> = props => {
+    const {className} = props
 
     const formStyles = useFormStyles();
-    const {push} = useHistory();
-    const [sortedBy, setSort] = React.useState<number | string>("");
     const formRef = React.useRef<HTMLDivElement>(null);
-    const {inputValue, clearFilterFromParams} = useFilterByQueryParams(UrlQueryFilter.Sort, formRef, setSort);
+    const [sortedBy, setSort] = React.useState<number | string>("");
+
+    const {inputValue, pushToRoute} = useFilterRouteManager(UrlQueryFilter.Sort, ProductFilterEnum.FilterSort, formRef, setSort);
 
     const handleChange = (event: React.ChangeEvent<{ name?: string; value: unknown }>) => {
-        const queryValue = event.target.value as number;
-        setSort(queryValue);
-        productRouteNavigation(UrlQueryFilter.Sort, ProductFilterEnum.FilterSort, queryValue, push);
+        const value = event.target.value as number;
+        pushToRoute(value);
     };
-
-    React.useEffect(() => {
-        setSort("");
-        clearFilterFromParams();
-    }, [clearFilter, clearFilterFromParams]);
 
     React.useEffect(() => {
         formRef.current?.classList.add(className);

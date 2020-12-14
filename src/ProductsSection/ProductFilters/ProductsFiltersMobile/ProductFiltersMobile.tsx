@@ -48,11 +48,12 @@ const FilterIcon: React.FunctionComponent<{ className: string }> = props => {
 
 // TODO: Refactor the code in order to eliminate repetition
 export const ProductFiltersMobile: React.FunctionComponent = () => {
-    const {push} = useHistory();
+    const {push, location: {search, pathname}} = useHistory();
     const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null);
     const [openProductType, setProductTypeDialog] = React.useState(false);
     const [openProductBrand, setProductBrandDialog] = React.useState(false);
     const searchBarAnchor = React.useRef<HTMLDivElement | null>(null);
+    const fullPathName = (pathname ? pathname : "/products") + search;
 
     const moreStyle = seeMoreStyle();
     const searchStyle = searchBarStyle();
@@ -119,7 +120,7 @@ export const ProductFiltersMobile: React.FunctionComponent = () => {
                     <MenuItem>Alphabetically</MenuItem>
                     <MenuItem>Lower Price</MenuItem>
                     <MenuItem
-                        onClick={() => productRouteNavigation(UrlQueryFilter.Sort, ProductFilterEnum.FilterSort, ProductSortBy.PriceDesc, push)}>Higher
+                        onClick={() => productRouteNavigation(UrlQueryFilter.Sort, ProductFilterEnum.FilterSort, ProductSortBy.PriceDesc, push, fullPathName)}>Higher
                         Price</MenuItem>
                     <MenuItem>
                         <ClearButton
