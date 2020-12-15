@@ -4,7 +4,7 @@ import {useProductFilterRoute} from "./useProductFilterRoute";
 import {useProductFilterRouteByQuery} from "./useProductFilterRouteByQuery";
 import {ProductFilterState, UrlQueryFilter} from "../ProductModels/ProductFiltersEnum";
 
-type RouteManagerType = { inputValue: number, pushToRoute: (queryValue: string | number) => void }
+type RouteManagerType = { inputValue: number | string, pushToRoute: (queryValue: string | number) => void }
 
 export const useFilterRouteManager = (
     urlFilterType: UrlQueryFilter,

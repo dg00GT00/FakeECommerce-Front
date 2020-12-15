@@ -1,24 +1,24 @@
 export enum ProductSortBy {
-    NameAsc,
-    NameDesc,
-    PriceAsc,
-    PriceDesc
+    NameAsc= "alphabetically",
+    NameDesc= "reverse alphabetically",
+    PriceAsc = "lower price",
+    PriceDesc = "higher price"
 }
 
 export enum ProductTypes {
-    MenClothing = 1,
-    Jewelry,
-    Electronics,
-    WomenClothing
+    MenClothing = "men clothing",
+    Jewelry = "jewelry",
+    Electronics = "electronic",
+    WomenClothing = "women clothing"
 }
 
 export enum ProductBrands {
-    MenStyledClothing = 1,
-    NewJewelry,
-    SuperElectronic,
-    WomenStyledClothing,
-    WomenLoving,
-    Samsung
+    MenStyledClothing = "mew styled clothing",
+    NewJewelry = "new jewelry",
+    SuperElectronic = "super electronic",
+    WomenStyledClothing = "women styled clothing",
+    WomenLoving = "women loving",
+    Samsung = "samsung"
 }
 
 export enum ProductFilterState {

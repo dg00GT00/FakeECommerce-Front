@@ -17,15 +17,16 @@ const manageSelectClassList = (action: "remove" | "add", divAnchor: React.RefObj
 }
 
 type FilterByParamsHook = {
-    inputValue: number,
+    inputValue: number | string,
     clearFilterFromParams: () => void
 }
+
 
 export const useProductFilterRouteByQuery = (
     queryFilterType: UrlQueryFilter,
     divAnchor: React.RefObject<HTMLDivElement>,
 ): FilterByParamsHook => {
-    const [inputValue, setInputValue] = React.useState(-1);
+    const [inputValue, setInputValue] = React.useState<number | string>(-1);
     const {location: {search}} = useHistory();
 
     // It must return -1 due to technical reasons
@@ -48,7 +49,7 @@ export const useProductFilterRouteByQuery = (
             const searchParams = parsePath(search).search;
             const queryValue = new URLSearchParams(searchParams)?.get(queryFilterType);
             manageSelectClassList("add", divAnchor);
-            setInputValue(parseInt(queryValue ?? "0"));
+            setInputValue(queryValue ?? "");
         }
     }, [search, divAnchor, queryFilterType]);
 

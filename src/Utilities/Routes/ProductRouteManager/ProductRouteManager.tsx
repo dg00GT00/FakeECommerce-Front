@@ -2,9 +2,16 @@ import * as React from "react";
 import {Route} from "react-router-dom";
 import {ProductGridItems} from "../../../ProductsSection/ProductGridItems/ProductGridItems";
 import {ProductFilterType} from "../../../HttpRequests/ProductsRequests";
-import {ProductFilterState, UrlQueryFilter} from "../../ProductModels/ProductFiltersEnum";
+import {
+    ProductBrands,
+    ProductFilterState,
+    ProductSortBy,
+    ProductTypes,
+    UrlQueryFilter
+} from "../../ProductModels/ProductFiltersEnum";
+import {productFilterEnumToUrl} from "../../Mappers/ProductFilterMapper";
 
-type ProductFilterState = {
+type FilterState = {
     filter: ProductFilterState[]
 }
 
@@ -12,12 +19,12 @@ type SearchParams = Omit<ProductFilterType, "pageNumber"> & { pageNumber?: numbe
 
 let filterParams: SearchParams = {};
 
-const newLocationState: ProductFilterState = {filter: []};
+const newLocationState: FilterState = {filter: []};
 
 // Eliminates the 'pageNumber' object key in order to let the product filter values act on the whole set of products
 const resetPageNumber: SearchParams = {pageNumber: undefined};
 
-function parseSearchParams(locationState: ProductFilterState, searchParams: string): SearchParams {
+function parseSearchParams(locationState: FilterState, searchParams: string): SearchParams {
     // Need to check if the state is defined case the user input url search parameter direct to the url
     if (!locationState) {
         if (searchParams.includes(UrlQueryFilter.Search)) {
@@ -51,18 +58,21 @@ function parseSearchParams(locationState: ProductFilterState, searchParams: stri
             filterParams = {
                 ...filterParams,
                 ...resetPageNumber,
-                productType: new URLSearchParams(searchParams)?.get(UrlQueryFilter.Type) ?? filterParams.productType
+                productType: productFilterEnumToUrl((new URLSearchParams(searchParams)?.get(UrlQueryFilter.Type) as ProductTypes)) ?? filterParams.productType
             };
         }
         if (filter === ProductFilterState.FilterSort) {
             const sort = new URLSearchParams(searchParams)?.get(UrlQueryFilter.Sort);
-            filterParams = {...filterParams, sortFilter: sort ? +sort : filterParams.sortFilter};
+            filterParams = {
+                ...filterParams,
+                sortFilter: productFilterEnumToUrl((sort as ProductSortBy)) ?? filterParams.sortFilter
+            };
         }
         if (filter === ProductFilterState.FilterBrand) {
             filterParams = {
                 ...filterParams,
                 ...resetPageNumber,
-                productBrand: new URLSearchParams(searchParams)?.get(UrlQueryFilter.Brand) ?? filterParams.productBrand
+                productBrand: productFilterEnumToUrl((new URLSearchParams(searchParams)?.get(UrlQueryFilter.Brand) as ProductBrands)) ?? filterParams.productBrand
             };
         }
         if (filter === ProductFilterState.FilterPageNumber) {
@@ -83,7 +93,7 @@ export const ProductRouteManager: React.FunctionComponent<ProductFilterType> = p
                 <ProductGridItems pageNumber={props.pageNumber}/>
             </Route>
             <Route path={"/products"} render={({location: {state, search}}) => {
-                const params = parseSearchParams((state as ProductFilterState), search);
+                const params = parseSearchParams((state as FilterState), search);
                 return <ProductGridItems {...params} pageNumber={params.pageNumber || 1}/>
             }}/>
         </>

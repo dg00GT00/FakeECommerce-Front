@@ -1,10 +1,9 @@
 import {ProductApi} from "./AxiosInstance";
 import {FullProductType} from "../Utilities/ProductModels/FullProductModel";
 import {productCardMapper, ProductCartType} from "../Utilities/Mappers/ProductCardMapper";
-import {ProductSortBy} from "../Utilities/ProductModels/ProductFiltersEnum";
 
 export type ProductFilterType = {
-    sortFilter?: ProductSortBy,
+    sortFilter?: string,
     productType?: string,
     productBrand?: string,
     searchFrag?: string,
