@@ -12,9 +12,7 @@ import {ProductFilterDialog} from "./ProductDialog/ProductFilterDialog";
 import {CartDefault} from "../../../Cart/CartDefault";
 import {ClearButton} from "../../../Utilities/ClearFilterManager/ClearButton";
 import {useHistory} from "react-router-dom";
-import {productRouteNavigation} from "../../../Utilities/Routes/ProductRouteManager/ProductRouteNavigation";
-import {ProductFilterEnum, UrlQueryFilter} from "../../../Utilities/Routes/ProductRouteManager/ProductRouteManager";
-import {ProductSortBy} from "../../../Utilities/ProductModels/ProductFilters";
+import {SortFilterOptions} from "./ProductFilterOptions/SortFilterOptions";
 
 const seeMoreStyle = makeStyles((theme: Theme) => {
     return createStyles({
@@ -116,12 +114,7 @@ export const ProductFiltersMobile: React.FunctionComponent = () => {
                     <ListSubheader>Filter by</ListSubheader>
                     <MenuItem id={"productType"} onClick={handleProductDialog}>Product Type</MenuItem>
                     <MenuItem id={"productBrand"} onClick={handleProductDialog}>Product Brand</MenuItem>
-                    <ListSubheader>Sort by</ListSubheader>
-                    <MenuItem>Alphabetically</MenuItem>
-                    <MenuItem>Lower Price</MenuItem>
-                    <MenuItem
-                        onClick={() => productRouteNavigation(UrlQueryFilter.Sort, ProductFilterEnum.FilterSort, ProductSortBy.PriceDesc, push, fullPathName)}>Higher
-                        Price</MenuItem>
+                    <SortFilterOptions/>
                     <MenuItem>
                         <ClearButton
                             onClick={handleClose}

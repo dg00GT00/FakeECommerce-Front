@@ -3,7 +3,7 @@ import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
 import {ProductFilterProps} from '../../ProductFilterTypes';
 import {TextField} from "@material-ui/core";
 import {useFilterRouteManager} from "../../../../Utilities/CustomHooks/useFilterRouteManager";
-import {ProductFilterEnum, UrlQueryFilter} from "../../../../Utilities/Routes/ProductRouteManager/ProductRouteManager";
+import {ProductFilterState, UrlQueryFilter} from "../../../../Utilities/ProductModels/ProductFiltersEnum";
 
 
 const useFormStyles = makeStyles((theme: Theme) =>
@@ -38,17 +38,17 @@ export const SearchFilter: React.FunctionComponent<ProductFilterProps> = props =
     const inputRef = React.useRef<HTMLInputElement>(null);
 
     // TODO: Adjust behavior of search field when pressing the clear button
-    const {pushToRoute} = useFilterRouteManager(UrlQueryFilter.Search, ProductFilterEnum.FilterSearch, inputRef, setInputResult);
+    const {pushToRoute} = useFilterRouteManager(UrlQueryFilter.Search, ProductFilterState.FilterSearch, inputRef, setInputResult);
+
     const onInputResult = React.useCallback((): void => {
         if (inputResult !== "" && inputResult === inputRef.current?.value) {
             pushToRoute(inputResult);
         }
-    }, [inputResult, inputRef, pushToRoute])
+    }, [inputResult, inputRef, pushToRoute]);
 
     React.useEffect(() => {
         const timer = setTimeout(() => onInputResult(), 1000);
         return () => clearTimeout(timer);
-
     }, [onInputResult]);
 
     React.useEffect(() => {

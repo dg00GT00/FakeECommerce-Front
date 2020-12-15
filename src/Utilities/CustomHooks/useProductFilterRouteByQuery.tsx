@@ -1,8 +1,8 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import * as React from "react";
 import {parsePath} from "history";
-import {UrlQueryFilter} from "../Routes/ProductRouteManager/ProductRouteManager";
 import {useHistory} from "react-router-dom";
+import {UrlQueryFilter} from "../ProductModels/ProductFiltersEnum";
 
 const manageSelectClassList = (action: "remove" | "add", divAnchor: React.RefObject<HTMLDivElement>): void => {
     const label = divAnchor.current?.querySelector("label");
@@ -47,7 +47,7 @@ export const useProductFilterRouteByQuery = (
         if (search.includes(queryFilterType)) {
             const searchParams = parsePath(search).search;
             const queryValue = new URLSearchParams(searchParams)?.get(queryFilterType);
-            manageSelectClassList("add", divAnchor)
+            manageSelectClassList("add", divAnchor);
             setInputValue(parseInt(queryValue ?? "0"));
         }
     }, [search, divAnchor, queryFilterType]);

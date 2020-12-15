@@ -3,8 +3,11 @@ import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
 import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
-import {ProductSortBy} from "../../../../Utilities/ProductModels/ProductFilters";
-import {ProductFilterEnum, UrlQueryFilter} from "../../../../Utilities/Routes/ProductRouteManager/ProductRouteManager";
+import {
+    ProductFilterState,
+    ProductSortBy,
+    UrlQueryFilter
+} from "../../../../Utilities/ProductModels/ProductFiltersEnum";
 import {ProductFilterProps} from "../../ProductFilterTypes";
 import {useFilterRouteManager} from "../../../../Utilities/CustomHooks/useFilterRouteManager";
 
@@ -40,7 +43,7 @@ export const SortFilterOptions: React.FunctionComponent<ProductFilterProps> = pr
     const formRef = React.useRef<HTMLDivElement>(null);
     const [sortedBy, setSort] = React.useState<number | string>("");
 
-    const {inputValue, pushToRoute} = useFilterRouteManager(UrlQueryFilter.Sort, ProductFilterEnum.FilterSort, formRef, setSort);
+    const {inputValue, pushToRoute} = useFilterRouteManager(UrlQueryFilter.Sort, ProductFilterState.FilterSort, formRef, setSort);
 
     const handleChange = (event: React.ChangeEvent<{ name?: string; value: unknown }>) => {
         const value = event.target.value as number;

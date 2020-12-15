@@ -20,3 +20,21 @@ export enum ProductBrands {
     WomenLoving,
     Samsung
 }
+
+export enum ProductFilterState {
+    FilterSearch,
+    FilterType,
+    FilterSort,
+    FilterBrand,
+    FilterPageNumber,
+    Clear
+}
+
+export enum UrlQueryFilter {
+    Search = "search",
+    Type = "type",
+    Sort = "sort",
+    Brand = "brand",
+    Page = "page",
+    Clear = "clear"
+}

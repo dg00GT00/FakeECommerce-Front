@@ -1,14 +1,14 @@
 import * as React from "react";
-import {ProductFilterEnum, UrlQueryFilter} from "../Routes/ProductRouteManager/ProductRouteManager";
 import {ClearFiltersContext} from "../ClearFilterManager/ClearFiltersContext";
 import {useProductFilterRoute} from "./useProductFilterRoute";
 import {useProductFilterRouteByQuery} from "./useProductFilterRouteByQuery";
+import {ProductFilterState, UrlQueryFilter} from "../ProductModels/ProductFiltersEnum";
 
 type RouteManagerType = { inputValue: number, pushToRoute: (queryValue: string | number) => void }
 
 export const useFilterRouteManager = (
     urlFilterType: UrlQueryFilter,
-    productFilterType: ProductFilterEnum,
+    productFilterType: ProductFilterState,
     formRef: React.RefObject<HTMLDivElement>,
     filterSetValue: React.Dispatch<React.SetStateAction<string | number>>
 ): RouteManagerType => {
@@ -18,5 +18,5 @@ export const useFilterRouteManager = (
     const pushToRoute = useProductFilterRoute(urlFilterType, productFilterType, filterSetValue);
     setClearFunction({clearInputFunction: filterSetValue, clearFilterFromParams});
 
-    return {inputValue, pushToRoute}
+    return {inputValue, pushToRoute};
 }

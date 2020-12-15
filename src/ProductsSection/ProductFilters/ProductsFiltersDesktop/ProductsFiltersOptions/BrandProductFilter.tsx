@@ -3,9 +3,12 @@ import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
 import {ProductFilterProps} from '../../ProductFilterTypes';
 import FormControl from "@material-ui/core/FormControl";
 import {InputLabel, Select} from "@material-ui/core";
-import {ProductBrands} from "../../../../Utilities/ProductModels/ProductFilters";
+import {
+    ProductBrands,
+    ProductFilterState,
+    UrlQueryFilter
+} from "../../../../Utilities/ProductModels/ProductFiltersEnum";
 import {useFilterRouteManager} from "../../../../Utilities/CustomHooks/useFilterRouteManager";
-import {ProductFilterEnum, UrlQueryFilter} from "../../../../Utilities/Routes/ProductRouteManager/ProductRouteManager";
 
 
 const useFormStyles = makeStyles((theme: Theme) =>
@@ -36,9 +39,9 @@ export const BrandProductFilter: React.FunctionComponent<ProductFilterProps> = p
     const {className} = props
 
     const formStyles = useFormStyles();
+    const formRef = React.useRef<HTMLDivElement>(null);
     const [brand, setBrand] = React.useState<number | string>("");
-    const formRef = React.useRef<HTMLDivElement>(null)
-    const {inputValue, pushToRoute} = useFilterRouteManager(UrlQueryFilter.Brand, ProductFilterEnum.FilterBrand, formRef, setBrand);
+    const {inputValue, pushToRoute} = useFilterRouteManager(UrlQueryFilter.Brand, ProductFilterState.FilterBrand, formRef, setBrand);
 
     const handleChange = (event: React.ChangeEvent<{ name?: string; value: unknown }>) => {
         const queryValue = event.target.value as number;
@@ -48,7 +51,7 @@ export const BrandProductFilter: React.FunctionComponent<ProductFilterProps> = p
 
     React.useEffect(() => {
         formRef.current?.classList.add(className)
-    }, [className])
+    }, [className]);
 
     return (
         <FormControl size={"small"} color={"secondary"} variant="outlined" className={formStyles.root} ref={formRef}>
