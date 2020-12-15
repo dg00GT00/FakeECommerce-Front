@@ -5,21 +5,21 @@ import {useProductFilterRoute} from "../../../../Utilities/CustomHooks/useProduc
 import {ProductFilterState, UrlQueryFilter} from "../../../../Utilities/ProductModels/ProductFiltersEnum";
 
 
-export const SortFilterOptions: React.FunctionComponent = () => {
-    const [sort, setSort] = React.useState<string | number>("");
-    const pushToRoute = useProductFilterRoute(UrlQueryFilter.Sort, ProductFilterState.FilterSort, setSort);
+export const SortFilterOptions: React.FunctionComponent<{ onClose: () => void }> = props => {
+    const pushToRoute = useProductFilterRoute(UrlQueryFilter.Sort, ProductFilterState.FilterSort);
 
     const handleClick: React.MouseEventHandler = event => {
-        console.log(event.currentTarget);
+        props.onClose();
+        pushToRoute(event.currentTarget.textContent?.toLowerCase());
     }
 
     return (
         <>
             <ListSubheader>Sort by</ListSubheader>
-            <MenuItem>Alphabetically</MenuItem>
-            <MenuItem>Reverse Alphabetically</MenuItem>
-            <MenuItem>Lower Price</MenuItem>
-            <MenuItem onClick={handleClick}>Higher Price</MenuItem>
+            {["Alphabetically", "Reverse", "Lower Price", "Higher Price"].map(value => {
+                value = value === "Reverse" ? "Reverse Alphabetically" : value;
+                return <MenuItem onClick={handleClick}>{value}</MenuItem>;
+            })}
         </>
     );
 }

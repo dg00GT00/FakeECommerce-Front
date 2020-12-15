@@ -13,6 +13,7 @@ import {CartDefault} from "../../../Cart/CartDefault";
 import {ClearButton} from "../../../Utilities/ClearFilterManager/ClearButton";
 import {useHistory} from "react-router-dom";
 import {SortFilterOptions} from "./ProductFilterOptions/SortFilterOptions";
+import {DialogTypesEnum} from "./ProductDialog/DialogTypesEnum";
 
 const seeMoreStyle = makeStyles((theme: Theme) => {
     return createStyles({
@@ -114,7 +115,7 @@ export const ProductFiltersMobile: React.FunctionComponent = () => {
                     <ListSubheader>Filter by</ListSubheader>
                     <MenuItem id={"productType"} onClick={handleProductDialog}>Product Type</MenuItem>
                     <MenuItem id={"productBrand"} onClick={handleProductDialog}>Product Brand</MenuItem>
-                    <SortFilterOptions/>
+                    <SortFilterOptions onClose={handleClose}/>
                     <MenuItem>
                         <ClearButton
                             onClick={handleClose}
@@ -126,12 +127,12 @@ export const ProductFiltersMobile: React.FunctionComponent = () => {
             <ProductFilterDialog
                 open={openProductType}
                 onClose={(event => setProductTypeDialog(false))}
-                dialogTitle={"Product Type"}
-                dialogItems={["Men Clothing", "Jewelry", "Electronics", "Women Clothing"]}/>
+                dialogTitle={DialogTypesEnum.ProductTypes}
+                dialogItems={["Men Clothing", "Jewelry", "Electronic", "Women Clothing"]}/>
             <ProductFilterDialog
                 open={openProductBrand}
                 onClose={(event => setProductBrandDialog(false))}
-                dialogTitle={"Product Brands"}
+                dialogTitle={DialogTypesEnum.ProductBrands}
                 dialogItems={["Men Styled Clothing", "New Jewelry", "Super Electronic", "Women Styled Clothing", "Women Loving", "Samsung"]}/>
         </div>
     )

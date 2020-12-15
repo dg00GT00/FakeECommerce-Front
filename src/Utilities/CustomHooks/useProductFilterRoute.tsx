@@ -14,7 +14,7 @@ let queryObj: { [i: string]: string } = {};
 
 export const useProductFilterRoute = (
     queryType: UrlQueryFilter,
-    filterType: ProductFilterState,
+    filterType?: ProductFilterState,
     setFilterValue?: React.Dispatch<React.SetStateAction<string | number>>
 ): (queryValue?: QueryValueType) => void => {
     const {push} = useHistory();
@@ -22,9 +22,11 @@ export const useProductFilterRoute = (
     return (queryValue?: QueryValueType): void => {
         let search;
 
-        if (queryValue && setFilterValue) {
+        if (queryValue) {
             queryObj = {...queryObj, [queryType]: queryValue.toString()};
-            setFilterValue(queryValue);
+            if (setFilterValue) {
+                setFilterValue(queryValue);
+            }
             search = new URLSearchParams(queryObj).toString();
         } else {
             queryObj = {};
