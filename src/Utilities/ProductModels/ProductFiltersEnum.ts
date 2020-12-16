@@ -13,7 +13,7 @@ export enum ProductTypes {
 }
 
 export enum ProductBrands {
-    MenStyledClothing = "mew styled clothing",
+    MenStyledClothing = "men styled clothing",
     NewJewelry = "new jewelry",
     SuperElectronic = "super electronic",
     WomenStyledClothing = "women styled clothing",
@@ -30,7 +30,7 @@ export enum ProductFilterState {
     Clear
 }
 
-export enum UrlQueryFilter {
+export enum FilterOptions {
     Search = "search",
     Type = "type",
     Sort = "sort",
