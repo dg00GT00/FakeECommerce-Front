@@ -25,8 +25,8 @@ const useFormStyles = makeStyles((theme: Theme) =>
             "& .Mui-focused": {
                 color: theme.palette.secondary.main
             }
-        },
-    }),
+        }
+    })
 );
 
 export const SearchFilter: React.FunctionComponent<ProductFilterProps> = props => {

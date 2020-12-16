@@ -85,7 +85,7 @@ export const ProductFiltersMobile: React.FunctionComponent = () => {
         handleClose();
     }
 
-    const handleProductDialog = (event: React.MouseEvent<HTMLElement>) => {
+    const handleProductDialog = (event: React.MouseEvent) => {
         if (event.currentTarget.id === "productType") {
             setProductTypeDialog(true);
         }
@@ -132,14 +132,16 @@ export const ProductFiltersMobile: React.FunctionComponent = () => {
                     onClose={handleClose}>
                     <ListSubheader>Filter by</ListSubheader>
                     <FilterOptionsWithIndicator
-                        clickAction={handleProductDialog}
+                        noRequestThroughNavigation
+                        clickAction={event => handleProductDialog(event)}
                         filterType={FilterOptions.Type}
                         typeId={FilterOptions.Type}
                         filterState={ProductFilterState.FilterType}
                         rootId={["productType"]}
                         filterOptions={["Product Type"]}/>
                     <FilterOptionsWithIndicator
-                        clickAction={handleProductDialog}
+                        noRequestThroughNavigation
+                        clickAction={event => handleProductDialog(event)}
                         filterType={FilterOptions.Brand}
                         filterState={ProductFilterState.FilterBrand}
                         typeId={FilterOptions.Brand}

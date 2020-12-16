@@ -15,11 +15,12 @@ const filterIndicatorStyle = {
 };
 
 type FilterOptionsWithIndicatorProps = {
-    clickAction: React.MouseEventHandler,
+    clickAction: (event: React.MouseEvent, index: number) => void,
     filterOptions: string[],
     filterType: FilterOptions,
     typeId: FilterOptions | string,
     filterState: ProductFilterState,
+    noRequestThroughNavigation?: boolean,
     subHeader?: string,
     rootId?: string[]
 };
@@ -73,8 +74,10 @@ export const FilterOptionsWithIndicator: React.FunctionComponent<FilterOptionsWi
             }
             return indicator;
         })
-        pushToRoute(textContent?.toLowerCase());
-        props.clickAction(event);
+        if (!(props.noRequestThroughNavigation !== undefined && props.noRequestThroughNavigation)) {
+            pushToRoute(textContent?.toLowerCase());
+        }
+        props.clickAction(event, index);
     }
 
     React.useEffect(() => {
