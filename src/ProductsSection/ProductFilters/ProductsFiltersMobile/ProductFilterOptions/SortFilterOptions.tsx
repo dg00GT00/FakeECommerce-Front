@@ -4,19 +4,22 @@ import MenuItem from "@material-ui/core/MenuItem/MenuItem";
 import {useProductFilterRoute} from "../../../../Utilities/CustomHooks/useProductFilterRoute";
 import {ProductFilterState, UrlQueryFilter} from "../../../../Utilities/ProductModels/ProductFiltersEnum";
 import {useTheme} from "@material-ui/core";
+import {ClearFiltersContext} from "../../../../Utilities/ClearFilterManager/ClearFiltersContext";
 
 const filterIndicatorStyle = {
-    width: "6px",
-    height: "6px",
+    width: "7px",
+    height: "7px",
     borderRadius: "50%",
     marginLeft: "15px",
     backgroundColor: "initial"
 };
 
-const filterIndicator: {[i: string]: number} = {};
+const filterIndicator: { [i: string]: { [i: string]: string } } = {};
 
 export const SortFilterOptions: React.FunctionComponent<{ onClose: React.MouseEventHandler }> = props => {
+    const {clearSwitch} = React.useContext(ClearFiltersContext);
     const pushToRoute = useProductFilterRoute(UrlQueryFilter.Sort, ProductFilterState.FilterSort);
+    const [indicatorStyle, setIndicatorStyle] = React.useState(filterIndicator);
     const filterRef = React.useRef<HTMLLIElement | null>(null);
 
     const theme = useTheme();
@@ -28,7 +31,7 @@ export const SortFilterOptions: React.FunctionComponent<{ onClose: React.MouseEv
         "Higher Price"
     ].map((value, index) => {
         const id = `sort_${index}`;
-        filterIndicator[id] = index;
+        filterIndicator[id] = filterIndicatorStyle;
         return (
             <MenuItem ref={filterRef} key={id} onClick={event => handleClick(event, index)}
                       style={{justifyContent: "space-between"}}>
@@ -39,23 +42,44 @@ export const SortFilterOptions: React.FunctionComponent<{ onClose: React.MouseEv
     });
 
     const handleClick = (event: React.MouseEvent, index: number) => {
-        const id = `sort_${index}`;
         const textContent = event.currentTarget.textContent;
         const value = textContent === "Reverse" ? "Reverse Alphabetically" : textContent;
-        const filterById = document.getElementById(id);
-        for (const indicatorId in filterIndicator) {
-            if (filterById) {
+        setIndicatorStyle(prevIndicator => {
+            const id = `sort_${index}`;
+            const indicator = prevIndicator || indicatorStyle;
+            for (const indicatorId in indicator) {
+                const indicatorEl = document.getElementById(indicatorId);
                 if (indicatorId === id) {
-                    console.log(indicatorId);
-                    filterById.style.backgroundColor = theme.palette.primary.main;
+                    indicator[indicatorId] = {...indicator[indicatorId], backgroundColor: theme.palette.primary.main};
+                    if (indicatorEl) {
+                        indicatorEl.style.backgroundColor = indicator[indicatorId].backgroundColor;
+                    }
                 } else {
-                    filterById.style.backgroundColor = "initial";
+                    indicator[indicatorId] = {...indicator[indicatorId], backgroundColor: "initial"};
+                    if (indicatorEl) {
+                        indicatorEl.style.backgroundColor = indicator[indicatorId].backgroundColor;
+                    }
                 }
             }
-        }
+            return indicator;
+        })
         pushToRoute(value?.toLowerCase());
         props.onClose(event);
     }
+
+    React.useEffect(() => {
+        setIndicatorStyle(prevIndicator => {
+            const indicator = prevIndicator || indicatorStyle;
+            for (const indicatorId in indicator) {
+                const indicatorEl = document.getElementById(indicatorId);
+                indicator[indicatorId] = {...indicator[indicatorId], backgroundColor: "initial"};
+                if (indicatorEl) {
+                    indicatorEl.style.backgroundColor = indicator[indicatorId].backgroundColor;
+                }
+            }
+            return indicator;
+        })
+    }, [clearSwitch, indicatorStyle]);
 
     return (
         <>
