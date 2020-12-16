@@ -35,7 +35,11 @@ const searchBarStyle = makeStyles({
 const clearButtonStyles = makeStyles((theme: Theme) => {
     return createStyles({
         root: {
-            backgroundColor: theme.palette.primary.main
+            backgroundColor: theme.palette.primary.main,
+            justifyContent: "center",
+            margin: "6%",
+            borderRadius: "3px",
+            color: theme.palette.common.white
         }
     })
 })
@@ -130,7 +134,7 @@ export const ProductFiltersMobile: React.FunctionComponent = () => {
                     <MenuItem id={"productType"} onClick={handleProductDialog}>Product Type</MenuItem>
                     <MenuItem id={"productBrand"} onClick={handleProductDialog}>Product Brand</MenuItem>
                     <SortFilterOptions onClose={handleClose}/>
-                    <MenuItem onClick={handleClearFilters} className={[clearStyle.root, styles.clear].join(" ")}>Clear</MenuItem>
+                    <MenuItem onClick={handleClearFilters} className={clearStyle.root}>Clear</MenuItem>
                 </Menu>
             </div>
             <ProductFilterDialog
