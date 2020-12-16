@@ -1,6 +1,6 @@
 import * as React from "react";
 import {useProductFilterRoute} from "../CustomHooks/useProductFilterRoute";
-import {ProductFilterState, UrlQueryFilter} from "../ProductModels/ProductFiltersEnum";
+import {FilterOptions, ProductFilterState} from "../ProductModels/ProductFiltersEnum";
 
 export type ClearFilterType = {
     clearInputFunction: React.Dispatch<React.SetStateAction<string | number>>,
@@ -19,7 +19,7 @@ const clearPropsArray: ClearFilterType[] = [];
 
 export const ClearFiltersProvider: React.FunctionComponent = props => {
     const [clearSwitch, toggleClearSwitch] = React.useState(0);
-    const pushToRoute = useProductFilterRoute(UrlQueryFilter.Clear, ProductFilterState.Clear)
+    const pushToRoute = useProductFilterRoute(FilterOptions.Clear, ProductFilterState.Clear)
 
     const setClearFunction = (clearProps: ClearFilterType) => {
         clearPropsArray.push(clearProps);

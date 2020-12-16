@@ -9,7 +9,7 @@ import {ProductsContext} from "../ProductContext/ProductsContext";
 import {handleScrollGridItems, PRODUCT_GRID_ID} from "../../Utilities/ProductGridScroll";
 import {ProductRouteManager} from "../../Utilities/Routes/ProductRouteManager/ProductRouteManager";
 import {ClearFiltersProvider} from "../../Utilities/ClearFilterManager/ClearFiltersContext";
-import {ProductFilterState, UrlQueryFilter} from "../../Utilities/ProductModels/ProductFiltersEnum";
+import {FilterOptions, ProductFilterState} from "../../Utilities/ProductModels/ProductFiltersEnum";
 
 
 const useStyles = makeStyles((theme) =>
@@ -68,7 +68,7 @@ export const ProductPaginationManager: React.FunctionComponent = () => {
                                 component={NavLink}
                                 to={{
                                     pathname: "/products",
-                                    search: `${UrlQueryFilter.Page}=${params.page}`,
+                                    search: `${FilterOptions.Page}=${params.page}`,
                                     state: {filter: [ProductFilterState.FilterPageNumber]}
                                 }}{...params}/>
                         )}

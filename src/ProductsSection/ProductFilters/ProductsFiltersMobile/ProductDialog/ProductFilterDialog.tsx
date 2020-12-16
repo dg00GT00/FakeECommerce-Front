@@ -5,7 +5,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Dialog from '@material-ui/core/Dialog';
 import {useProductFilterRoute} from "../../../../Utilities/CustomHooks/useProductFilterRoute";
-import {ProductFilterState, UrlQueryFilter} from "../../../../Utilities/ProductModels/ProductFiltersEnum";
+import {FilterOptions, ProductFilterState} from "../../../../Utilities/ProductModels/ProductFiltersEnum";
 import {DialogTypesEnum} from './DialogTypesEnum';
 
 type ProductDialogProps = {
@@ -21,10 +21,10 @@ export const ProductFilterDialog: React.FunctionComponent<ProductDialogProps> = 
 
     switch (props.dialogTitle) {
         case DialogTypesEnum.ProductTypes:
-            pushToRoute = productFilterRoute(UrlQueryFilter.Type, ProductFilterState.FilterType);
+            pushToRoute = productFilterRoute(FilterOptions.Type, ProductFilterState.FilterType);
             break;
         case DialogTypesEnum.ProductBrands:
-            pushToRoute = productFilterRoute(UrlQueryFilter.Brand, ProductFilterState.FilterBrand);
+            pushToRoute = productFilterRoute(FilterOptions.Brand, ProductFilterState.FilterBrand);
             break;
     }
 

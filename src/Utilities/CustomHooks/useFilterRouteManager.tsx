@@ -2,12 +2,12 @@ import * as React from "react";
 import {ClearFiltersContext} from "../ClearFilterManager/ClearFiltersContext";
 import {useProductFilterRoute} from "./useProductFilterRoute";
 import {useProductFilterRouteByQuery} from "./useProductFilterRouteByQuery";
-import {ProductFilterState, UrlQueryFilter} from "../ProductModels/ProductFiltersEnum";
+import {FilterOptions, ProductFilterState} from "../ProductModels/ProductFiltersEnum";
 
 type RouteManagerType = { inputValue: number | string, pushToRoute: (queryValue: string | number) => void }
 
 export const useFilterRouteManager = (
-    urlFilterType: UrlQueryFilter,
+    urlFilterType: FilterOptions,
     productFilterType: ProductFilterState,
     formRef: React.RefObject<HTMLDivElement>,
     filterSetValue: React.Dispatch<React.SetStateAction<string | number>>

@@ -1,6 +1,5 @@
 import * as React from "react";
 import Menu from "@material-ui/core/Menu";
-import ListSubheader from "@material-ui/core/ListSubheader";
 import IconButton from "@material-ui/core/IconButton/IconButton";
 import MenuItem from "@material-ui/core/MenuItem/MenuItem";
 import SearchRoundedIcon from '@material-ui/icons/SearchRounded';
@@ -10,9 +9,11 @@ import {InputBase, Paper, SvgIcon, useTheme} from "@material-ui/core";
 import {useScrollPosition} from "../../../Utilities/CustomHooks/useScrollPosition";
 import {ProductFilterDialog} from "./ProductDialog/ProductFilterDialog";
 import {CartDefault} from "../../../Cart/CartDefault";
-import {SortFilterOptions} from "./ProductFilterOptions/SortFilterOptions";
+import {FilterOptionsWithIndicator} from "./ProductFilterOptions/FilterOptionsWithIndicator";
 import {DialogTypesEnum} from "./ProductDialog/DialogTypesEnum";
 import {ClearFiltersContext} from "../../../Utilities/ClearFilterManager/ClearFiltersContext";
+import {FilterOptions} from "../../../Utilities/ProductModels/ProductFiltersEnum";
+import ListSubheader from "@material-ui/core/ListSubheader";
 
 const seeMoreStyle = makeStyles((theme: Theme) => {
     return createStyles({
@@ -55,11 +56,19 @@ const FilterIcon: React.FunctionComponent<{ className: string }> = props => {
     )
 }
 
+const filterIndicatorStyle = {
+    width: "7px",
+    height: "7px",
+    borderRadius: "50%",
+    marginLeft: "15px",
+    backgroundColor: "initial"
+};
 
 // TODO: Refactor the code in order to eliminate repetition
 export const ProductFiltersMobile: React.FunctionComponent = () => {
-    const {setClear} = React.useContext(ClearFiltersContext);
+    const {clearSwitch, setClear} = React.useContext(ClearFiltersContext);
 
+    const [indicatorStyle, setIndicatorStyle] = React.useState(filterIndicatorStyle);
     const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null);
     const [openProductType, setProductTypeDialog] = React.useState(false);
     const [openProductBrand, setProductBrandDialog] = React.useState(false);
@@ -97,10 +106,10 @@ export const ProductFiltersMobile: React.FunctionComponent = () => {
 
     useScrollPosition(({previousPosition, currentPosition}) => {
         if (currentPosition.y === 0 && searchBarAnchor.current) {
-            searchBarAnchor.current.style.boxShadow = "0 4px 9px 0 #00000057"
+            searchBarAnchor.current.style.boxShadow = "0 4px 9px 0 #00000057";
         }
         if (currentPosition.y > 0 && searchBarAnchor.current) {
-            searchBarAnchor.current.style.boxShadow = "none"
+            searchBarAnchor.current.style.boxShadow = "none";
         }
     }, {element: searchBarAnchor})
 
@@ -131,9 +140,21 @@ export const ProductFiltersMobile: React.FunctionComponent = () => {
                     open={open}
                     onClose={handleClose}>
                     <ListSubheader>Filter by</ListSubheader>
-                    <MenuItem id={"productType"} onClick={handleProductDialog}>Product Type</MenuItem>
-                    <MenuItem id={"productBrand"} onClick={handleProductDialog}>Product Brand</MenuItem>
-                    <SortFilterOptions onClose={handleClose}/>
+                    <FilterOptionsWithIndicator
+                        clickAction={handleProductDialog}
+                        filterType={FilterOptions.Type}
+                        optionsId={["productType"]}
+                        filterOptions={["Product Type"]}/>
+                    <FilterOptionsWithIndicator
+                        clickAction={handleProductDialog}
+                        filterType={FilterOptions.Brand}
+                        optionsId={["productBrand"]}
+                        filterOptions={["Product Brand"]}/>
+                    <FilterOptionsWithIndicator
+                        clickAction={handleClose}
+                        filterType={FilterOptions.Sort}
+                        subHeader={"Sort By"}
+                        filterOptions={["Alphabetically", "Reverse Alphabetically", "Lower Price", "Higher Price"]}/>
                     <MenuItem onClick={handleClearFilters} className={clearStyle.root}>Clear</MenuItem>
                 </Menu>
             </div>

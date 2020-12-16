@@ -2,7 +2,7 @@
 import * as React from "react";
 import {parsePath} from "history";
 import {useHistory} from "react-router-dom";
-import {UrlQueryFilter} from "../ProductModels/ProductFiltersEnum";
+import {FilterOptions} from "../ProductModels/ProductFiltersEnum";
 
 const manageSelectClassList = (action: "remove" | "add", divAnchor: React.RefObject<HTMLDivElement>): void => {
     const label = divAnchor.current?.querySelector("label");
@@ -23,7 +23,7 @@ type FilterByParamsHook = {
 
 
 export const useProductFilterRouteByQuery = (
-    queryFilterType: UrlQueryFilter,
+    queryFilterType: FilterOptions,
     divAnchor: React.RefObject<HTMLDivElement>,
 ): FilterByParamsHook => {
     const [inputValue, setInputValue] = React.useState<number | string>(-1);

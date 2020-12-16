@@ -1,11 +1,11 @@
 import * as React from "react";
 import {useHistory} from "react-router-dom"
 import {
+    FilterOptions,
     ProductBrands,
     ProductFilterState,
     ProductSortBy,
-    ProductTypes,
-    UrlQueryFilter
+    ProductTypes
 } from "../ProductModels/ProductFiltersEnum";
 
 type QueryValueType = string | number | ProductTypes | ProductBrands | ProductSortBy;
@@ -13,7 +13,7 @@ type QueryValueType = string | number | ProductTypes | ProductBrands | ProductSo
 let queryObj: { [i: string]: string } = {};
 
 export const useProductFilterRoute = (
-    queryType: UrlQueryFilter,
+    queryType: FilterOptions,
     filterType?: ProductFilterState,
     setFilterValue?: React.Dispatch<React.SetStateAction<string | number>>
 ): (queryValue?: QueryValueType) => void => {

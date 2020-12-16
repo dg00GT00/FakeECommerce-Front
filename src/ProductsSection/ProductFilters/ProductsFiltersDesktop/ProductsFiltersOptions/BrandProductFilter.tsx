@@ -3,11 +3,7 @@ import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
 import {ProductFilterProps} from '../../ProductFilterTypes';
 import FormControl from "@material-ui/core/FormControl";
 import {InputLabel, Select} from "@material-ui/core";
-import {
-    ProductBrands,
-    ProductFilterState,
-    UrlQueryFilter
-} from "../../../../Utilities/ProductModels/ProductFiltersEnum";
+import {FilterOptions, ProductBrands, ProductFilterState} from "../../../../Utilities/ProductModels/ProductFiltersEnum";
 import {useFilterRouteManager} from "../../../../Utilities/CustomHooks/useFilterRouteManager";
 
 
@@ -41,7 +37,7 @@ export const BrandProductFilter: React.FunctionComponent<ProductFilterProps> = p
     const formStyles = useFormStyles();
     const formRef = React.useRef<HTMLDivElement>(null);
     const [brand, setBrand] = React.useState<number | string>("");
-    const {inputValue, pushToRoute} = useFilterRouteManager(UrlQueryFilter.Brand, ProductFilterState.FilterBrand, formRef, setBrand);
+    const {inputValue, pushToRoute} = useFilterRouteManager(FilterOptions.Brand, ProductFilterState.FilterBrand, formRef, setBrand);
 
     const handleChange = (event: React.ChangeEvent<{ name?: string; value: unknown }>) => {
         const queryValue = event.target.value as number;
