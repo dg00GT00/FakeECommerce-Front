@@ -1,12 +1,10 @@
 import * as React from 'react';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Dialog from '@material-ui/core/Dialog';
 import {useProductFilterRoute} from "../../../../Utilities/CustomHooks/useProductFilterRoute";
 import {FilterOptions, ProductFilterState} from "../../../../Utilities/ProductModels/ProductFiltersEnum";
 import {DialogTypesEnum} from './DialogTypesEnum';
+import {FilterOptionsWithIndicator} from "../ProductFilterOptions/FilterOptionsWithIndicator";
 
 type ProductDialogProps = {
     onClose: React.MouseEventHandler<HTMLElement>;
@@ -36,13 +34,12 @@ export const ProductFilterDialog: React.FunctionComponent<ProductDialogProps> = 
     return (
         <Dialog onClose={props.onClose} aria-labelledby="simple-dialog-title" open={props.open}>
             <DialogTitle id="simple-dialog-title">{props.dialogTitle}</DialogTitle>
-            <List>
-                {props.dialogItems.map((product, index) => (
-                    <ListItem button key={`dialog_${index}`}>
-                        <ListItemText onClick={handleClick} primary={product}/>
-                    </ListItem>
-                ))}
-            </List>
+            <FilterOptionsWithIndicator
+                clickAction={handleClick}
+                filterOptions={props.dialogItems}
+                filterState={props.dialogTitle === DialogTypesEnum.ProductTypes ? ProductFilterState.FilterType : ProductFilterState.FilterBrand}
+                filterType={props.dialogTitle === DialogTypesEnum.ProductTypes ? FilterOptions.Type : FilterOptions.Brand}
+                typeId={props.dialogTitle === DialogTypesEnum.ProductTypes ? "dialog_type" : "dialog_brand"}/>
         </Dialog>
     );
 }

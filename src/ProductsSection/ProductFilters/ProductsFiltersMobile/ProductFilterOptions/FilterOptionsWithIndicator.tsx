@@ -18,18 +18,20 @@ type FilterOptionsWithIndicatorProps = {
     clickAction: React.MouseEventHandler,
     filterOptions: string[],
     filterType: FilterOptions,
+    typeId: FilterOptions | string,
+    filterState: ProductFilterState,
     subHeader?: string,
-    optionsId?: string[]
+    rootId?: string[]
 };
 
 export const FilterOptionsWithIndicator: React.FunctionComponent<FilterOptionsWithIndicatorProps> = props => {
 
-    if (props.optionsId && props.optionsId.length !== props.filterOptions.length) {
+    if (props.rootId && props.rootId.length !== props.filterOptions.length) {
         throw new Error("The number of items in the optionsId props must match the number of items of filterOptions props");
     }
 
     const {clearSwitch} = React.useContext(ClearFiltersContext);
-    const pushToRoute = useProductFilterRoute(FilterOptions.Sort, ProductFilterState.FilterSort);
+    const pushToRoute = useProductFilterRoute(props.filterType, props.filterState);
     const [indicatorStyle, setIndicatorStyle] = React.useState<{ [i: string]: { [i: string]: string } }>({});
     const filterRef = React.useRef<HTMLLIElement | null>(null);
 
@@ -41,7 +43,7 @@ export const FilterOptionsWithIndicator: React.FunctionComponent<FilterOptionsWi
         return (
             <MenuItem ref={filterRef}
                       key={id}
-                      id={props.optionsId ? props.optionsId[index] : undefined}
+                      id={props.rootId ? props.rootId[index] : undefined}
                       onClick={event => handleClick(event, index)}
                       style={{justifyContent: "space-between"}}>
                 {value}

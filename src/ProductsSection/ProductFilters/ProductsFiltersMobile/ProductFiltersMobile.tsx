@@ -12,7 +12,7 @@ import {CartDefault} from "../../../Cart/CartDefault";
 import {FilterOptionsWithIndicator} from "./ProductFilterOptions/FilterOptionsWithIndicator";
 import {DialogTypesEnum} from "./ProductDialog/DialogTypesEnum";
 import {ClearFiltersContext} from "../../../Utilities/ClearFilterManager/ClearFiltersContext";
-import {FilterOptions} from "../../../Utilities/ProductModels/ProductFiltersEnum";
+import {FilterOptions, ProductFilterState} from "../../../Utilities/ProductModels/ProductFiltersEnum";
 import ListSubheader from "@material-ui/core/ListSubheader";
 
 const seeMoreStyle = makeStyles((theme: Theme) => {
@@ -143,16 +143,22 @@ export const ProductFiltersMobile: React.FunctionComponent = () => {
                     <FilterOptionsWithIndicator
                         clickAction={handleProductDialog}
                         filterType={FilterOptions.Type}
-                        optionsId={["productType"]}
+                        typeId={FilterOptions.Type}
+                        filterState={ProductFilterState.FilterType}
+                        rootId={["productType"]}
                         filterOptions={["Product Type"]}/>
                     <FilterOptionsWithIndicator
                         clickAction={handleProductDialog}
                         filterType={FilterOptions.Brand}
-                        optionsId={["productBrand"]}
+                        filterState={ProductFilterState.FilterBrand}
+                        typeId={FilterOptions.Brand}
+                        rootId={["productBrand"]}
                         filterOptions={["Product Brand"]}/>
                     <FilterOptionsWithIndicator
                         clickAction={handleClose}
                         filterType={FilterOptions.Sort}
+                        typeId={FilterOptions.Sort}
+                        filterState={ProductFilterState.FilterSort}
                         subHeader={"Sort By"}
                         filterOptions={["Alphabetically", "Reverse Alphabetically", "Lower Price", "Higher Price"]}/>
                     <MenuItem onClick={handleClearFilters} className={clearStyle.root}>Clear</MenuItem>
