@@ -12,8 +12,10 @@
         padding: 30px 5px;
 
         .clear {
-            position: relative;
-            z-index: 10;
+            justify-content: center;
+            margin: 6%;
+            border-radius: 3px;
+            color: white;
         }
 
         .cart {

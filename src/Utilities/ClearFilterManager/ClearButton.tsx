@@ -11,7 +11,7 @@ type ClearButtonProps = {
 export const ClearButton: React.FunctionComponent<ClearButtonProps> = props => {
     const {setClear} = React.useContext(ClearFiltersContext);
 
-    const onClick = (...args: any[]): void => {
+    const handleClick = (...args: any[]): void => {
         setClear();
         if (props.onClick) {
             props.onClick(args);
@@ -21,7 +21,7 @@ export const ClearButton: React.FunctionComponent<ClearButtonProps> = props => {
     return (
         <Button color={"primary"}
                 variant={"contained"}
-                onClick={() => onClick.apply(onClick, props.onClick?.arguments)}
+                onClick={() => handleClick.apply(handleClick, props.onClick?.arguments)}
                 {...props}>Clear</Button>
     );
 }

@@ -37,8 +37,8 @@ export const ProductFilterDialog: React.FunctionComponent<ProductDialogProps> = 
         <Dialog onClose={props.onClose} aria-labelledby="simple-dialog-title" open={props.open}>
             <DialogTitle id="simple-dialog-title">{props.dialogTitle}</DialogTitle>
             <List>
-                {props.dialogItems.map((product) => (
-                    <ListItem button key={product}>
+                {props.dialogItems.map((product, index) => (
+                    <ListItem button key={`dialog_${index}`}>
                         <ListItemText onClick={handleClick} primary={product}/>
                     </ListItem>
                 ))}

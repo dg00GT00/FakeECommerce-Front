@@ -10,10 +10,9 @@ import {InputBase, Paper, SvgIcon, useTheme} from "@material-ui/core";
 import {useScrollPosition} from "../../../Utilities/CustomHooks/useScrollPosition";
 import {ProductFilterDialog} from "./ProductDialog/ProductFilterDialog";
 import {CartDefault} from "../../../Cart/CartDefault";
-import {ClearButton} from "../../../Utilities/ClearFilterManager/ClearButton";
-import {useHistory} from "react-router-dom";
 import {SortFilterOptions} from "./ProductFilterOptions/SortFilterOptions";
 import {DialogTypesEnum} from "./ProductDialog/DialogTypesEnum";
+import {ClearFiltersContext} from "../../../Utilities/ClearFilterManager/ClearFiltersContext";
 
 const seeMoreStyle = makeStyles((theme: Theme) => {
     return createStyles({
@@ -33,6 +32,14 @@ const searchBarStyle = makeStyles({
     }
 })
 
+const clearButtonStyles = makeStyles((theme: Theme) => {
+    return createStyles({
+        root: {
+            backgroundColor: theme.palette.primary.main
+        }
+    })
+})
+
 const FilterIcon: React.FunctionComponent<{ className: string }> = props => {
     return (
         <SvgIcon className={props.className}>
@@ -47,15 +54,17 @@ const FilterIcon: React.FunctionComponent<{ className: string }> = props => {
 
 // TODO: Refactor the code in order to eliminate repetition
 export const ProductFiltersMobile: React.FunctionComponent = () => {
-    const {push, location: {search, pathname}} = useHistory();
+    const {setClear} = React.useContext(ClearFiltersContext);
+
     const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null);
     const [openProductType, setProductTypeDialog] = React.useState(false);
     const [openProductBrand, setProductBrandDialog] = React.useState(false);
     const searchBarAnchor = React.useRef<HTMLDivElement | null>(null);
-    const fullPathName = (pathname ? pathname : "/products") + search;
 
     const moreStyle = seeMoreStyle();
     const searchStyle = searchBarStyle();
+    const clearStyle = clearButtonStyles();
+
     const theme = useTheme();
     const open = Boolean(anchorEl);
 
@@ -66,6 +75,11 @@ export const ProductFiltersMobile: React.FunctionComponent = () => {
     const handleClose = () => {
         setAnchorEl(null);
     };
+
+    const handleClearFilters = () => {
+        setClear();
+        handleClose();
+    }
 
     const handleProductDialog = (event: React.MouseEvent<HTMLElement>) => {
         if (event.currentTarget.id === "productType") {
@@ -116,22 +130,17 @@ export const ProductFiltersMobile: React.FunctionComponent = () => {
                     <MenuItem id={"productType"} onClick={handleProductDialog}>Product Type</MenuItem>
                     <MenuItem id={"productBrand"} onClick={handleProductDialog}>Product Brand</MenuItem>
                     <SortFilterOptions onClose={handleClose}/>
-                    <MenuItem>
-                        <ClearButton
-                            onClick={handleClose}
-                            // className={styles.clear}
-                            style={{width: "100%", display: "block", marginTop: "5px"}}/>
-                    </MenuItem>
+                    <MenuItem onClick={handleClearFilters} className={[clearStyle.root, styles.clear].join(" ")}>Clear</MenuItem>
                 </Menu>
             </div>
             <ProductFilterDialog
                 open={openProductType}
-                onClose={(event => setProductTypeDialog(false))}
+                onClose={(_ => setProductTypeDialog(false))}
                 dialogTitle={DialogTypesEnum.ProductTypes}
                 dialogItems={["Men Clothing", "Jewelry", "Electronic", "Women Clothing"]}/>
             <ProductFilterDialog
                 open={openProductBrand}
-                onClose={(event => setProductBrandDialog(false))}
+                onClose={(_ => setProductBrandDialog(false))}
                 dialogTitle={DialogTypesEnum.ProductBrands}
                 dialogItems={["Men Styled Clothing", "New Jewelry", "Super Electronic", "Women Styled Clothing", "Women Loving", "Samsung"]}/>
         </div>
