@@ -14,8 +14,6 @@ const filterIndicatorStyle = {
     backgroundColor: "initial"
 };
 
-const filterIndicator: { [i: string]: { [i: string]: string } } = {};
-
 type FilterOptionsWithIndicatorProps = {
     clickAction: React.MouseEventHandler,
     filterOptions: string[],
@@ -25,20 +23,21 @@ type FilterOptionsWithIndicatorProps = {
 };
 
 export const FilterOptionsWithIndicator: React.FunctionComponent<FilterOptionsWithIndicatorProps> = props => {
+
     if (props.optionsId && props.optionsId.length !== props.filterOptions.length) {
         throw new Error("The number of items in the optionsId props must match the number of items of filterOptions props");
     }
 
     const {clearSwitch} = React.useContext(ClearFiltersContext);
     const pushToRoute = useProductFilterRoute(FilterOptions.Sort, ProductFilterState.FilterSort);
-    const [indicatorStyle, setIndicatorStyle] = React.useState(filterIndicator);
+    const [indicatorStyle, setIndicatorStyle] = React.useState<{ [i: string]: { [i: string]: string } }>({});
     const filterRef = React.useRef<HTMLLIElement | null>(null);
 
     const theme = useTheme();
 
     const filterItems = props.filterOptions.map((value, index) => {
         const id = `${props.filterType}_${index}`;
-        filterIndicator[id] = filterIndicatorStyle;
+        indicatorStyle[id] = filterIndicatorStyle;
         return (
             <MenuItem ref={filterRef}
                       key={id}
