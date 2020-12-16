@@ -56,19 +56,10 @@ const FilterIcon: React.FunctionComponent<{ className: string }> = props => {
     )
 }
 
-const filterIndicatorStyle = {
-    width: "7px",
-    height: "7px",
-    borderRadius: "50%",
-    marginLeft: "15px",
-    backgroundColor: "initial"
-};
-
 // TODO: Refactor the code in order to eliminate repetition
 export const ProductFiltersMobile: React.FunctionComponent = () => {
-    const {clearSwitch, setClear} = React.useContext(ClearFiltersContext);
+    const {setClear} = React.useContext(ClearFiltersContext);
 
-    const [indicatorStyle, setIndicatorStyle] = React.useState(filterIndicatorStyle);
     const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null);
     const [openProductType, setProductTypeDialog] = React.useState(false);
     const [openProductBrand, setProductBrandDialog] = React.useState(false);

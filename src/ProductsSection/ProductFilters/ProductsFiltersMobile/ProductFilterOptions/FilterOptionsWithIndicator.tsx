@@ -38,7 +38,7 @@ export const FilterOptionsWithIndicator: React.FunctionComponent<FilterOptionsWi
     const theme = useTheme();
 
     const filterItems = props.filterOptions.map((value, index) => {
-        const id = `${props.filterType}_${index}`;
+        const id = `${props.typeId}_${index}`;
         indicatorStyle[id] = filterIndicatorStyle;
         return (
             <MenuItem ref={filterRef}
@@ -55,7 +55,7 @@ export const FilterOptionsWithIndicator: React.FunctionComponent<FilterOptionsWi
     const handleClick = (event: React.MouseEvent, index: number) => {
         const textContent = event.currentTarget.textContent;
         setIndicatorStyle(prevIndicator => {
-            const id = `${props.filterType}_${index}`;
+            const id = `${props.typeId}_${index}`;
             const indicator = prevIndicator || indicatorStyle;
             for (const indicatorId in indicator) {
                 const indicatorEl = document.getElementById(indicatorId);
