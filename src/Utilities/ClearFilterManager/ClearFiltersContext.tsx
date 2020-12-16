@@ -18,7 +18,7 @@ export const ClearFiltersContext = React.createContext({
 const clearPropsArray: ClearFilterType[] = [];
 
 export const ClearFiltersProvider: React.FunctionComponent = props => {
-    const [clearSwitch, toggleClearSwitch] = React.useState(0);
+    const clearSwitch = React.useRef(0);
     const pushToRoute = useProductFilterRoute(FilterOptions.Clear, ProductFilterState.Clear)
 
     const setClearFunction = (clearProps: ClearFilterType) => {
@@ -26,13 +26,11 @@ export const ClearFiltersProvider: React.FunctionComponent = props => {
     }
 
     const setClear = () => {
-        toggleClearSwitch(_ => {
-            if (clearSwitch === 0) {
-                return 1;
-            } else {
-                return 0;
-            }
-        });
+        if (clearSwitch.current === 0) {
+            clearSwitch.current = 1;
+        } else {
+            clearSwitch.current = 0;
+        }
         clearPropsArray?.forEach(clearProp => {
             clearProp.clearInputFunction("");
             clearProp.clearFilterFromParams();
@@ -41,7 +39,7 @@ export const ClearFiltersProvider: React.FunctionComponent = props => {
     }
 
     return (
-        <ClearFiltersContext.Provider value={{setClear, setClearFunction, clearSwitch}}>
+        <ClearFiltersContext.Provider value={{setClear, setClearFunction, clearSwitch: clearSwitch.current}}>
             {props.children}
         </ClearFiltersContext.Provider>
     );
