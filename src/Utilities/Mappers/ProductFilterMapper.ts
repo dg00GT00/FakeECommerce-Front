@@ -32,5 +32,7 @@ export const productFilterEnumToUrl = (filterType: ProductFilterMapperType): str
             return "2";
         case ProductSortBy.PriceDesc:
             return "3";
+        default:
+            return "Infinity"
     }
 }
