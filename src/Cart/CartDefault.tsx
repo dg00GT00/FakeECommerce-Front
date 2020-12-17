@@ -2,7 +2,7 @@ import * as React from "react";
 import ShoppingCartRounded from "@material-ui/icons/ShoppingCartRounded";
 import IconButton from "@material-ui/core/IconButton";
 import Badge from "@material-ui/core/Badge/Badge";
-import {CartContext} from "./CartContext";
+import {CartContext} from "../Utilities/Context/CartContext";
 
 type CartDefaultProps = {
     classNameIcon?: string,

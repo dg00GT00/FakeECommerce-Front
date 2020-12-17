@@ -1,5 +1,5 @@
 import * as React from "react";
-import {ClearFiltersContext} from "../ClearFilterManager/ClearFiltersContext";
+import {ClearFiltersContext} from "../Context/ClearFiltersContext";
 import {useProductFilterRoute} from "./useProductFilterRoute";
 import {useProductFilterRouteByQuery} from "./useProductFilterRouteByQuery";
 import {FilterOptions, ProductFilterState} from "../ProductModels/ProductFiltersEnum";

@@ -1,5 +1,5 @@
 import * as React from "react";
-import {ClearFiltersContext} from "./ClearFiltersContext";
+import {ClearFiltersContext} from "../Context/ClearFiltersContext";
 import Button from "@material-ui/core/Button/Button";
 
 type ClearButtonProps = {

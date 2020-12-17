@@ -8,7 +8,7 @@ import {createStyles, makeStyles} from "@material-ui/core/styles";
 import {ProductsContext} from "../ProductContext/ProductsContext";
 import {handleScrollGridItems, PRODUCT_GRID_ID} from "../../Utilities/ProductGridScroll";
 import {ProductRouteManager} from "../../Utilities/Routes/ProductRouteManager/ProductRouteManager";
-import {ClearFiltersProvider} from "../../Utilities/ClearFilterManager/ClearFiltersContext";
+import {ClearFiltersProvider} from "../../Utilities/Context/ClearFiltersContext";
 import {FilterOptions, ProductFilterState} from "../../Utilities/ProductModels/ProductFiltersEnum";
 
 
@@ -51,7 +51,9 @@ export const ProductPaginationManager: React.FunctionComponent = () => {
     return (
         <div className={styles.grid_container}>
             <ClearFiltersProvider>
-                <ProductFilters/>
+                {/*<MobileFiltersContextProvider>*/}
+                    <ProductFilters/>
+                {/*</MobileFiltersContextProvider>*/}
             </ClearFiltersProvider>
             <div className={styles.grid_content} id={PRODUCT_GRID_ID}>
                 <ProductRouteManager pageNumber={pageNumber}/>

@@ -2,7 +2,7 @@ import * as React from "react";
 import {LandingMarketing} from "../LandingMarketing/LandingMarketing";
 import styles from "./ProductsSection.module.scss";
 import {createStyles, makeStyles} from "@material-ui/core/styles";
-import {CartContext} from "../Cart/CartContext";
+import {CartContext} from "../Utilities/Context/CartContext";
 import {FloatingCart} from "../Cart/FloatingCart";
 import {ProductPaginationManager} from "./ProductPaginationManager/ProductPaginationManager";
 import {ProductsContextProvider} from "./ProductContext/ProductsContext";

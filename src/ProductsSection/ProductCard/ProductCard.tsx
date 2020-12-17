@@ -10,7 +10,7 @@ import CardHeader from "@material-ui/core/CardHeader";
 import styles from "./ProductCard.module.scss";
 import {ReactComponent as CartArrowDown} from "../../Assets/cartArrowDown.svg";
 import {ButtonBase, useTheme} from "@material-ui/core";
-import {CartContext} from "../../Cart/CartContext";
+import {CartContext} from "../../Utilities/Context/CartContext";
 import {ProductCardProps} from '../../Utilities/ProductProps/ProductCardProps';
 
 

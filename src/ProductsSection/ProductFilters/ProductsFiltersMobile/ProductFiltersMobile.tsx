@@ -5,27 +5,17 @@ import MenuItem from "@material-ui/core/MenuItem/MenuItem";
 import SearchRoundedIcon from '@material-ui/icons/SearchRounded';
 import styles from "./ProductFiltersMobile.module.scss";
 import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
-import {InputBase, Paper, SvgIcon, useTheme} from "@material-ui/core";
+import {InputBase, Paper, useTheme} from "@material-ui/core";
 import {useScrollPosition} from "../../../Utilities/CustomHooks/useScrollPosition";
 import {ProductFilterDialog} from "./ProductDialog/ProductFilterDialog";
 import {CartDefault} from "../../../Cart/CartDefault";
 import {FilterOptionsWithIndicator} from "./ProductFilterOptions/FilterOptionsWithIndicator";
 import {DialogTypesEnum} from "./ProductDialog/DialogTypesEnum";
-import {ClearFiltersContext} from "../../../Utilities/ClearFilterManager/ClearFiltersContext";
+import {ClearFiltersContext} from "../../../Utilities/Context/ClearFiltersContext";
 import {FilterOptions, ProductFilterState} from "../../../Utilities/ProductModels/ProductFiltersEnum";
 import ListSubheader from "@material-ui/core/ListSubheader";
-
-const seeMoreStyle = makeStyles((theme: Theme) => {
-    return createStyles({
-        root: {
-            fill: theme.palette.secondary.main,
-        },
-        button: {
-            paddingRight: 0,
-            paddingLeft: "5%"
-        }
-    })
-})
+import {FilterMenu} from "./FilterMenu/FilterMenu";
+import {filterIndication} from "../../../Utilities/CustomHooks/filterIndication";
 
 const searchBarStyle = makeStyles({
     root: {
@@ -45,35 +35,35 @@ const clearButtonStyles = makeStyles((theme: Theme) => {
     })
 })
 
-const FilterIcon: React.FunctionComponent<{ className: string }> = props => {
-    return (
-        <SvgIcon className={props.className}>
-            <svg viewBox="0 0 24 24">
-                <path fill="currentColor"
-                      d="M11 11L16.76 3.62A1 1 0 0 0 16.59 2.22A1 1 0 0 0 16 2H2A1 1 0 0 0 1.38 2.22A1 1 0 0 0 1.21 3.62L7 11V16.87A1 1 0 0 0 7.29 17.7L9.29 19.7A1 1 0 0 0 10.7 19.7A1 1 0 0 0 11 18.87V11M13 16L18 21L23 16Z"/>
-            </svg>
-        </SvgIcon>
-    )
-}
+const {isFilterSelected} = filterIndication();
 
 // TODO: Refactor the code in order to eliminate repetition
 export const ProductFiltersMobile: React.FunctionComponent = () => {
+
     const {setClear} = React.useContext(ClearFiltersContext);
 
-    const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null);
+    const [anchorEl, setAnchorEl] = React.useState<Element | null>(null);
+    const [badgeDisplay, toggleBadgeDisplay] = React.useState(!isFilterSelected);
     const [openProductType, setProductTypeDialog] = React.useState(false);
     const [openProductBrand, setProductBrandDialog] = React.useState(false);
     const searchBarAnchor = React.useRef<HTMLDivElement | null>(null);
 
-    const moreStyle = seeMoreStyle();
     const searchStyle = searchBarStyle();
     const clearStyle = clearButtonStyles();
 
     const theme = useTheme();
     const open = Boolean(anchorEl);
 
-    const handleClick = (event: React.MouseEvent<HTMLElement>) => {
+    const handleClick = (event: React.MouseEvent) => {
         setAnchorEl(event.currentTarget);
+        toggleBadgeDisplay(preDisplay => {
+            const display = preDisplay === undefined ? badgeDisplay : preDisplay;
+            if (display === !isFilterSelected) {
+                return display;
+            } else {
+                return !display;
+            }
+        });
     };
 
     const handleClose = () => {
@@ -102,7 +92,7 @@ export const ProductFiltersMobile: React.FunctionComponent = () => {
         if (currentPosition.y > 0 && searchBarAnchor.current) {
             searchBarAnchor.current.style.boxShadow = "none";
         }
-    }, {element: searchBarAnchor})
+    }, {element: searchBarAnchor});
 
     return (
         <div className={styles.mobile_filters_container}
@@ -116,14 +106,7 @@ export const ProductFiltersMobile: React.FunctionComponent = () => {
                     <InputBase placeholder={"Search"} fullWidth className={styles.input_search_bar}/>
                 </Paper>
                 <CartDefault classNameButton={styles.cart} hideWhenZero/>
-                <IconButton
-                    classes={{root: moreStyle.button}}
-                    aria-label="more"
-                    aria-controls="long-menu"
-                    aria-haspopup="true"
-                    onClick={handleClick}>
-                    <FilterIcon className={moreStyle.root}/>
-                </IconButton>
+                <FilterMenu onClick={handleClick} badgeDisplay={badgeDisplay}/>
                 <Menu
                     id="long-menu"
                     anchorEl={anchorEl}

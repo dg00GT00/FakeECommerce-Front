@@ -4,7 +4,7 @@ import {ProductsSection} from "../ProductsSection/ProductsSection";
 import {Testimonials} from "../Testimonials/Testimonials";
 import {Footer} from "../Footer/Footer";
 import {Header} from "../Header/Header";
-import {CartContextProvider} from "../Cart/CartContext";
+import {CartContextProvider} from "../Utilities/Context/CartContext";
 import {BrowserRouter} from "react-router-dom";
 
 const App = () => {

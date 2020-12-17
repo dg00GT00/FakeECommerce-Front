@@ -5,7 +5,7 @@ import {useProductFilterRoute} from "../../../../Utilities/CustomHooks/useProduc
 import {FilterOptions, ProductFilterState} from "../../../../Utilities/ProductModels/ProductFiltersEnum";
 import {DialogTypesEnum} from './DialogTypesEnum';
 import {FilterOptionsWithIndicator} from "../ProductFilterOptions/FilterOptionsWithIndicator";
-import {ClearFiltersContext} from "../../../../Utilities/ClearFilterManager/ClearFiltersContext";
+import {ClearFiltersContext} from "../../../../Utilities/Context/ClearFiltersContext";
 
 type ProductDialogProps = {
     onClose: React.MouseEventHandler;

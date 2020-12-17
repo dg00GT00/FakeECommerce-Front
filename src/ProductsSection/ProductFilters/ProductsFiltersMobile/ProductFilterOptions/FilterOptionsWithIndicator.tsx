@@ -4,7 +4,8 @@ import MenuItem from "@material-ui/core/MenuItem/MenuItem";
 import {useProductFilterRoute} from "../../../../Utilities/CustomHooks/useProductFilterRoute";
 import {FilterOptions, ProductFilterState} from "../../../../Utilities/ProductModels/ProductFiltersEnum";
 import {useTheme} from "@material-ui/core";
-import {ClearFiltersContext} from "../../../../Utilities/ClearFilterManager/ClearFiltersContext";
+import {ClearFiltersContext} from "../../../../Utilities/Context/ClearFiltersContext";
+import {filterIndication} from "../../../../Utilities/CustomHooks/filterIndication";
 
 const filterIndicatorStyle = {
     width: "7px",
@@ -25,16 +26,16 @@ type FilterOptionsWithIndicatorProps = {
     rootId?: string[]
 };
 
-export const FilterOptionsWithIndicator: React.FunctionComponent<FilterOptionsWithIndicatorProps> = props => {
+const {setSelection, resetSelection} = filterIndication();
 
+export const FilterOptionsWithIndicator: React.FunctionComponent<FilterOptionsWithIndicatorProps> = props => {
     if (props.rootId && props.rootId.length !== props.filterOptions.length) {
         throw new Error("The number of items in the optionsId props must match the number of items of filterOptions props");
-    }
 
+    }
     const {clearSwitch} = React.useContext(ClearFiltersContext);
     const pushToRoute = useProductFilterRoute(props.filterType, props.filterState);
     const [indicatorStyle, setIndicatorStyle] = React.useState<{ [i: string]: { [i: string]: string } }>({});
-    const filterRef = React.useRef<HTMLLIElement | null>(null);
 
     const theme = useTheme();
 
@@ -42,8 +43,7 @@ export const FilterOptionsWithIndicator: React.FunctionComponent<FilterOptionsWi
         const id = `${props.typeId}_${index}`;
         indicatorStyle[id] = filterIndicatorStyle;
         return (
-            <MenuItem ref={filterRef}
-                      key={id}
+            <MenuItem key={id}
                       id={props.rootId ? props.rootId[index] : undefined}
                       onClick={event => handleClick(event, index)}
                       style={{justifyContent: "space-between"}}>
@@ -73,9 +73,10 @@ export const FilterOptionsWithIndicator: React.FunctionComponent<FilterOptionsWi
                 }
             }
             return indicator;
-        })
+        });
         if (!(props.noRequestThroughNavigation !== undefined && props.noRequestThroughNavigation)) {
             pushToRoute(textContent?.toLowerCase());
+            setSelection();
         }
         props.clickAction(event, index);
     }
@@ -91,7 +92,8 @@ export const FilterOptionsWithIndicator: React.FunctionComponent<FilterOptionsWi
                 }
             }
             return indicator;
-        })
+        });
+        resetSelection();
     }, [clearSwitch, indicatorStyle]);
 
     return (
