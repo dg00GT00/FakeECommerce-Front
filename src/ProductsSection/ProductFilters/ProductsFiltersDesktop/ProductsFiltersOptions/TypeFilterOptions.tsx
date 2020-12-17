@@ -1,4 +1,4 @@
-import React, {useRef} from 'react';
+import * as React from 'react';
 import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
 import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
@@ -36,7 +36,7 @@ const useFormStyles = makeStyles((theme: Theme) =>
 export const TypeFilterOptions: React.FunctionComponent<ProductFilterProps> = props => {
     const {className} = props;
     const formStyles = useFormStyles();
-    const formRef = useRef<HTMLDivElement>(null)
+    const formRef = React.useRef<HTMLDivElement>(null)
     const [type, setType] = React.useState<number | string>("");
 
     const {inputValue, pushToRoute} = useFilterRouteManager(FilterOptions.Type, ProductFilterState.FilterType, formRef, setType);

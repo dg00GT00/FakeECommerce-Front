@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
 import {ProductFilterProps} from '../../ProductFilterTypes';
 import FormControl from "@material-ui/core/FormControl";
