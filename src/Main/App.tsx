@@ -1,23 +1,18 @@
 import * as React from "react";
-import {MainLanding} from "../HeroSection/MainTextHero/MainLanding";
-import {ProductsSection} from "../ProductsSection/ProductsSection";
-import {Testimonials} from "../Testimonials/Testimonials";
-import {Footer} from "../Footer/Footer";
-import {Header} from "../Header/Header";
-import {CartContextProvider} from "../Utilities/Context/CartContext";
-import {BrowserRouter} from "react-router-dom";
+import {UserSignup} from "../UserManager/UserSignup";
 
 const App = () => {
     return (
-        <BrowserRouter>
-            <CartContextProvider>
-                <Header/>
-                <MainLanding/>
-                <ProductsSection/>
-            </CartContextProvider>
-            <Testimonials/>
-            <Footer/>
-        </BrowserRouter>
+        <UserSignup/>
+        // <BrowserRouter>
+        //     <CartContextProvider>
+        //         <Header/>
+        //         <MainLanding/>
+        //         <ProductsSection/>
+        //     </CartContextProvider>
+        //     <Testimonials/>
+        //     <Footer/>
+        // </BrowserRouter>
     );
 }
 
