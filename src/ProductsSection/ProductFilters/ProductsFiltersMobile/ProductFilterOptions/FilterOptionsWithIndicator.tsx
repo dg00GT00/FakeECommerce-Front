@@ -5,7 +5,7 @@ import {useProductFilterRoute} from "../../../../Utilities/CustomHooks/useProduc
 import {FilterOptions, ProductFilterState} from "../../../../Utilities/ProductModels/ProductFiltersEnum";
 import {useTheme} from "@material-ui/core";
 import {ClearFiltersContext} from "../../../../Utilities/Context/ClearFiltersContext";
-import {filterIndication} from "../../../../Utilities/CustomHooks/filterIndication";
+import {MobileFiltersContext} from "../../../../Utilities/Context/MobileFiltersContext";
 
 const filterIndicatorStyle = {
     width: "7px",
@@ -26,7 +26,6 @@ type FilterOptionsWithIndicatorProps = {
     rootId?: string[]
 };
 
-const {setSelection, resetSelection} = filterIndication();
 
 export const FilterOptionsWithIndicator: React.FunctionComponent<FilterOptionsWithIndicatorProps> = props => {
     if (props.rootId && props.rootId.length !== props.filterOptions.length) {
@@ -34,6 +33,7 @@ export const FilterOptionsWithIndicator: React.FunctionComponent<FilterOptionsWi
 
     }
     const {clearSwitch} = React.useContext(ClearFiltersContext);
+    const {toggleFilterSelection} = React.useContext(MobileFiltersContext);
     const pushToRoute = useProductFilterRoute(props.filterType, props.filterState);
     const [indicatorStyle, setIndicatorStyle] = React.useState<{ [i: string]: { [i: string]: string } }>({});
 
@@ -55,46 +55,57 @@ export const FilterOptionsWithIndicator: React.FunctionComponent<FilterOptionsWi
 
     const handleClick = (event: React.MouseEvent, index: number) => {
         const textContent = event.currentTarget.textContent;
-        setIndicatorStyle(prevIndicator => {
-            const id = `${props.typeId}_${index}`;
-            const indicator = prevIndicator || indicatorStyle;
-            for (const indicatorId in indicator) {
-                const indicatorEl = document.getElementById(indicatorId);
-                if (indicatorId === id) {
-                    indicator[indicatorId] = {...indicator[indicatorId], backgroundColor: theme.palette.primary.main};
-                    if (indicatorEl) {
-                        indicatorEl.style.backgroundColor = indicator[indicatorId].backgroundColor;
-                    }
-                } else {
-                    indicator[indicatorId] = {...indicator[indicatorId], backgroundColor: "initial"};
-                    if (indicatorEl) {
-                        indicatorEl.style.backgroundColor = indicator[indicatorId].backgroundColor;
+        // This function should wrap the function that update the state of this component due to
+        // asynchronous behavior of set state function
+        toggleFilterSelection(_ => {
+            setIndicatorStyle(prevIndicator => {
+                const id = `${props.typeId}_${index}`;
+                const indicator = prevIndicator || indicatorStyle;
+                for (const indicatorId in indicator) {
+                    const indicatorEl = document.getElementById(indicatorId);
+                    if (indicatorId === id) {
+                        indicator[indicatorId] = {
+                            ...indicator[indicatorId],
+                            backgroundColor: theme.palette.primary.main
+                        };
+                        if (indicatorEl) {
+                            indicatorEl.style.backgroundColor = indicator[indicatorId].backgroundColor;
+                        }
+                    } else {
+                        indicator[indicatorId] = {...indicator[indicatorId], backgroundColor: "initial"};
+                        if (indicatorEl) {
+                            indicatorEl.style.backgroundColor = indicator[indicatorId].backgroundColor;
+                        }
                     }
                 }
-            }
-            return indicator;
+                return indicator;
+            });
+            return true;
         });
         if (!(props.noRequestThroughNavigation !== undefined && props.noRequestThroughNavigation)) {
             pushToRoute(textContent?.toLowerCase());
-            setSelection();
         }
         props.clickAction(event, index);
     }
 
     React.useEffect(() => {
-        setIndicatorStyle(prevIndicator => {
-            const indicator = prevIndicator || indicatorStyle;
-            for (const indicatorId in indicator) {
-                const indicatorEl = document.getElementById(indicatorId);
-                indicator[indicatorId] = {...indicator[indicatorId], backgroundColor: "initial"};
-                if (indicatorEl) {
-                    indicatorEl.style.backgroundColor = indicator[indicatorId].backgroundColor;
+        // This function should wrap the function that update the state of this component due to
+        // asynchronous behavior of set state function
+        toggleFilterSelection(_ => {
+            setIndicatorStyle(prevIndicator => {
+                const indicator = prevIndicator || indicatorStyle;
+                for (const indicatorId in indicator) {
+                    const indicatorEl = document.getElementById(indicatorId);
+                    indicator[indicatorId] = {...indicator[indicatorId], backgroundColor: "initial"};
+                    if (indicatorEl) {
+                        indicatorEl.style.backgroundColor = indicator[indicatorId].backgroundColor;
+                    }
                 }
-            }
-            return indicator;
-        });
-        resetSelection();
-    }, [clearSwitch, indicatorStyle]);
+                return indicator;
+            });
+            return false;
+        })
+    }, [clearSwitch, indicatorStyle, toggleFilterSelection]);
 
     return (
         <>

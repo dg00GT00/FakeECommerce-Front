@@ -3,6 +3,7 @@ import IconButton from "@material-ui/core/IconButton/IconButton";
 import Badge from "@material-ui/core/Badge/Badge";
 import {SvgIcon} from "@material-ui/core";
 import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
+import {MobileFiltersContext} from "../../../../Utilities/Context/MobileFiltersContext";
 
 const seeMoreStyle = makeStyles((theme: Theme) => {
     return createStyles({
@@ -28,15 +29,12 @@ const FilterIcon: React.FunctionComponent<{ className: string }> = props => {
     )
 }
 
-export const FilterMenu: React.FunctionComponent<{onClick: React.MouseEventHandler, badgeDisplay: boolean}> = props => {
+export const FilterMenu: React.FunctionComponent<{onClick: React.MouseEventHandler}> = props => {
     const moreStyle = seeMoreStyle();
-
-    React.useEffect(() => {
-        console.log("on filter menu");
-    }, [props.badgeDisplay]);
+    const {isFilterSelected} = React.useContext(MobileFiltersContext);
 
     return (
-        <Badge variant={"dot"} color={"secondary"} invisible={props.badgeDisplay}>
+        <Badge variant={"dot"} color={"secondary"} invisible={!isFilterSelected}>
             <IconButton
                 classes={{root: moreStyle.button}}
                 aria-label="more"

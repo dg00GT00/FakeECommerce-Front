@@ -15,7 +15,7 @@ import {ClearFiltersContext} from "../../../Utilities/Context/ClearFiltersContex
 import {FilterOptions, ProductFilterState} from "../../../Utilities/ProductModels/ProductFiltersEnum";
 import ListSubheader from "@material-ui/core/ListSubheader";
 import {FilterMenu} from "./FilterMenu/FilterMenu";
-import {filterIndication} from "../../../Utilities/CustomHooks/filterIndication";
+import {useForceUpdate} from "../../../Utilities/CustomHooks/useForceUpdate";
 
 const searchBarStyle = makeStyles({
     root: {
@@ -35,15 +35,14 @@ const clearButtonStyles = makeStyles((theme: Theme) => {
     })
 })
 
-const {isFilterSelected} = filterIndication();
 
 // TODO: Refactor the code in order to eliminate repetition
 export const ProductFiltersMobile: React.FunctionComponent = () => {
 
     const {setClear} = React.useContext(ClearFiltersContext);
 
+    const forceUpdate = useForceUpdate();
     const [anchorEl, setAnchorEl] = React.useState<Element | null>(null);
-    const [badgeDisplay, toggleBadgeDisplay] = React.useState(!isFilterSelected);
     const [openProductType, setProductTypeDialog] = React.useState(false);
     const [openProductBrand, setProductBrandDialog] = React.useState(false);
     const searchBarAnchor = React.useRef<HTMLDivElement | null>(null);
@@ -56,22 +55,16 @@ export const ProductFiltersMobile: React.FunctionComponent = () => {
 
     const handleClick = (event: React.MouseEvent) => {
         setAnchorEl(event.currentTarget);
-        toggleBadgeDisplay(preDisplay => {
-            const display = preDisplay === undefined ? badgeDisplay : preDisplay;
-            if (display === !isFilterSelected) {
-                return display;
-            } else {
-                return !display;
-            }
-        });
     };
 
     const handleClose = () => {
         setAnchorEl(null);
+        forceUpdate();
     };
 
     const handleClearFilters = () => {
         setClear();
+        forceUpdate();
         handleClose();
     }
 
@@ -106,7 +99,7 @@ export const ProductFiltersMobile: React.FunctionComponent = () => {
                     <InputBase placeholder={"Search"} fullWidth className={styles.input_search_bar}/>
                 </Paper>
                 <CartDefault classNameButton={styles.cart} hideWhenZero/>
-                <FilterMenu onClick={handleClick} badgeDisplay={badgeDisplay}/>
+                <FilterMenu onClick={handleClick}/>
                 <Menu
                     id="long-menu"
                     anchorEl={anchorEl}

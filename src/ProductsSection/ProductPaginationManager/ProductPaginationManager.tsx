@@ -10,6 +10,7 @@ import {handleScrollGridItems, PRODUCT_GRID_ID} from "../../Utilities/ProductGri
 import {ProductRouteManager} from "../../Utilities/Routes/ProductRouteManager/ProductRouteManager";
 import {ClearFiltersProvider} from "../../Utilities/Context/ClearFiltersContext";
 import {FilterOptions, ProductFilterState} from "../../Utilities/ProductModels/ProductFiltersEnum";
+import {MobileFiltersContextProvider} from "../../Utilities/Context/MobileFiltersContext";
 
 
 const useStyles = makeStyles((theme) =>
@@ -51,9 +52,9 @@ export const ProductPaginationManager: React.FunctionComponent = () => {
     return (
         <div className={styles.grid_container}>
             <ClearFiltersProvider>
-                {/*<MobileFiltersContextProvider>*/}
+                <MobileFiltersContextProvider>
                     <ProductFilters/>
-                {/*</MobileFiltersContextProvider>*/}
+                </MobileFiltersContextProvider>
             </ClearFiltersProvider>
             <div className={styles.grid_content} id={PRODUCT_GRID_ID}>
                 <ProductRouteManager pageNumber={pageNumber}/>

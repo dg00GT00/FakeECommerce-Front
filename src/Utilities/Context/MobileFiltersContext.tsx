@@ -1,12 +1,10 @@
 import * as React from "react";
 
 export const MobileFiltersContext = React.createContext({
-    isFilterSelected: false,
-    setSelection: () => {
-    },
-    resetSelection: () => {
+        isFilterSelected: false,
+        toggleFilterSelection: (func: (prevState: boolean) => boolean) => {}
     }
-});
+);
 
 export const MobileFiltersContextProvider: React.FunctionComponent = props => {
     const [isFilterSelected, toggleFilterSelection] = React.useState(false);
@@ -14,8 +12,7 @@ export const MobileFiltersContextProvider: React.FunctionComponent = props => {
     return (
         <MobileFiltersContext.Provider value={{
             isFilterSelected,
-            setSelection: () => toggleFilterSelection(true),
-            resetSelection: () => toggleFilterSelection(false)
+            toggleFilterSelection
         }}>
             {props.children}
         </MobileFiltersContext.Provider>
