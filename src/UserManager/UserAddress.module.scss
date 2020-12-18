@@ -4,19 +4,10 @@
     grid-column-gap: 20px;
     grid-row-gap: 30px;
 
-    .zip_code {
-        grid-column: 1 / -1;
-    }
-
-    .city {
-        grid-column: 1 / -1;
-    }
-
-    .street {
-        grid-column: 1 /-1;
-    }
-
+    .zip_code,
+    .city,
+    .street,
     .complement {
-        grid-column: 1 /-1;
+        grid-column: 1 / -1;
     }
 }

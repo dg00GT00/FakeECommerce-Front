@@ -6,7 +6,7 @@ import {createStyles, makeStyles} from "@material-ui/core/styles";
 import {Theme} from "@material-ui/core";
 import Button from "@material-ui/core/Button/Button";
 import {ComplementaryColors} from "../Utilities/Theme/CustomTheme";
-import {UserAddress} from "./UserAddress";
+import {UserSignup} from "./UserSigunp";
 
 const userMangerStyles = makeStyles((theme: Theme) => {
     return createStyles({
@@ -36,7 +36,7 @@ export const UserDefaultCard: React.FunctionComponent = () => {
                     <div className={style.gradient}/>
                 </div>
                 <div className={[styles.card_content, style.cardContent].join(" ")}>
-                    <UserAddress/>
+                    <UserSignup/>
                     <div className={styles.action_buttons}>
                         <Button variant={"contained"}>Back</Button>
                         <Button variant={"contained"} color={"secondary"}>Go</Button>
@@ -44,5 +44,5 @@ export const UserDefaultCard: React.FunctionComponent = () => {
                 </div>
             </Paper>
         </div>
-    )
+    );
 }
