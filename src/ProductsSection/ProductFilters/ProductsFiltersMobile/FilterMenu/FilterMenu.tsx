@@ -8,7 +8,7 @@ import {MobileFiltersContext} from "../../../../Utilities/Context/MobileFiltersC
 const seeMoreStyle = makeStyles((theme: Theme) => {
     return createStyles({
         root: {
-            fill: theme.palette.secondary.main,
+            fill: theme.palette.common.white,
         },
         button: {
             paddingRight: 0,
@@ -29,14 +29,13 @@ const FilterIcon: React.FunctionComponent<{ className: string }> = props => {
     )
 }
 
-export const FilterMenu: React.FunctionComponent<{onClick: React.MouseEventHandler}> = props => {
+export const FilterMenu: React.FunctionComponent<{ onClick: React.MouseEventHandler }> = props => {
     const moreStyle = seeMoreStyle();
     const {isFilterSelected} = React.useContext(MobileFiltersContext);
 
     return (
         <Badge variant={"dot"} color={"secondary"} invisible={!isFilterSelected}>
             <IconButton
-                classes={{root: moreStyle.button}}
                 aria-label="more"
                 aria-controls="long-menu"
                 aria-haspopup="true"

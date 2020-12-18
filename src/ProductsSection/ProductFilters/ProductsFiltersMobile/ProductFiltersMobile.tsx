@@ -1,11 +1,9 @@
 import * as React from "react";
 import Menu from "@material-ui/core/Menu";
-import IconButton from "@material-ui/core/IconButton/IconButton";
 import MenuItem from "@material-ui/core/MenuItem/MenuItem";
-import SearchRoundedIcon from '@material-ui/icons/SearchRounded';
 import styles from "./ProductFiltersMobile.module.scss";
 import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
-import {InputBase, Paper, useTheme} from "@material-ui/core";
+import {useTheme} from "@material-ui/core";
 import {useScrollPosition} from "../../../Utilities/CustomHooks/useScrollPosition";
 import {ProductFilterDialog} from "./ProductDialog/ProductFilterDialog";
 import {CartDefault} from "../../../Cart/CartDefault";
@@ -16,12 +14,8 @@ import {FilterOptions, ProductFilterState} from "../../../Utilities/ProductModel
 import ListSubheader from "@material-ui/core/ListSubheader";
 import {FilterMenu} from "./FilterMenu/FilterMenu";
 import {useForceUpdate} from "../../../Utilities/CustomHooks/useForceUpdate";
+import {SearchMenu} from "./SearchMenu/SearchMenu";
 
-const searchBarStyle = makeStyles({
-    root: {
-        backgroundColor: "#ffd36954", // Change this value if the secondary theme color also change
-    }
-})
 
 const clearButtonStyles = makeStyles((theme: Theme) => {
     return createStyles({
@@ -47,7 +41,6 @@ export const ProductFiltersMobile: React.FunctionComponent = () => {
     const [openProductBrand, setProductBrandDialog] = React.useState(false);
     const searchBarAnchor = React.useRef<HTMLDivElement | null>(null);
 
-    const searchStyle = searchBarStyle();
     const clearStyle = clearButtonStyles();
 
     const theme = useTheme();
@@ -92,12 +85,7 @@ export const ProductFiltersMobile: React.FunctionComponent = () => {
              style={{backgroundColor: theme.palette.primary.main}}
              ref={searchBarAnchor}>
             <div className={styles.mobile_filters}>
-                <Paper className={[styles.product_search, searchStyle.root].join(" ")}>
-                    <IconButton aria-label={"search"}>
-                        <SearchRoundedIcon className={styles.search_icon}/>
-                    </IconButton>
-                    <InputBase placeholder={"Search"} fullWidth className={styles.input_search_bar}/>
-                </Paper>
+                <SearchMenu/>
                 <CartDefault classNameButton={styles.cart} hideWhenZero/>
                 <FilterMenu onClick={handleClick}/>
                 <Menu
