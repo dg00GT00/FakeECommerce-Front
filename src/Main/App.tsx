@@ -1,9 +1,9 @@
 import * as React from "react";
-import {UserSignup} from "../UserManager/UserSignup";
+import {UserDefaultCard} from "../UserManager/UserDefaultCard";
 
 const App = () => {
     return (
-        <UserSignup/>
+        <UserDefaultCard/>
         // <BrowserRouter>
         //     <CartContextProvider>
         //         <Header/>

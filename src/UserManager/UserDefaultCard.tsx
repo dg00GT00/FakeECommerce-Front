@@ -1,11 +1,12 @@
 import * as React from "react";
 import Paper from "@material-ui/core/Paper";
-import styles from "./UserSignup.module.scss";
+import styles from "./UserDefaultCard.module.scss";
 import {ReactComponent as Logo} from "../Assets/eCommerceBaseLogo.svg";
 import {createStyles, makeStyles} from "@material-ui/core/styles";
-import {TextField, Theme} from "@material-ui/core";
+import {Theme} from "@material-ui/core";
 import Button from "@material-ui/core/Button/Button";
 import {ComplementaryColors} from "../Utilities/Theme/CustomTheme";
+import {UserAddress} from "./UserAddress";
 
 const userMangerStyles = makeStyles((theme: Theme) => {
     return createStyles({
@@ -21,9 +22,9 @@ const userMangerStyles = makeStyles((theme: Theme) => {
             backgroundColor: ComplementaryColors.tertiary.main,
         }
     })
-})
+});
 
-export const UserSignup: React.FunctionComponent = () => {
+export const UserDefaultCard: React.FunctionComponent = () => {
     const style = userMangerStyles();
 
     return (
@@ -35,36 +36,7 @@ export const UserSignup: React.FunctionComponent = () => {
                     <div className={style.gradient}/>
                 </div>
                 <div className={[styles.card_content, style.cardContent].join(" ")}>
-                    <TextField color={"primary"}
-                               id="username"
-                               label="Username"
-                               type="text"
-                               variant="outlined"
-                               size={"small"}
-                               fullWidth
-                               InputProps={{
-                                   required: true
-                               }}/>
-                    <TextField color={"primary"}
-                               id="password"
-                               label="Password"
-                               type="password"
-                               variant="outlined"
-                               size={"small"}
-                               fullWidth
-                               InputProps={{
-                                   required: true
-                               }}/>
-                    <TextField color={"primary"}
-                               id="repeat-password"
-                               label="Repeat Password"
-                               type="password"
-                               variant="outlined"
-                               size={"small"}
-                               fullWidth
-                               InputProps={{
-                                   required: true
-                               }}/>
+                    <UserAddress/>
                     <div className={styles.action_buttons}>
                         <Button variant={"contained"}>Back</Button>
                         <Button variant={"contained"} color={"secondary"}>Go</Button>

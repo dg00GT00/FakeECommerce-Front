@@ -1,0 +1,22 @@
+.card_content {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-column-gap: 20px;
+    grid-row-gap: 30px;
+
+    .zip_code {
+        grid-column: 1 / -1;
+    }
+
+    .city {
+        grid-column: 1 / -1;
+    }
+
+    .street {
+        grid-column: 1 /-1;
+    }
+
+    .complement {
+        grid-column: 1 /-1;
+    }
+}
