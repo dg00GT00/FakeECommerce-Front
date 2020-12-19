@@ -1,7 +1,8 @@
 import * as React from "react";
 import {TextField} from "@material-ui/core";
+import {UserInputTypes} from "../../Utilities/ProductModels/UserInputTypes";
 
-export const UserZipCode: React.FunctionComponent<{className: string}> = props => {
+export const UserZipCode: React.FunctionComponent<UserInputTypes & {className: string}> = props => {
     return (
         <TextField color={"primary"}
                    id="zip-code"
@@ -10,9 +11,7 @@ export const UserZipCode: React.FunctionComponent<{className: string}> = props =
                    variant="outlined"
                    size={"small"}
                    fullWidth
-                   className={props.className}
-                   InputProps={{
-                       required: true,
-                   }}/>
+                   required
+                   {...props}/>
     );
 }

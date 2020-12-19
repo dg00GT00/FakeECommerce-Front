@@ -39,7 +39,7 @@
         grid-row-gap: #{"min(5vw, 30px)"};
         padding: 10% 10% 0 10%;
 
-        label, input {
+        label, input, select, option {
             font-size: clamp(.7rem, 4vw, 1rem);
         }
     }

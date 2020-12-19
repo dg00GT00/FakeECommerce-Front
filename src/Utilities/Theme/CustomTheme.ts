@@ -31,7 +31,7 @@ export const customTheme = createMuiTheme({
         background: {
             default: '#f1f1f1',
         },
-    },
+    }
 });
 
 export const ComplementaryColors: ComplementaryColorsType = {

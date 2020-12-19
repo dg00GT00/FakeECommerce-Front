@@ -2,7 +2,7 @@
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     grid-column-gap: 20px;
-    grid-row-gap: 30px;
+    grid-row-gap: #{"min(5vw, 30px)"};
 
     .zip_code,
     .city,

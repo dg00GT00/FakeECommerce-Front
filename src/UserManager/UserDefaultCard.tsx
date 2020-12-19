@@ -6,7 +6,7 @@ import {createStyles, makeStyles} from "@material-ui/core/styles";
 import {Theme} from "@material-ui/core";
 import Button from "@material-ui/core/Button/Button";
 import {ComplementaryColors} from "../Utilities/Theme/CustomTheme";
-import {UserSignup} from "./UserSigunp";
+import {UserAddress} from "./UserAddress/UserAddress";
 
 const userMangerStyles = makeStyles((theme: Theme) => {
     return createStyles({
@@ -20,12 +20,27 @@ const userMangerStyles = makeStyles((theme: Theme) => {
         },
         cardContent: {
             backgroundColor: ComplementaryColors.tertiary.main,
+        },
+        label: {
+            backgroundColor: ComplementaryColors.tertiary.main,
+            padding: "0 1%"
         }
     })
 });
 
 export const UserDefaultCard: React.FunctionComponent = () => {
     const style = userMangerStyles();
+
+    const customInputLabel = {
+        InputLabelProps: {
+            classes: {
+                root: style.label
+            }
+        },
+        InputProps: {
+            notched: false
+        }
+    }
 
     return (
         <div className={[styles.card_page, style.background].join(" ")}>
@@ -36,7 +51,8 @@ export const UserDefaultCard: React.FunctionComponent = () => {
                     <div className={style.gradient}/>
                 </div>
                 <div className={[styles.card_content, style.cardContent].join(" ")}>
-                    <UserSignup/>
+                    {/*<UserSignup {...customInputLabel}/>*/}
+                    <UserAddress {...customInputLabel}/>
                     <div className={styles.action_buttons}>
                         <Button variant={"contained"}>Back</Button>
                         <Button variant={"contained"} color={"secondary"}>Go</Button>
