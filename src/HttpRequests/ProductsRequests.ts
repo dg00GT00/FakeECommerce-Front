@@ -1,4 +1,4 @@
-import {ProductApi} from "./AxiosInstance";
+import {api} from "./AxiosInstance";
 import {FullProductType} from "../Utilities/ProductModels/FullProductModel";
 import {productCardMapper, ProductCartType} from "../Utilities/Mappers/ProductCardMapper";
 
@@ -35,7 +35,7 @@ export class ProductRequestManager {
             searchFrag ? `&Search=${searchFrag}` : "",
         ].join("");
 
-        const response = await ProductApi.get<FullProductType>(productListUrl);
+        const response = await api.get<FullProductType>(productListUrl);
         this.productAmount = response.data.count;
         return (response.data.data.length === 0) ? null : productCardMapper(response.data);
     }
