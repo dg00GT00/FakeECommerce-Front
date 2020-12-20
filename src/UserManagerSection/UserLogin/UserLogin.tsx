@@ -26,7 +26,7 @@ export const UserLogin: React.FunctionComponent<UserInputTypes> = props => {
                        fullWidth
                        {...props}
             />
-            <NavLink to={"/user/signup"} className={styles.forgot_password}>Forgot your password?</NavLink>
+            <NavLink to={"/user/signup"} className={styles.forgot_password}>Have no account?</NavLink>
         </>
     )
 }

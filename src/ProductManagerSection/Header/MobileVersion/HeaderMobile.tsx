@@ -9,6 +9,7 @@ import {ReactComponent as Logo} from "../../../Assets/eCommerceFooter.svg";
 import {Fade, Menu, MenuItem} from "@material-ui/core";
 import {HeaderProps} from "../HeaderProps";
 import {CartDefault} from "../../Cart/CartDefault";
+import {NavLink} from 'react-router-dom';
 
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -41,14 +42,19 @@ export const HeaderMobile: React.FunctionComponent<HeaderProps> = props => {
                     keepMounted
                     open={Boolean(anchorEl)}
                     onClose={handleMenuClose}
-                    TransitionComponent={Fade}
-                >
-                    <MenuItem>{props.login}</MenuItem>
-                    <MenuItem>{props.signup}</MenuItem>
+                    TransitionComponent={Fade}>
+                    <MenuItem>
+                        <NavLink to={props.loginPath}
+                                 style={{textDecoration: "none", color: "currentColor"}}>Login
+                        </NavLink></MenuItem>
+                    <MenuItem>
+                        <NavLink to={props.signupPath}
+                                 style={{textDecoration: "none", color: "currentColor"}}>Signup
+                        </NavLink></MenuItem>
                 </Menu>
                 <div className={styles.menu_actions}>
-                    <CartDefault classNameButton={styles.cart} colorButton={"inherit"}/>
-                    <AccountBoxRoundedIcon className={styles.account} onClick={handleProfileMenuOpen}/>
+                    <CartDefault classNameButton={""} colorButton={"inherit"}/>
+                    <AccountBoxRoundedIcon className={""} onClick={handleProfileMenuOpen}/>
                 </div>
             </Toolbar>
         </AppBar>

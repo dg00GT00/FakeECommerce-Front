@@ -1,4 +1,4 @@
 export type HeaderProps = {
-    login: string;
-    signup: string;
+    loginPath: string;
+    signupPath: string;
 }
