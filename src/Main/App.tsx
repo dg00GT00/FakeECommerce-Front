@@ -1,18 +1,13 @@
 import * as React from "react";
-import {UserDefaultCard} from "../UserManager/UserDefaultCard";
+import {BrowserRouter} from "react-router-dom";
+import {GlobalRouteManager} from "../Routes/GlobalRouteManager";
+
 
 const App = () => {
     return (
-        <UserDefaultCard/>
-        // <BrowserRouter>
-        //     <CartContextProvider>
-        //         <Header/>
-        //         <MainLanding/>
-        //         <ProductsSection/>
-        //     </CartContextProvider>
-        //     <Testimonials/>
-        //     <Footer/>
-        // </BrowserRouter>
+        <BrowserRouter>
+            <GlobalRouteManager/>
+        </BrowserRouter>
     );
 }
 

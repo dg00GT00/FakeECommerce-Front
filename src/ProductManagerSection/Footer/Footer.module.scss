@@ -1,0 +1,121 @@
+@import "../../Utilities/PageGeneralVariables";
+@import "../../Utilities/GeneralMediaQueries";
+
+.footer {
+    width: 100%;
+    font-size: clamp(.8rem, 3vw, 1rem);
+
+    .container {
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        @include global-width();
+        padding: 50px 0;
+
+        @media (max-width: 768px) {
+            flex-direction: column;
+            .footer_logo {
+                margin-bottom: 50px;
+                padding-bottom: 50px;
+                border-bottom: 1px solid #4a4a4a;
+            }
+        }
+
+        .footer_logo {
+            flex: 1;
+            svg {
+                width: 100%;
+                height: auto;
+            }
+        }
+
+        .merchandise {
+            flex: 1;
+            display: flex;
+            justify-content: flex-start;
+
+            @media (max-width: 1000px) {
+                flex-direction: column;
+                align-items: flex-start;
+                margin-left: 50px;
+
+                .follow_us {
+                    margin-bottom: 20px;
+                }
+                .divider {
+                    margin-bottom: 10px;
+                }
+
+                @media (max-width: 768px) {
+                    width: 100%;
+                    flex-direction: row;
+                    margin-left: 0;
+                    justify-content: space-between;
+
+                    @media (max-width: map-get($general-media-queries, "MOBILE_320")){
+                        flex-direction: column;
+                    }
+                }
+            }
+
+            .follow_us {
+                flex: 1;
+            }
+
+            p {
+                margin-bottom: 10px;
+            }
+
+            a {
+                display: block;
+                width: 50px;
+                height: 50px;
+
+                svg {
+                    width: inherit;
+                    height: inherit;
+                }
+            }
+
+            .payment {
+                flex: 1;
+
+                .fake_creditcard {
+                    height: 120px;
+
+                    img {
+                        height: inherit;
+                    }
+                }
+            }
+        }
+    }
+
+    p {
+        color: white;
+
+        address {
+            display: inline-block;
+        }
+    }
+
+    address {
+        font-weight: bold;
+    }
+
+    .divider {
+        background-color: #707070;
+        width: 40px;
+        height: 3px;
+        margin-bottom: 30px;
+    }
+
+    .author {
+        text-align: center;
+        .dev {
+            font-style: italic;
+            font-weight: bold;
+        }
+    }
+}
+

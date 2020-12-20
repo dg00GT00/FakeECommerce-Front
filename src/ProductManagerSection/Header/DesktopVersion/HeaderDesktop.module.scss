@@ -1,0 +1,29 @@
+@import "../../../Utilities/PageGeneralVariables";
+
+.header {
+    height: 200px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    @include global-width();
+
+    .nav {
+        width: 33%;
+        ul {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            list-style: none;
+
+            li {
+                display: inline-block;
+            }
+            .cart {
+                svg {
+                    width: 40px;
+                    height: auto;
+                }
+            }
+        }
+    }
+}
