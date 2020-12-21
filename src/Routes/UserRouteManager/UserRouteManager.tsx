@@ -31,13 +31,13 @@ export const UserRouteManager: React.FunctionComponent = () => {
     return (
         <>
             <Route exact path={`${path}/signup`}>
-                <UserCard showRequiredLabel cardType={"Signup"}>
-                    <UserSignup {...customInputLabel}/>
+                <UserCard cardType={"Signup"} formId={"signup"}>
+                    <UserSignup {...customInputLabel} formId={"signup"} showRequiredLabel={true}/>
                 </UserCard>
             </Route>
             <Route exact path={`${path}/login`}>
-                <UserCard showRequiredLabel cardType={"Login"}>
-                    <UserLogin {...customInputLabel}/>
+                <UserCard cardType={"Login"} formId={"login"}>
+                    <UserLogin {...customInputLabel} formId={"login"} showRequiredLabel={true}/>
                 </UserCard>
             </Route>
         </>

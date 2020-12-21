@@ -3,10 +3,8 @@ import Paper from "@material-ui/core/Paper";
 import styles from "./UserCard.module.scss";
 import {ReactComponent as Logo} from "../../Assets/eCommerceBaseLogo.svg";
 import {createStyles, makeStyles} from "@material-ui/core/styles";
-import {Theme} from "@material-ui/core";
-import Button from "@material-ui/core/Button/Button";
 import {ComplementaryColors} from "../../Utilities/Theme/CustomTheme";
-import {useHistory} from "react-router-dom";
+import {Theme} from "@material-ui/core";
 
 const userMangerStyles = makeStyles((theme: Theme) => {
     return createStyles({
@@ -24,12 +22,10 @@ const userMangerStyles = makeStyles((theme: Theme) => {
     })
 });
 
-export const UserCard: React.FunctionComponent<{ cardType: string, showRequiredLabel?: boolean }> = ({
-                                                                                                         showRequiredLabel = true,
-                                                                                                         ...props
-                                                                                                     }) => {
+type UserCardProps = { cardType: string, formId: string};
+
+export const UserCard: React.FunctionComponent<UserCardProps> = props => {
     const style = userMangerStyles();
-    const {goBack} = useHistory();
 
     return (
         <div className={[styles.card_page, style.background].join(" ")}>
@@ -40,12 +36,9 @@ export const UserCard: React.FunctionComponent<{ cardType: string, showRequiredL
                     <div className={style.gradient}/>
                 </div>
                 <div className={[styles.card_content, style.cardContent].join(" ")}>
-                    {props.children}
-                    {showRequiredLabel ? <p>* fields required</p> : null}
-                    <div className={styles.action_buttons}>
-                        <Button variant={"contained"} onClick={_ => goBack()}>Back</Button>
-                        <Button variant={"contained"} color={"secondary"}>Go</Button>
-                    </div>
+                    <form id={props.formId} onSubmit={event => event.preventDefault()}>
+                        {props.children}
+                    </form>
                 </div>
             </Paper>
         </div>
