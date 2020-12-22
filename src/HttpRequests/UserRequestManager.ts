@@ -17,4 +17,8 @@ export class UserRequestManager {
         }
         return (user.data as UserModel);
     }
+
+    public async emailExists(email: string): Promise<boolean> {
+        return (await api.get<boolean>(`/account/emailexists?email=${email}`)).data;
+    }
 }

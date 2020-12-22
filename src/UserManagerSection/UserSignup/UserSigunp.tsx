@@ -1,123 +1,204 @@
 import * as React from "react";
-import {TextField, Tooltip} from "@material-ui/core";
+import {TextField} from "@material-ui/core";
 import {UserInputTypes} from "../../Utilities/ProductModels/UserInputTypes";
-import {ErrorState, FieldId, FormState} from "../UserFormsTypes/UserFormsTypes";
+import {FieldId, FormState} from "../UserFormsTypes/UserFormsTypes";
 import {UserFormButton} from "../UserFormButton";
+import {UserRequestManager} from "../../HttpRequests/UserRequestManager";
+import Tooltip from "@material-ui/core/Tooltip/Tooltip";
 
 const passwordRegex = "(?=^.{6,10}$)(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&amp;*()_+}{&quot;:;'?/&gt;.&lt;,])(?!.*\\s).*$"
 
 const initialFormState: FormState<FieldId> = {
-    username: {requiredValidity: false},
-    email: {requiredValidity: false},
-    password: {requiredValidity: false, patternValidity: false},
-    repeatPassword: {requiredValidity: false, patternValidity: false},
+    username: {requiredValidity: false, submitButtonDisable: false},
+    email: {requiredValidity: false, submitButtonDisable: false},
+    password: {requiredValidity: false, patternValidity: false, submitButtonDisable: false},
+    repeatPassword: {requiredValidity: false, patternValidity: false, submitButtonDisable: false},
 };
 
-const initialErrorState: ErrorState = {
-    email: false,
-    password: false,
-    username: false,
-    repeatPassword: false
+const userAccount = new UserRequestManager();
+
+enum ActionTypes {
+    REQUIRED = "REQUIRED",
+    PASSWORD = "PASSWORD",
+    REPEAT_PASSWORD = "REPEAT_PASSWORD",
 }
 
-// Pa$$word1
+type FormActions =
+    { type: ActionTypes.REQUIRED, fieldId: FieldId, fieldValidity: boolean }
+    | { type: ActionTypes.PASSWORD, fieldValue: string }
+    | { type: ActionTypes.REPEAT_PASSWORD, fieldValue: string }
+
+
+const formReducer = (prevState: FormState<FieldId>, action: FormActions): FormState<FieldId> => {
+    let newState: FormState<FieldId>;
+    switch (action.type) {
+        case ActionTypes.REQUIRED:
+            return {
+                ...prevState,
+                [action.fieldId]: {
+                    ...prevState[action.fieldId],
+                    requiredValidity: !action.fieldValidity,
+                    submitButtonDisable: action.fieldValidity
+                }
+            };
+        case ActionTypes.PASSWORD:
+            if (new RegExp(passwordRegex).test(action.fieldValue)) {
+                newState = {
+                    ...prevState,
+                    password: {
+                        ...prevState.password,
+                        patternValidity: false,
+                        requiredValidity: false,
+                        submitButtonDisable: true
+                    }
+                }
+            } else {
+                newState = {
+                    ...prevState,
+                    password: {
+                        ...prevState.password,
+                        patternValidity: true,
+                        submitButtonDisable: false
+                    }
+                }
+                if (action.fieldValue === "") {
+                    newState.password.patternValidity = false;
+                    newState.password.requiredValidity = true;
+                }
+            }
+            if (prevState.repeatPassword.fieldValue !== action.fieldValue) {
+                newState.repeatPassword.patternValidity = true;
+                newState.repeatPassword.submitButtonDisable = false;
+            } else {
+                newState.repeatPassword.patternValidity = false;
+                newState.repeatPassword.submitButtonDisable = true;
+            }
+            newState.password.fieldValue = action.fieldValue;
+            return newState;
+        case ActionTypes.REPEAT_PASSWORD:
+            if (action.fieldValue !== prevState.password.fieldValue || action.fieldValue === "") {
+                newState = {
+                    ...prevState,
+                    repeatPassword: {
+                        ...prevState.repeatPassword,
+                        patternValidity: true,
+                        submitButtonDisable: false
+                    }
+                }
+            } else {
+                newState = {
+                    ...prevState,
+                    repeatPassword: {
+                        ...prevState.repeatPassword,
+                        patternValidity: false,
+                        submitButtonDisable: true
+                    }
+                }
+            }
+            newState.repeatPassword.fieldValue = action.fieldValue;
+            return newState;
+        default:
+            return initialFormState;
+    }
+}
+
 
 export const UserSignup: React.FunctionComponent<UserInputTypes> = props => {
 
     const {formId, showRequiredLabel, ...inputProps} = props;
-    const [formState, setFormState] = React.useState<FormState<FieldId>>(initialFormState);
+    const [formState, formDispatch] = React.useReducer<React.Reducer<FormState<FieldId>, FormActions>>(formReducer, initialFormState);
+    const [emailState, setEmailState] = React.useState(initialFormState);
     const [errorState, setErrorState] = React.useState(true);
-    const errorObj = React.useRef(initialErrorState);
-    const [passwordState, setPasswordState] = React.useState("");
 
     React.useEffect(() => {
         setErrorState(_ => {
-            for (const key in errorObj.current) {
-                if (!initialErrorState[(key as FieldId)]) {
+            for (const key in formState) {
+                if (key === "email") formState.email = emailState.email;
+                if (!formState[(key as FieldId)].submitButtonDisable) {
                     return true;
                 }
             }
             return false;
         })
-    }, [formState]);
+    }, [formState, emailState]);
 
-    const requireValidation = (event: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>, fieldId: FieldId) => {
-        let newState: FormState<FieldId>;
-        setFormState(prevFormState => {
-            const state = prevFormState ?? formState;
-            const requiredValidity = event.target.checkValidity();
-            newState = {
-                ...state,
-                [fieldId]: {
-                    ...state[fieldId],
-                    requiredValidity: !requiredValidity
-                }
-            }
-            errorObj.current[fieldId] = requiredValidity;
-            return newState;
-        });
-    }
-
-    const passwordValidation = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, fieldId: FieldId) => {
-        let newState: FormState<FieldId>;
-        setPasswordState(prevPass => {
-            let passState = prevPass ?? passwordState;
-            setFormState(prevFormState => {
-                const state = prevFormState ?? formState;
-                if (new RegExp(passwordRegex).test(event.target.value)) {
-                    newState = {
-                        ...state,
-                        [fieldId]: {
-                            ...state[fieldId],
-                            patternValidity: false
-                        }
+    const emailValidation = (event: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>, formState: FormState<FieldId>) => {
+        if (event.target.checkValidity()) {
+            userAccount
+                .emailExists(event.target.value)
+                .then(email => {
+                    if (email) {
+                        event.target.value = "This email already exists";
+                        setEmailState(_ => {
+                            return {
+                                ...formState,
+                                email: {
+                                    ...formState.email,
+                                    requiredValidity: true,
+                                    submitButtonDisable: false
+                                }
+                            }
+                        });
+                    } else {
+                        setEmailState(_ => {
+                            return {
+                                ...formState,
+                                email: {
+                                    ...formState.email,
+                                    requiredValidity: false,
+                                    submitButtonDisable: true
+                                }
+                            }
+                        });
                     }
-                } else {
-                    newState = {
-                        ...state,
-                        [fieldId]: {
-                            ...state[fieldId],
-                            patternValidity: true
+                })
+                .catch(_ => {
+                    event.target.value = "Inconsistency on the server. Try again";
+                    setEmailState(_ => {
+                        return {
+                            ...formState,
+                            email: {
+                                ...formState.email,
+                                requiredValidity: true,
+                                submitButtonDisable: false
+                            }
                         }
+                    });
+                });
+        } else {
+            setEmailState(_ => {
+                return {
+                    ...formState,
+                    email: {
+                        ...formState.email,
+                        requiredValidity: true,
+                        submitButtonDisable: false
                     }
                 }
-                if (passState !== event.target.value) {
-                    newState.repeatPassword.patternValidity = true;
-                    errorObj.current.repeatPassword = false;
-                }
-                passState = event.target.value;
-                errorObj.current[fieldId] = !newState[fieldId].patternValidity as boolean
-                console.log(newState);
-                return newState;
             });
-            return passState;
-        });
+        }
+    }
+    const requiredValidation = (event: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>, fieldId: FieldId) => {
+        formDispatch({type: ActionTypes.REQUIRED, fieldId, fieldValidity: event.target.checkValidity()});
     }
 
-    const repeatPasswordValidation = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, fieldId: FieldId) => {
-        let newState: FormState<FieldId>;
-        setFormState(prevFormState => {
-            const state = prevFormState ?? formState;
-            if (event.target.value !== passwordState || event.target.value === "") {
-                newState = {
-                    ...state,
-                    [fieldId]: {
-                        ...state[fieldId],
-                        patternValidity: true
-                    }
-                }
-            } else {
-                newState = {
-                    ...state,
-                    [fieldId]: {
-                        ...state[fieldId],
-                        patternValidity: false
-                    }
-                }
-            }
-            errorObj.current[fieldId] = !newState[fieldId].patternValidity as boolean;
-            return newState;
-        });
+    const passwordValidation = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        formDispatch({type: ActionTypes.PASSWORD, fieldValue: event.target.value});
+    }
+
+    const repeatPasswordValidation = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        formDispatch({type: ActionTypes.REPEAT_PASSWORD, fieldValue: event.target.value});
+    }
+
+    const passwordHelperText = (formState: FormState<FieldId>): string | null => {
+        let message: string | null = null;
+        if (formState.password.requiredValidity) {
+            message = "* this field is required";
+        }
+        if (formState.password.patternValidity) {
+            message = "* this password is invalid";
+        }
+        return message;
     }
 
     return (
@@ -131,12 +212,12 @@ export const UserSignup: React.FunctionComponent<UserInputTypes> = props => {
                        type="text"
                        variant="outlined"
                        size={"small"}
-                       onBlur={event => requireValidation(event, "username")}
+                       onBlur={event => requiredValidation(event, "username")}
                        FormHelperTextProps={{error: true}}
                        helperText={formState.username.requiredValidity ? "* this field is required" : null}
                        {...inputProps}/>
             <TextField color={"primary"}
-                       error={formState.email.requiredValidity}
+                       error={emailState.email.requiredValidity}
                        fullWidth
                        required
                        id="email"
@@ -144,16 +225,16 @@ export const UserSignup: React.FunctionComponent<UserInputTypes> = props => {
                        type="email"
                        variant="outlined"
                        size={"small"}
-                       onBlur={event => requireValidation(event, "email")}
+                       onBlur={event => emailValidation(event, formState)}
                        FormHelperTextProps={{error: true}}
-                       helperText={formState.email.requiredValidity ? "* this field is required" : null}
+                       helperText={emailState.email.requiredValidity ? "* this field is required" : null}
                        {...inputProps}/>
             <Tooltip
                 title={"Password must have 1 uppercase, 1 lowercase, 1 number, 1 non alphanumeric and at least 6 characters"}
                 disableHoverListener
                 arrow>
                 <TextField color={"primary"}
-                           error={formState.password.patternValidity}
+                           error={formState.password.requiredValidity || formState.password.patternValidity}
                            required
                            id="password"
                            label="Password"
@@ -161,9 +242,10 @@ export const UserSignup: React.FunctionComponent<UserInputTypes> = props => {
                            variant="outlined"
                            size={"small"}
                            fullWidth
-                           onChange={event => passwordValidation(event, "password")}
+                           onChange={passwordValidation}
+                           onBlur={event => requiredValidation(event, "password")}
                            FormHelperTextProps={{error: true}}
-                           helperText={formState.password.patternValidity ? "* this password is invalid" : null}
+                           helperText={passwordHelperText(formState)}
                            {...inputProps}/>
             </Tooltip>
             <TextField color={"primary"}
@@ -175,7 +257,7 @@ export const UserSignup: React.FunctionComponent<UserInputTypes> = props => {
                        size={"small"}
                        fullWidth
                        required
-                       onChange={event => repeatPasswordValidation(event, "repeatPassword")}
+                       onChange={repeatPasswordValidation}
                        FormHelperTextProps={{error: true}}
                        helperText={formState.repeatPassword.patternValidity ? "* the passwords are not equal" : null}
                        {...inputProps}/>
