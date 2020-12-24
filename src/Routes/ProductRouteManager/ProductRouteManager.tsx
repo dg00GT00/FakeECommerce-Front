@@ -1,5 +1,5 @@
 import * as React from "react";
-import {Route, useRouteMatch} from "react-router-dom";
+import {Route} from "react-router-dom";
 import {ProductGridItems} from "../../ProductManagerSection/ProductsSection/ProductGridItems/ProductGridItems";
 import {ProductFilterType} from "../../HttpRequests/ProductsRequests";
 import {
@@ -13,9 +13,9 @@ import {productFilterEnumToUrl} from "../../Utilities/Mappers/ProductFilterMappe
 
 type FilterState = {
     filter: ProductFilterState[]
-}
+};
 
-type SearchParams = Omit<ProductFilterType, "pageNumber"> & { pageNumber?: number }
+type SearchParams = Omit<ProductFilterType, "pageNumber"> & { pageNumber?: number };
 
 let filterParams: SearchParams = {};
 
@@ -87,8 +87,6 @@ function parseSearchParams(locationState: FilterState, searchParams: string): Se
 }
 
 export const ProductRouteManager: React.FunctionComponent<ProductFilterType> = props => {
-    console.log("From the product manager: ", useRouteMatch());
-
     return (
         <>
             <Route exact path={"/"}>

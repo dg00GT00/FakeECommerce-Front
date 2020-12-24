@@ -19,12 +19,14 @@ const userAccount = new UserRequestManager();
 
 enum ActionTypes {
     REQUIRED = "REQUIRED",
+    USER_NAME = "USER_NAME",
     PASSWORD = "PASSWORD",
     REPEAT_PASSWORD = "REPEAT_PASSWORD",
 }
 
 type FormActions =
     { type: ActionTypes.REQUIRED, fieldId: FieldId, fieldValidity: boolean }
+    | { type: ActionTypes.USER_NAME, fieldValue: string }
     | { type: ActionTypes.PASSWORD, fieldValue: string }
     | { type: ActionTypes.REPEAT_PASSWORD, fieldValue: string }
 
@@ -39,6 +41,14 @@ const formReducer = (prevState: FormState<FieldId>, action: FormActions): FormSt
                     ...prevState[action.fieldId],
                     requiredValidity: !action.fieldValidity,
                     submitButtonDisable: action.fieldValidity
+                }
+            };
+        case ActionTypes.USER_NAME:
+            return {
+                ...prevState,
+                username: {
+                    ...prevState.username,
+                    fieldValue: action.fieldValue
                 }
             };
         case ActionTypes.PASSWORD:
@@ -122,7 +132,7 @@ export const UserSignup: React.FunctionComponent<UserInputTypes> = props => {
         })
     }, [formState, emailState]);
 
-    const emailValidation = (event: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>, formState: FormState<FieldId>) => {
+    const emailValidation = (event: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>, formState: FormState<FieldId>): void => {
         if (event.target.checkValidity()) {
             userAccount
                 .emailExists(event.target.value)
@@ -146,14 +156,15 @@ export const UserSignup: React.FunctionComponent<UserInputTypes> = props => {
                                 email: {
                                     ...formState.email,
                                     requiredValidity: false,
-                                    submitButtonDisable: true
+                                    submitButtonDisable: true,
+                                    fieldValue: event.target.value
                                 }
                             }
                         });
                     }
                 })
                 .catch(_ => {
-                    event.target.value = "Inconsistency on the server. Try again";
+                    event.target.value = "Error on the server. Try again";
                     setEmailState(_ => {
                         return {
                             ...formState,
@@ -178,15 +189,20 @@ export const UserSignup: React.FunctionComponent<UserInputTypes> = props => {
             });
         }
     }
-    const requiredValidation = (event: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>, fieldId: FieldId) => {
+    const requiredValidation = (event: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>, fieldId: FieldId): void => {
         formDispatch({type: ActionTypes.REQUIRED, fieldId, fieldValidity: event.target.checkValidity()});
     }
 
-    const passwordValidation = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const userNameValidation = (event: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>, fieldId: FieldId): void => {
+        requiredValidation(event, fieldId);
+        formDispatch({type: ActionTypes.USER_NAME, fieldValue: event.target.value});
+    }
+
+    const passwordValidation = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>): void => {
         formDispatch({type: ActionTypes.PASSWORD, fieldValue: event.target.value});
     }
 
-    const repeatPasswordValidation = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const repeatPasswordValidation = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>): void => {
         formDispatch({type: ActionTypes.REPEAT_PASSWORD, fieldValue: event.target.value});
     }
 
@@ -212,7 +228,7 @@ export const UserSignup: React.FunctionComponent<UserInputTypes> = props => {
                        type="text"
                        variant="outlined"
                        size={"small"}
-                       onBlur={event => requiredValidation(event, "username")}
+                       onBlur={event => userNameValidation(event, "username")}
                        FormHelperTextProps={{error: true}}
                        helperText={formState.username.requiredValidity ? "* this field is required" : null}
                        {...inputProps}/>
@@ -262,7 +278,7 @@ export const UserSignup: React.FunctionComponent<UserInputTypes> = props => {
                        helperText={formState.repeatPassword.patternValidity ? "* the passwords are not equal" : null}
                        {...inputProps}/>
             {showRequiredLabel ? <p>* fields required</p> : null}
-            <UserFormButton formId={formId} formValidity={errorState}/>
+            <UserFormButton formId={formId} formValidity={errorState} formState={formState}/>
         </>
     );
 }

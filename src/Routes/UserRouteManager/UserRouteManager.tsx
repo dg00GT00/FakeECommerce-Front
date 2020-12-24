@@ -5,6 +5,7 @@ import {makeStyles} from "@material-ui/core/styles";
 import {ComplementaryColors} from "../../Utilities/Theme/CustomTheme";
 import {UserSignup} from "../../UserManagerSection/UserSignup/UserSigunp";
 import {UserLogin} from "../../UserManagerSection/UserLogin/UserLogin";
+import {FormId} from "../../UserManagerSection/UserFormsTypes/UserFormsTypes";
 
 const userStyle = makeStyles({
     root: {
@@ -32,12 +33,12 @@ export const UserRouteManager: React.FunctionComponent = () => {
         <>
             <Route exact path={`${path}/signup`}>
                 <UserCard cardType={"Signup"} formId={"signup"}>
-                    <UserSignup {...customInputLabel} formId={"signup"} showRequiredLabel={true}/>
+                    <UserSignup {...customInputLabel} formId={FormId.SIGNUP} showRequiredLabel={true}/>
                 </UserCard>
             </Route>
             <Route exact path={`${path}/login`}>
                 <UserCard cardType={"Login"} formId={"login"}>
-                    <UserLogin {...customInputLabel} formId={"login"} showRequiredLabel={true}/>
+                    <UserLogin {...customInputLabel} formId={FormId.LOGIN} showRequiredLabel={true}/>
                 </UserCard>
             </Route>
         </>

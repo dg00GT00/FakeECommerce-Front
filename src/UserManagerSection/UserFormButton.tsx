@@ -2,12 +2,45 @@ import * as React from "react";
 import styles from "./UserCard/UserCard.module.scss";
 import Button from "@material-ui/core/Button/Button";
 import {useHistory} from "react-router-dom";
+import {FormId, UserFormButtonProps} from "./UserFormsTypes/UserFormsTypes";
+import {AuthContext} from "../Utilities/Context/AuthContext";
 
-export const UserFormButton: React.FunctionComponent<{ formId: string, formValidity: boolean }> = props => {
-    const {goBack} = useHistory();
+export const UserFormButton: React.FunctionComponent<UserFormButtonProps> = props => {
+    const {registerUser, userLogin} = React.useContext(AuthContext);
+    const {goBack, push} = useHistory();
 
-    const onSubmit: React.FormEventHandler = event => {
-        console.log("clicked");
+    const submitForm: React.MouseEventHandler = event => {
+        if (props.formId === FormId.SIGNUP) {
+            const {
+                email: {fieldValue: email},
+                password: {fieldValue: password},
+                username: {fieldValue: username}
+            } = props.formState;
+            if (username && email && password) {
+                registerUser(username, email, password)
+                    .then(_ => push({
+                        pathname: "/"
+                    }))
+                    .catch(_ => push({
+                        pathname: "/notfound"
+                    }));
+            }
+        }
+        if (props.formId === FormId.LOGIN) {
+            const {
+                password: {fieldValue: password},
+                email: {fieldValue: email}
+            } = props.formState;
+            if (email && password) {
+                userLogin(email, password)
+                    .then(_ => push({
+                        pathname: "/"
+                    }))
+                    .catch(_ => push({
+                        pathname: "/notfound"
+                    }));
+            }
+        }
     }
 
     return (
@@ -18,7 +51,7 @@ export const UserFormButton: React.FunctionComponent<{ formId: string, formValid
                 form={props.formId}
                 variant={"contained"}
                 disabled={props.formValidity}
-                onClick={onSubmit}
+                onClick={submitForm}
                 color={"secondary"}>Go</Button>
         </div>
     )
