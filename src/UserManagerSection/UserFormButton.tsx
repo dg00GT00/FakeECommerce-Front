@@ -21,9 +21,11 @@ export const UserFormButton: React.FunctionComponent<UserFormButtonProps> = prop
                     .then(_ => push({
                         pathname: "/"
                     }))
-                    .catch(_ => push({
-                        pathname: "/notfound"
-                    }));
+                    .catch(error => {
+                        push({
+                            pathname: "/notfound"
+                        })
+                    });
             }
         }
         if (props.formId === FormId.LOGIN) {
@@ -36,9 +38,11 @@ export const UserFormButton: React.FunctionComponent<UserFormButtonProps> = prop
                     .then(_ => push({
                         pathname: "/"
                     }))
-                    .catch(_ => push({
-                        pathname: "/notfound"
-                    }));
+                    .catch(error => {
+                        push({
+                            pathname: "/notfound"
+                        })
+                    });
             }
         }
     }
