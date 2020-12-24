@@ -1,7 +1,7 @@
 export type FullUserModel = {
-    userName: string,
+    displayName: string,
     email: string,
-    jwtToken: string
+    token: string
 }
 
 export type UserModel = Omit<FullUserModel, "jwtToken">;
