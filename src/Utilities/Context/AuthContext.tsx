@@ -10,8 +10,6 @@ export const AuthContext = React.createContext({
 
 const userAuth = new UserRequestManager();
 
-let jwtToken: string | undefined;
-
 export const AuthContextProvider: React.FunctionComponent = props => {
     const user = React.useRef<UserModel | UserLoginModel | null>(null);
 
