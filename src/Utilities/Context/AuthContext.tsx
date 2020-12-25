@@ -1,28 +1,37 @@
 import * as React from "react";
 import {UserRequestManager} from "../../HttpRequests/UserRequestManager";
-import {UserLoginModel, UserModel} from "../UserModels/FullUserModel";
-
-export const AuthContext = React.createContext({
-    user: {},
-    registerUser: async (userName: string, email: string, password: string) => {},
-    userLogin: async (email: string, password: string) => {}
-});
+import {UserModel} from "../UserModels/FullUserModel";
 
 const userAuth = new UserRequestManager();
 
-export const AuthContextProvider: React.FunctionComponent = props => {
-    const user = React.useRef<UserModel | UserLoginModel | null>(null);
+export const AuthContext = React.createContext({
+    // A hack to make the return value of this function be string or null
+    getJwt: () => ({} as {[i: string]: string | null}).value,
+    user: userAuth,
+    userLogin: async (email: string, password: string) => Promise.resolve({displayName: "", email: ""}),
+    registerUser: async (userName: string, email: string, password: string) => Promise.resolve({
+        displayName: "",
+        email: ""
+    })
+});
 
-    const registerUser = async (userName: string, email: string, password: string): Promise<void> => {
-        user.current = await userAuth.registerUser(userName, email, password);
+export const AuthContextProvider: React.FunctionComponent = props => {
+    const user = React.useRef<UserRequestManager>(userAuth);
+
+    const registerUser = async (userName: string, email: string, password: string): Promise<UserModel> => {
+        return await userAuth.registerUser(userName, email, password);
     }
 
-    const userLogin = async (email: string, password: string): Promise<void> => {
-        user.current = await userAuth.userLogin(email, password);
+    const userLogin = async (email: string, password: string): Promise<UserModel> => {
+        return await userAuth.userLogin(email, password);
     };
 
+    const getJwt = (): string | null => {
+        return userAuth.jwt;
+    }
+
     return (
-        <AuthContext.Provider value={{user, registerUser, userLogin}}>
+        <AuthContext.Provider value={{user: user.current, getJwt, registerUser, userLogin}}>
             {props.children}
         </AuthContext.Provider>
     )
