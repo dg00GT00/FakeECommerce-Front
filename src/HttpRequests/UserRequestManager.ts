@@ -1,21 +1,29 @@
 import {api} from "./AxiosInstance";
-import {FullUserModel, UserLoginModel, UserModel} from "../Utilities/UserModels/FullUserModel";
+import {FullUserModel, UserModel} from "../Utilities/UserModels/FullUserModel";
 import {ResponseStatusCode} from "../Utilities/RouterValidation/ResponseStatusCodes";
 import {ErrorModel} from "../Utilities/UserModels/ErrorModel";
+import jwtDecode from "jwt-decode";
 
 export class UserRequestManager {
-    private jwt = "jwt";
+    private jwt_key = "jwt";
 
-    set jwtToken(token: string | null) {
+    set jwt(token: string | null) {
         if (token) {
-            sessionStorage.setItem(this.jwt, token);
+            sessionStorage.setItem(this.jwt_key, token);
         } else {
-            throw new Error("The jwtToken must have a value");
+            throw new Error("The jwt must have a value");
         }
     }
 
-    get jwtToken(): string | null {
-        return sessionStorage.getItem(this.jwt);
+    get jwt(): string | null {
+        return sessionStorage.getItem(this.jwt_key);
+    }
+
+    public getDisplayNameFromJwt(): string | null{
+        if (this.jwt) {
+            return jwtDecode<{given_name: string}>(this.jwt).given_name;
+        }
+        return null;
     }
 
     public async registerUser(userName: string, email: string, password: string): Promise<UserModel> {
@@ -29,12 +37,12 @@ export class UserRequestManager {
         if (user.status in ResponseStatusCode) {
             throw new Error((user.data as ErrorModel).message);
         }
-        this.jwtToken = (user.data as FullUserModel).token;
+        this.jwt = (user.data as FullUserModel).token;
         return (user.data as UserModel);
     }
 
-    public async userLogin(email: string, password: string): Promise<UserLoginModel> {
-        const login = await api.post<FullUserModel | UserLoginModel | ErrorModel>("/account/login", {
+    public async userLogin(email: string, password: string): Promise<UserModel> {
+        const login = await api.post<FullUserModel | UserModel | ErrorModel>("/account/login", {
             password,
             email
         }, {
@@ -43,8 +51,8 @@ export class UserRequestManager {
         if (login.status in ResponseStatusCode) {
             throw new Error((login.data as ErrorModel).message);
         }
-        this.jwtToken = (login.data as FullUserModel).token;
-        return (login.data as UserLoginModel);
+        this.jwt = (login.data as FullUserModel).token;
+        return (login.data as UserModel);
     }
 
     public async emailExists(email: string): Promise<boolean> {
@@ -52,6 +60,10 @@ export class UserRequestManager {
     }
 
     public deleteJwt(): void {
-        sessionStorage.removeItem(this.jwt);
+        if (this.jwt) {
+            sessionStorage.removeItem(this.jwt_key);
+        }else {
+            throw new Error("No jwt found to be deleted");
+        }
     }
 }
