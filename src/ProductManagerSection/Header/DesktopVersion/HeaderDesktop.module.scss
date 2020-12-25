@@ -9,6 +9,11 @@
 
     .nav {
         width: 33%;
+
+        .user_account {
+            margin-left: 50%;
+        }
+
         ul {
             display: flex;
             justify-content: space-between;
@@ -23,6 +28,7 @@
             li {
                 display: inline-block;
             }
+
             .cart {
                 svg {
                     width: 40px;

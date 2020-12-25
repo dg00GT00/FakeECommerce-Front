@@ -18,9 +18,11 @@ export const UserFormButton: React.FunctionComponent<UserFormButtonProps> = prop
             } = props.formState;
             if (username && email && password) {
                 registerUser(username, email, password)
-                    .then(_ => push({
-                        pathname: "/"
-                    }))
+                    .then(_ => {
+                        push({
+                            pathname: "/"
+                        })
+                    })
                     .catch(error => {
                         push({
                             pathname: "/notfound"
@@ -35,9 +37,11 @@ export const UserFormButton: React.FunctionComponent<UserFormButtonProps> = prop
             } = props.formState;
             if (email && password) {
                 userLogin(email, password)
-                    .then(_ => push({
-                        pathname: "/"
-                    }))
+                    .then(_ => {
+                        push({
+                            pathname: "/"
+                        })
+                    })
                     .catch(error => {
                         push({
                             pathname: "/notfound"
