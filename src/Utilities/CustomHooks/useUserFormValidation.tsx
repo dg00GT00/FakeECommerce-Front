@@ -21,7 +21,7 @@ enum ActionTypes {
 }
 
 type FormActions =
-    { type: ActionTypes.REQUIRED, fieldId: FieldId, fieldValidity: boolean }
+    { type: ActionTypes.REQUIRED, fieldValue: string, fieldId: FieldId, fieldValidity: boolean }
     | { type: ActionTypes.USER_NAME, fieldValue: string }
     | { type: ActionTypes.PASSWORD, fieldValue: string }
     | { type: ActionTypes.REPEAT_PASSWORD, fieldValue: string }
@@ -36,7 +36,8 @@ const formReducer = (prevState: FormState<FieldId>, action: FormActions): FormSt
                 [action.fieldId]: {
                     ...prevState[action.fieldId],
                     requiredValidity: !action.fieldValidity,
-                    submitButtonDisable: action.fieldValidity
+                    submitButtonDisable: action.fieldValidity,
+                    fieldValue: action.fieldValue
                 }
             };
         case ActionTypes.USER_NAME:
@@ -215,7 +216,12 @@ export const useUserFormValidation = (omitFieldValidators?: FieldId[], checkEmai
         }
     }
     const requiredValidation = (event: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>, fieldId: FieldId): void => {
-        formDispatch({type: ActionTypes.REQUIRED, fieldId, fieldValidity: event.target.checkValidity()});
+        formDispatch({
+            type: ActionTypes.REQUIRED,
+            fieldValue: event.target.value,
+            fieldId,
+            fieldValidity: event.target.checkValidity()
+        });
     }
 
     const userNameValidation = (event: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>, fieldId: FieldId): void => {
