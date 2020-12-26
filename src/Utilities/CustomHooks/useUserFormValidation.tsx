@@ -116,11 +116,11 @@ type UserFormValidationType = {
         formState: FormState<FieldId>
     },
     validationFunctions: {
-        emailValidation: (event: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>, formState: FormState<FieldId>) => void,
-        userNameValidation: (event: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>, fieldId: FieldId) => void,
-        requiredValidation: (event: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>, fieldId: FieldId) => void,
-        passwordValidation: (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void,
-        repeatPasswordValidation: (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void,
+        emailValidation: (event: React.SyntheticEvent<HTMLInputElement | HTMLTextAreaElement>, formState: FormState<FieldId>) => void,
+        userNameValidation: (event: React.SyntheticEvent<HTMLInputElement | HTMLTextAreaElement>, fieldId: FieldId) => void,
+        requiredValidation: (event: React.SyntheticEvent<HTMLInputElement | HTMLTextAreaElement>, fieldId: FieldId) => void,
+        passwordValidation: (event: React.SyntheticEvent<HTMLInputElement | HTMLTextAreaElement>) => void,
+        repeatPasswordValidation: (event: React.SyntheticEvent<HTMLInputElement | HTMLTextAreaElement>) => void,
         passwordHelperText: (formState: FormState<FieldId>) => string | null
     }
 }
@@ -144,14 +144,14 @@ export const useUserFormValidation = (omitFieldValidators?: FieldId[], checkEmai
         });
     }, [formState, emailState, omitFieldValidators]);
 
-    const emailValidation = (event: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>, formState: FormState<FieldId>): void => {
-        if (event.target.checkValidity()) {
+    const emailValidation = (event: React.SyntheticEvent<HTMLInputElement | HTMLTextAreaElement>, formState: FormState<FieldId>): void => {
+        if (event.currentTarget.checkValidity()) {
             if (checkEmailExistence) {
                 userAccount
-                    .emailExists(event.target.value)
+                    .emailExists(event.currentTarget.value)
                     .then(email => {
                         if (email) {
-                            event.target.value = "This email already exists";
+                            event.currentTarget.value = "This email already exists";
                             setEmailState(_ => {
                                 return {
                                     ...formState,
@@ -170,14 +170,14 @@ export const useUserFormValidation = (omitFieldValidators?: FieldId[], checkEmai
                                         ...formState.email,
                                         requiredValidity: false,
                                         submitButtonDisable: true,
-                                        fieldValue: event.target.value
+                                        fieldValue: event.currentTarget.value
                                     }
                                 }
                             });
                         }
                     })
                     .catch(_ => {
-                        event.target.value = "Error on the server. Try again";
+                        event.currentTarget.value = "Error on the server. Try again";
                         setEmailState(_ => {
                             return {
                                 ...formState,
@@ -197,7 +197,7 @@ export const useUserFormValidation = (omitFieldValidators?: FieldId[], checkEmai
                             ...formState.email,
                             requiredValidity: false,
                             submitButtonDisable: true,
-                            fieldValue: event.target.value
+                            fieldValue: event.currentTarget.value
                         }
                     }
                 });
@@ -215,26 +215,26 @@ export const useUserFormValidation = (omitFieldValidators?: FieldId[], checkEmai
             });
         }
     }
-    const requiredValidation = (event: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>, fieldId: FieldId): void => {
+    const requiredValidation = (event: React.SyntheticEvent<HTMLInputElement | HTMLTextAreaElement>, fieldId: FieldId): void => {
         formDispatch({
             type: ActionTypes.REQUIRED,
-            fieldValue: event.target.value,
+            fieldValue: event.currentTarget.value,
             fieldId,
-            fieldValidity: event.target.checkValidity()
+            fieldValidity: event.currentTarget.checkValidity()
         });
     }
 
-    const userNameValidation = (event: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>, fieldId: FieldId): void => {
+    const userNameValidation = (event: React.SyntheticEvent<HTMLInputElement | HTMLTextAreaElement>, fieldId: FieldId): void => {
         requiredValidation(event, fieldId);
-        formDispatch({type: ActionTypes.USER_NAME, fieldValue: event.target.value});
+        formDispatch({type: ActionTypes.USER_NAME, fieldValue: event.currentTarget.value});
     }
 
-    const passwordValidation = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>): void => {
-        formDispatch({type: ActionTypes.PASSWORD, fieldValue: event.target.value});
+    const passwordValidation = (event: React.SyntheticEvent<HTMLInputElement | HTMLTextAreaElement>): void => {
+        formDispatch({type: ActionTypes.PASSWORD, fieldValue: event.currentTarget.value});
     }
 
-    const repeatPasswordValidation = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>): void => {
-        formDispatch({type: ActionTypes.REPEAT_PASSWORD, fieldValue: event.target.value});
+    const repeatPasswordValidation = (event: React.SyntheticEvent<HTMLInputElement | HTMLTextAreaElement>): void => {
+        formDispatch({type: ActionTypes.REPEAT_PASSWORD, fieldValue: event.currentTarget.value});
     }
 
     const passwordHelperText = (formState: FormState<FieldId>): string | null => {
