@@ -12,7 +12,7 @@ export const UserLogin: React.FunctionComponent<UserInputTypes> = props => {
     const {
         validationState: {errorState, formState, emailState},
         validationFunctions: {emailValidation, requiredValidation, passwordHelperText}
-    } = useUserFormValidation(["username", "password", "repeatPassword"], false);
+    } = useUserFormValidation(["username", "repeatPassword"], false);
 
     return (
         <>
@@ -26,6 +26,7 @@ export const UserLogin: React.FunctionComponent<UserInputTypes> = props => {
                        variant="outlined"
                        size={"small"}
                        onBlur={event => emailValidation(event, formState)}
+                       onChange={event => emailValidation(event, formState)}
                        FormHelperTextProps={{error: true}}
                        helperText={emailState.email.requiredValidity ? "* this field is required" : null}
                        {...inputProps}/>
@@ -39,6 +40,7 @@ export const UserLogin: React.FunctionComponent<UserInputTypes> = props => {
                        size={"small"}
                        fullWidth
                        onBlur={event => requiredValidation(event, "password")}
+                       onChange={event => requiredValidation(event, "password")}
                        FormHelperTextProps={{error: true}}
                        helperText={passwordHelperText(formState)}
                        {...inputProps}/>
