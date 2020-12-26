@@ -1,12 +1,11 @@
 import * as React from "react";
 import styles from "../UserCard/UserCard.module.scss";
 import Button from "@material-ui/core/Button/Button";
+import {MessageState} from "./UserActionTypes";
 import {useHistory} from "react-router-dom";
 import {UserSnackbar} from "./UserSnackbar";
 import {AuthContext} from "../../Utilities/Context/AuthContext";
-import {ErrorModel} from "../../Utilities/UserModels/ErrorModel";
 import {FormId, UserFormButtonProps} from "../UserFormsTypes/UserFormsTypes";
-import {MessageState} from "./UserActionTypes";
 
 export const UserFormButton: React.FunctionComponent<UserFormButtonProps> = props => {
     const [message, setMessage] = React.useState<MessageState>({message: undefined, stateCount: 0});
@@ -28,8 +27,15 @@ export const UserFormButton: React.FunctionComponent<UserFormButtonProps> = prop
                             pathname: "/"
                         })
                     })
-                    .catch((error: Omit<ErrorModel, "error">) => {
-                        // setErrorMessage(error.message);
+                    .catch(error => {
+                        setMessage(prevState => {
+                            const state = prevState ?? message;
+                            return {
+                                ...state,
+                                message: error,
+                                stateCount: state.stateCount === 0 ? 1 : 0
+                            }
+                        });
                     });
             }
         }

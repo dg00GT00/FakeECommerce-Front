@@ -9,7 +9,10 @@ const messageByStatusCode = (statusCode: number | undefined): string => {
     if (statusCode === ResponseStatusCode["401"]) {
         return "Email or password wrong!";
     }
-    return "Something went wrong. Try again!"
+    if (statusCode === ResponseStatusCode["400"]) {
+        return "Error when creating an account";
+    }
+    return "Something went wrong. Try again!";
 }
 
 export class UserRequestManager {
