@@ -1,8 +1,16 @@
-import {api} from "./AxiosInstance";
 import {FullUserModel, UserModel} from "../Utilities/UserModels/FullUserModel";
 import {ResponseStatusCode} from "../Utilities/RouterValidation/ResponseStatusCodes";
 import {ErrorModel} from "../Utilities/UserModels/ErrorModel";
+import {api} from "./AxiosInstance";
 import jwtDecode from "jwt-decode";
+import {AxiosError} from "axios";
+
+const messageByStatusCode = (statusCode: number | undefined): string => {
+    if (statusCode === ResponseStatusCode["401"]) {
+        return "Email or password wrong!";
+    }
+    return "Something went wrong. Try again!"
+}
 
 export class UserRequestManager {
     private jwt_key = "jwt";
@@ -27,40 +35,36 @@ export class UserRequestManager {
     }
 
     public async registerUser(userName: string, email: string, password: string): Promise<UserModel> {
-        const user = await api.post<FullUserModel | ErrorModel>("/account/register", {
-            displayName: userName,
-            email,
-            password
-        }, {
-            headers: {"Content-Type": "application/json; charset=UTF-8"}
-        });
-        if (user.status in ResponseStatusCode) {
-            const error = user.data as ErrorModel;
-            return Promise.reject({
-                message: error.message,
-                statusCode: error.statusCode
+        try {
+            const user = await api.post<FullUserModel | ErrorModel>("/account/register", {
+                displayName: userName,
+                email,
+                password
+            }, {
+                headers: {"Content-Type": "application/json; charset=UTF-8"}
             });
+            this.jwt = (user.data as FullUserModel).token;
+            return (user.data as UserModel);
+        } catch (e) {
+            const error = messageByStatusCode((e as AxiosError).response?.status);
+            return Promise.reject(error);
         }
-        this.jwt = (user.data as FullUserModel).token;
-        return (user.data as UserModel);
     }
 
     public async userLogin(email: string, password: string): Promise<UserModel> {
-        const login = await api.post<FullUserModel | UserModel | ErrorModel>("/account/login", {
-            password,
-            email
-        }, {
-            headers: {"Content-Type": "application/json; charset=UTF-8"}
-        });
-        if (login.status in ResponseStatusCode) {
-            const error = login.data as ErrorModel;
-            return Promise.reject({
-                message: error.message,
-                statusCode: error.statusCode
+        try {
+            const login = await api.post<FullUserModel | UserModel | ErrorModel>("/account/login", {
+                password,
+                email
+            }, {
+                headers: {"Content-Type": "application/json; charset=UTF-8"}
             });
+            this.jwt = (login.data as FullUserModel).token;
+            return (login.data as UserModel);
+        } catch (e) {
+            const error = messageByStatusCode((e as AxiosError).response?.status);
+            return Promise.reject(error);
         }
-        this.jwt = (login.data as FullUserModel).token;
-        return (login.data as UserModel);
     }
 
     public async emailExists(email: string): Promise<boolean> {

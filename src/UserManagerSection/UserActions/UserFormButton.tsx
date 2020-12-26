@@ -45,12 +45,12 @@ export const UserFormButton: React.FunctionComponent<UserFormButtonProps> = prop
                             pathname: "/"
                         });
                     })
-                    .catch((error: Omit<ErrorModel, "error">) => {
+                    .catch(error => {
                         setMessage(prevState => {
                             const state = prevState ?? message;
                             return {
                                 ...state,
-                                message: error.message,
+                                message: error,
                                 stateCount: state.stateCount === 0 ? 1 : 0
                             }
                         });
