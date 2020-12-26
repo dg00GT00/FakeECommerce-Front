@@ -1,6 +1,7 @@
-.forgot_password {
-    text-align: end;
-    text-decoration: none;
+.no_account {
     color: black;
+    width: max-content;
+    justify-self: end;
+    text-decoration: none;
     font-size: clamp(.6rem, 3vw, .9rem);
 }

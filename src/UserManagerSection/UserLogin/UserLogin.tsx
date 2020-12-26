@@ -2,17 +2,17 @@ import * as React from "react";
 import {TextField} from "@material-ui/core";
 import {UserInputTypes} from "../../Utilities/ProductModels/UserInputTypes";
 import {NavLink} from "react-router-dom";
-import styles from "./UserLogin.module.scss";
 import {UserFormButton} from "../UserFormButton";
 import {useUserFormValidation} from "../../Utilities/CustomHooks/useUserFormValidation";
+import styles from "./UserLogin.module.scss";
 
 
 export const UserLogin: React.FunctionComponent<UserInputTypes> = props => {
     const {formId, showRequiredLabel, ...inputProps} = props;
     const {
-        validationFunctions: {emailValidation, passwordValidation, requiredValidation, passwordHelperText},
-        validationState: {errorState, formState, emailState}
-    } = useUserFormValidation(["username", "repeatPassword"], false);
+        validationState: {errorState, formState, emailState},
+        validationFunctions: {emailValidation, requiredValidation, passwordHelperText}
+    } = useUserFormValidation(["username", "password", "repeatPassword"], false);
 
     return (
         <>
@@ -30,7 +30,7 @@ export const UserLogin: React.FunctionComponent<UserInputTypes> = props => {
                        helperText={emailState.email.requiredValidity ? "* this field is required" : null}
                        {...inputProps}/>
             <TextField color={"primary"}
-                       error={formState.password.requiredValidity || formState.password.patternValidity}
+                       error={formState.password.requiredValidity}
                        required
                        id="password"
                        label="Password"
@@ -38,12 +38,11 @@ export const UserLogin: React.FunctionComponent<UserInputTypes> = props => {
                        variant="outlined"
                        size={"small"}
                        fullWidth
-                       onChange={passwordValidation}
                        onBlur={event => requiredValidation(event, "password")}
                        FormHelperTextProps={{error: true}}
                        helperText={passwordHelperText(formState)}
                        {...inputProps}/>
-            <NavLink to={"/user/signup"} className={styles.forgot_password}>Have no account?</NavLink>
+            <NavLink to={"/user/signup"} className={styles.no_account}>Have no account?</NavLink>
             <UserFormButton formId={formId} formValidity={errorState} formState={formState}/>
         </>
     )
