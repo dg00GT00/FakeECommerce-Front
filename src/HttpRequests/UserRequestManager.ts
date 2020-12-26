@@ -19,9 +19,9 @@ export class UserRequestManager {
         return sessionStorage.getItem(this.jwt_key);
     }
 
-    public getDisplayNameFromJwt(): string | null{
+    public getDisplayNameFromJwt(): string | null {
         if (this.jwt) {
-            return jwtDecode<{given_name: string}>(this.jwt).given_name;
+            return jwtDecode<{ given_name: string }>(this.jwt).given_name;
         }
         return null;
     }
@@ -35,7 +35,11 @@ export class UserRequestManager {
             headers: {"Content-Type": "application/json; charset=UTF-8"}
         });
         if (user.status in ResponseStatusCode) {
-            throw new Error((user.data as ErrorModel).message);
+            const error = user.data as ErrorModel;
+            return Promise.reject({
+                message: error.message,
+                statusCode: error.statusCode
+            });
         }
         this.jwt = (user.data as FullUserModel).token;
         return (user.data as UserModel);
@@ -49,7 +53,11 @@ export class UserRequestManager {
             headers: {"Content-Type": "application/json; charset=UTF-8"}
         });
         if (login.status in ResponseStatusCode) {
-            throw new Error((login.data as ErrorModel).message);
+            const error = login.data as ErrorModel;
+            return Promise.reject({
+                message: error.message,
+                statusCode: error.statusCode
+            });
         }
         this.jwt = (login.data as FullUserModel).token;
         return (login.data as UserModel);
@@ -62,7 +70,7 @@ export class UserRequestManager {
     public deleteJwt(): void {
         if (this.jwt) {
             sessionStorage.removeItem(this.jwt_key);
-        }else {
+        } else {
             throw new Error("No jwt found to be deleted");
         }
     }
