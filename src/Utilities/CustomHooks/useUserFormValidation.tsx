@@ -125,22 +125,29 @@ type UserFormValidationType = {
     }
 }
 
-export const useUserFormValidation = (omitFieldValidators?: FieldId[], checkEmailExistence = true): UserFormValidationType => {
+const errorStateTrigger = <T extends string>(formState: FormState<T>, omitFieldValidators?: T[], errorStateMiddleware?: (key: T, ...args: any[]) => FormState<T>): boolean => {
+    for (const key in formState) {
+        if (!omitFieldValidators?.includes(key as T)) {
+            const newFormState = errorStateMiddleware ? errorStateMiddleware(key) : formState;
+            if (!newFormState[(key as T)].submitButtonDisable) {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+export const useUserFormValidation = (omitFieldValidators?: FieldId[]): UserFormValidationType => {
     const [formState, formDispatch] = React.useReducer<React.Reducer<FormState<FieldId>, FormActions>>(formReducer, initialFormState);
     const [emailState, setEmailState] = React.useState(initialFormState);
     const [errorState, setErrorState] = React.useState(true);
 
     React.useEffect(() => {
         setErrorState(_ => {
-            for (const key in formState) {
-                if (!omitFieldValidators?.includes(key as FieldId)) {
-                    if (key === "email") formState.email = emailState.email;
-                    if (!formState[(key as FieldId)].submitButtonDisable) {
-                        return true;
-                    }
-                }
-            }
-            return false;
+            return errorStateTrigger(formState, omitFieldValidators, (key) => {
+                if (key === "email") formState.email = emailState.email;
+                return formState;
+            });
         });
     }, [formState, emailState, omitFieldValidators]);
 
