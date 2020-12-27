@@ -2,7 +2,7 @@ import * as React from "react";
 import {TextField} from "@material-ui/core";
 import {UserInputTypes} from "../../Utilities/ProductModels/UserInputTypes";
 import {NavLink} from "react-router-dom";
-import {UserFormButton} from "../UserActions/UserFormButton";
+import {UserActionButton} from "../UserActions/UserActionButton";
 import {useUserFormValidation} from "../../Utilities/CustomHooks/useUserFormValidation";
 import styles from "./UserLogin.module.scss";
 
@@ -11,8 +11,8 @@ export const UserLogin: React.FunctionComponent<UserInputTypes> = props => {
     const {formId, showRequiredLabel, ...inputProps} = props;
     const {
         validationState: {errorState, formState, emailState},
-        validationFunctions: {emailValidation, requiredValidation, passwordHelperText}
-    } = useUserFormValidation(["username", "repeatPassword"], false);
+        validationFunctions: {emailValidation, genericFieldValidation, passwordHelperText}
+    } = useUserFormValidation(["generic", "repeatPassword"]);
 
     return (
         <>
@@ -25,8 +25,8 @@ export const UserLogin: React.FunctionComponent<UserInputTypes> = props => {
                        type="email"
                        variant="outlined"
                        size={"small"}
-                       onBlur={event => emailValidation(event, formState)}
-                       onChange={event => emailValidation(event, formState)}
+                       onBlur={event => emailValidation(event, formState, false)}
+                       onChange={event => emailValidation(event, formState, false)}
                        FormHelperTextProps={{error: true}}
                        helperText={emailState.email.requiredValidity ? "* this field is required" : null}
                        {...inputProps}/>
@@ -39,13 +39,13 @@ export const UserLogin: React.FunctionComponent<UserInputTypes> = props => {
                        variant="outlined"
                        size={"small"}
                        fullWidth
-                       onBlur={event => requiredValidation(event, "password")}
-                       onChange={event => requiredValidation(event, "password")}
+                       onBlur={event => genericFieldValidation(event, "password")}
+                       onChange={event => genericFieldValidation(event, "password")}
                        FormHelperTextProps={{error: true}}
                        helperText={passwordHelperText(formState)}
                        {...inputProps}/>
             <NavLink to={"/user/signup"} className={styles.no_account}>Have no account?</NavLink>
-            <UserFormButton formId={formId} formValidity={errorState} formState={formState}/>
+            <UserActionButton formId={formId} formValidity={errorState} formState={formState}/>
         </>
     )
 }

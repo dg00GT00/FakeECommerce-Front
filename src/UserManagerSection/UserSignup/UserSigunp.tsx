@@ -1,7 +1,7 @@
 import * as React from "react";
 import {TextField} from "@material-ui/core";
 import {UserInputTypes} from "../../Utilities/ProductModels/UserInputTypes";
-import {UserFormButton} from "../UserActions/UserFormButton";
+import {UserActionButton} from "../UserActions/UserActionButton";
 import Tooltip from "@material-ui/core/Tooltip/Tooltip";
 import {useUserFormValidation} from "../../Utilities/CustomHooks/useUserFormValidation";
 
@@ -14,7 +14,7 @@ export const UserSignup: React.FunctionComponent<UserInputTypes> = props => {
         passwordValidation,
         repeatPasswordValidation,
         requiredValidation,
-        userNameValidation
+        genericFieldValidation
     }, validationState: {
         errorState,
         emailState,
@@ -24,7 +24,7 @@ export const UserSignup: React.FunctionComponent<UserInputTypes> = props => {
     return (
         <>
             <TextField color={"primary"}
-                       error={formState.username.requiredValidity}
+                       error={formState.generic.requiredValidity}
                        fullWidth
                        required
                        id="username"
@@ -32,9 +32,9 @@ export const UserSignup: React.FunctionComponent<UserInputTypes> = props => {
                        type="text"
                        variant="outlined"
                        size={"small"}
-                       onBlur={event => userNameValidation(event, "username")}
+                       onBlur={event => genericFieldValidation(event, "generic")}
                        FormHelperTextProps={{error: true}}
-                       helperText={formState.username.requiredValidity ? "* this field is required" : null}
+                       helperText={formState.generic.requiredValidity ? "* this field is required" : null}
                        {...inputProps}/>
             <TextField color={"primary"}
                        error={emailState.email.requiredValidity}
@@ -45,7 +45,7 @@ export const UserSignup: React.FunctionComponent<UserInputTypes> = props => {
                        type="email"
                        variant="outlined"
                        size={"small"}
-                       onBlur={event => emailValidation(event, formState)}
+                       onBlur={event => emailValidation(event, formState, true)}
                        FormHelperTextProps={{error: true}}
                        helperText={emailState.email.requiredValidity ? "* this field is required" : null}
                        {...inputProps}/>
@@ -82,7 +82,7 @@ export const UserSignup: React.FunctionComponent<UserInputTypes> = props => {
                        helperText={formState.repeatPassword.patternValidity ? "* the passwords are not equal" : null}
                        {...inputProps}/>
             {showRequiredLabel ? <p>* fields required</p> : null}
-            <UserFormButton formId={formId} formValidity={errorState} formState={formState}/>
+            <UserActionButton formId={formId} formValidity={errorState} formState={formState}/>
         </>
     );
 }
