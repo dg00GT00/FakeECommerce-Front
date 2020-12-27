@@ -82,3 +82,7 @@ export class UserRequestManager {
         }
     }
 }
+
+export const emailExists = async (email: string): Promise<boolean> => {
+    return (await api.get<boolean>(`/account/emailexists?email=${email}`)).data;
+}

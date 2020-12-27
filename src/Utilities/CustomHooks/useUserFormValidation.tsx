@@ -1,6 +1,6 @@
 import * as React from "react";
 import {FieldId, FormState} from "../../UserManagerSection/UserFormsTypes/UserFormsTypes";
-import {UserRequestManager} from "../../HttpRequests/UserRequestManager";
+import {emailExists} from "../../HttpRequests/UserRequestManager";
 
 const passwordRegex = "(?=^.{6,10}$)(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&amp;*()_+}{&quot;:;'?/&gt;.&lt;,])(?!.*\\s).*$";
 
@@ -10,8 +10,6 @@ const initialFormState: FormState<FieldId> = {
     password: {requiredValidity: false, patternValidity: false, submitButtonDisable: false},
     repeatPassword: {requiredValidity: false, patternValidity: false, submitButtonDisable: false},
 };
-
-const userAccount = new UserRequestManager();
 
 enum ActionTypes {
     REQUIRED = "REQUIRED",
@@ -155,8 +153,7 @@ export const useUserFormValidation = (omitFieldValidators?: FieldId[]): UserForm
     function emailValidation(event: any, formState: any, checkEmailExistence = true): void {
         if (event.target.checkValidity()) {
             if (checkEmailExistence) {
-                userAccount
-                    .emailExists(event.target.value)
+                emailExists(event.target.value)
                     .then(email => {
                         if (email) {
                             event.target.value = "This email already exists";
