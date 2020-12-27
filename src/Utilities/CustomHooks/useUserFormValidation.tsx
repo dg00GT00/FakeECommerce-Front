@@ -5,7 +5,7 @@ import {UserRequestManager} from "../../HttpRequests/UserRequestManager";
 const passwordRegex = "(?=^.{6,10}$)(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&amp;*()_+}{&quot;:;'?/&gt;.&lt;,])(?!.*\\s).*$";
 
 const initialFormState: FormState<FieldId> = {
-    username: {requiredValidity: false, submitButtonDisable: false},
+    generic: {requiredValidity: false, submitButtonDisable: false},
     email: {requiredValidity: false, submitButtonDisable: false},
     password: {requiredValidity: false, patternValidity: false, submitButtonDisable: false},
     repeatPassword: {requiredValidity: false, patternValidity: false, submitButtonDisable: false},
@@ -15,14 +15,14 @@ const userAccount = new UserRequestManager();
 
 enum ActionTypes {
     REQUIRED = "REQUIRED",
-    USER_NAME = "USER_NAME",
+    GENERIC = "GENERIC",
     PASSWORD = "PASSWORD",
     REPEAT_PASSWORD = "REPEAT_PASSWORD",
 }
 
 type FormActions =
-    { type: ActionTypes.REQUIRED, fieldValue: string, fieldId: FieldId, fieldValidity: boolean }
-    | { type: ActionTypes.USER_NAME, fieldValue: string }
+    { type: ActionTypes.REQUIRED, fieldId: FieldId, fieldValidity: boolean }
+    | { type: ActionTypes.GENERIC, fieldValue: string }
     | { type: ActionTypes.PASSWORD, fieldValue: string }
     | { type: ActionTypes.REPEAT_PASSWORD, fieldValue: string }
 
@@ -37,14 +37,13 @@ const formReducer = (prevState: FormState<FieldId>, action: FormActions): FormSt
                     ...prevState[action.fieldId],
                     requiredValidity: !action.fieldValidity,
                     submitButtonDisable: action.fieldValidity,
-                    fieldValue: action.fieldValue
                 }
             };
-        case ActionTypes.USER_NAME:
+        case ActionTypes.GENERIC:
             return {
                 ...prevState,
-                username: {
-                    ...prevState.username,
+                generic: {
+                    ...prevState.generic,
                     fieldValue: action.fieldValue
                 }
             };
@@ -116,9 +115,9 @@ type UserFormValidationType = {
         formState: FormState<FieldId>
     },
     validationFunctions: {
-        emailValidation: (event: any, formState: any) => void,
-        userNameValidation: (event: React.SyntheticEvent<HTMLInputElement | HTMLTextAreaElement>, fieldId: FieldId) => void,
-        requiredValidation: (event: React.SyntheticEvent<HTMLInputElement | HTMLTextAreaElement>, fieldId: FieldId) => void,
+        requiredValidation: (event: any, fieldId: any) => any,
+        genericFieldValidation: (event: any, fieldId: any) => void,
+        emailValidation: (event: any, formState: any, checkEmailExistence: boolean) => any,
         passwordValidation: (event: React.SyntheticEvent<HTMLInputElement | HTMLTextAreaElement>) => void,
         repeatPasswordValidation: (event: React.SyntheticEvent<HTMLInputElement | HTMLTextAreaElement>) => void,
         passwordHelperText: (formState: FormState<FieldId>) => string | null
@@ -151,9 +150,9 @@ export const useUserFormValidation = (omitFieldValidators?: FieldId[]): UserForm
         });
     }, [formState, emailState, omitFieldValidators]);
 
-    function emailValidation(event: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>, formState: FormState<FieldId>): void;
-    function emailValidation(event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, formState: FormState<FieldId>): void;
-    function emailValidation(event: any, formState: any): void {
+    function emailValidation(event: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>, formState: FormState<FieldId>, checkEmailExistence: boolean): void;
+    function emailValidation(event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, formState: FormState<FieldId>, checkEmailExistence: boolean): void;
+    function emailValidation(event: any, formState: any, checkEmailExistence = true): void {
         if (event.target.checkValidity()) {
             if (checkEmailExistence) {
                 userAccount
@@ -225,18 +224,26 @@ export const useUserFormValidation = (omitFieldValidators?: FieldId[]): UserForm
         }
     }
 
-    const requiredValidation = (event: React.SyntheticEvent<HTMLInputElement | HTMLTextAreaElement>, fieldId: FieldId): void => {
+    function requiredValidation(event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, fieldId: FieldId): void;
+    function requiredValidation(event: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>, fieldId: FieldId): void;
+    function requiredValidation(event: any, fieldId: any): any {
         formDispatch({
-            type: ActionTypes.REQUIRED,
-            fieldValue: event.currentTarget.value,
             fieldId,
-            fieldValidity: event.currentTarget.checkValidity()
+            type: ActionTypes.REQUIRED,
+            fieldValidity: event.target.checkValidity()
         });
     }
 
-    const userNameValidation = (event: React.SyntheticEvent<HTMLInputElement | HTMLTextAreaElement>, fieldId: FieldId): void => {
+    /**
+     * Encompasses the required validation plus the retrieval of it input value
+     * @param event the onBlur event
+     * @param fieldId the field id for requirement validation
+     */
+    function genericFieldValidation(event: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>, fieldId: FieldId): void;
+    function genericFieldValidation(event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, fieldId: FieldId): void;
+    function genericFieldValidation(event: any, fieldId: FieldId): void {
         requiredValidation(event, fieldId);
-        formDispatch({type: ActionTypes.USER_NAME, fieldValue: event.currentTarget.value});
+        formDispatch({type: ActionTypes.GENERIC, fieldValue: event.currentTarget.value});
     }
 
     // TODO: Verify the rightness of regular expression in the view of Javascript
@@ -268,7 +275,7 @@ export const useUserFormValidation = (omitFieldValidators?: FieldId[]): UserForm
         validationFunctions: {
             emailValidation,
             requiredValidation,
-            userNameValidation,
+            genericFieldValidation,
             passwordValidation,
             passwordHelperText,
             repeatPasswordValidation
