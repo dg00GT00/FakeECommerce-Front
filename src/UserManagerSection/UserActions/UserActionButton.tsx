@@ -7,7 +7,7 @@ import {UserSnackbar} from "./UserSnackbar";
 import {AuthContext} from "../../Utilities/Context/AuthContext";
 import {FormId, UserFormButtonProps} from "../UserFormsTypes/UserFormsTypes";
 
-export const UserFormButton: React.FunctionComponent<UserFormButtonProps> = props => {
+export const UserActionButton: React.FunctionComponent<UserFormButtonProps> = props => {
     const [message, setMessage] = React.useState<MessageState>({message: undefined, stateCount: 0});
     const {registerUser, userLogin} = React.useContext(AuthContext);
     const {goBack, push} = useHistory();
@@ -18,7 +18,7 @@ export const UserFormButton: React.FunctionComponent<UserFormButtonProps> = prop
             const {
                 email: {fieldValue: email},
                 password: {fieldValue: password},
-                username: {fieldValue: username}
+                generic: {fieldValue: username}
             } = props.formState;
             if (username && email && password) {
                 registerUser(username, email, password)
@@ -41,7 +41,7 @@ export const UserFormButton: React.FunctionComponent<UserFormButtonProps> = prop
         }
         if (props.formId === FormId.LOGIN) {
             const {
-                password: {fieldValue: password},
+                generic: {fieldValue: password},
                 email: {fieldValue: email}
             } = props.formState;
             if (email && password) {
