@@ -1,6 +1,6 @@
 import * as React from "react";
 import {TextField} from "@material-ui/core";
-import {UserInputTypes} from "../../Utilities/ProductModels/UserInputTypes";
+import {UserInputTypes} from "../../../Utilities/ProductModels/UserInputTypes";
 
 
 export const UserState: React.FunctionComponent<UserInputTypes> = props => {
@@ -20,11 +20,11 @@ export const UserState: React.FunctionComponent<UserInputTypes> = props => {
                    variant="outlined"
                    size={"small"}
                    select={true}
+                   required
+                   fullWidth
                    InputLabelProps={props.InputLabelProps}
                    InputProps={props.InputProps}
-                   SelectProps={{native: true}}
-                   fullWidth
-                   required>
+                   SelectProps={{native: true}}>
             <option/>
             <option value={0}>A state</option>
             <option value={1}>Another state</option>

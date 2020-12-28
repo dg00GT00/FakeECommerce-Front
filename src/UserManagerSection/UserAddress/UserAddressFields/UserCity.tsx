@@ -1,9 +1,11 @@
 import * as React from "react";
 import {TextField} from "@material-ui/core";
-import {UserInputTypes} from "../../Utilities/ProductModels/UserInputTypes";
+import {UserInputTypes} from "../../../Utilities/ProductModels/UserInputTypes";
+import {useUserAccountFormValidation} from "../../../Utilities/CustomHooks/formValidation/useUserAccountFormValidation";
 
 export const UserCity: React.FunctionComponent<UserInputTypes & { className: string }> = props => {
     const [city, setCity] = React.useState("");
+    const {validationFunctions, validationState} = useUserAccountFormValidation();
 
     const handleChange = (event: React.ChangeEvent<{ name?: string; value: unknown }>) => {
         const value = event.target.value as string;

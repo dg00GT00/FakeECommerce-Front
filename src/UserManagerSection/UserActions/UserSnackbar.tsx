@@ -8,7 +8,7 @@ type SnackbarMessage = {
     key: number;
 }
 
-// Avoids the snackbar to loop after each stateCount increase
+// Avoids the snackbar to loop after each stateCount increment
 let outerStateCount = 0;
 
 export const UserSnackbar: React.FunctionComponent<MessageState> = props => {

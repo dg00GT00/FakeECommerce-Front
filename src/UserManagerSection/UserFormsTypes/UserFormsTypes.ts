@@ -1,6 +1,5 @@
-export type UserFormButtonProps = { formId: FormId, formValidity: boolean, formState: FormState<FieldId> };
-export type FieldId = "username" | "email" | "password" | "repeatPassword";
-export type ErrorState = Record<FieldId, boolean>;
+export type UserFormButtonProps = { formId: FormId, formValidity: boolean, formState: FormState<any> };
+export type FieldId = "generic" | "email" | "password" | "repeatPassword";
 
 export type FormState<T extends string | number | symbol> = Record<T, {
     requiredValidity: boolean,
@@ -10,5 +9,6 @@ export type FormState<T extends string | number | symbol> = Record<T, {
 
 export enum FormId {
     SIGNUP = "SIGNUP",
-    LOGIN = "LOGIN"
+    LOGIN = "LOGIN",
+    ADDRESS = "ADDRESS"
 }

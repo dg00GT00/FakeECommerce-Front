@@ -8,7 +8,7 @@ import {AuthContext} from "../../Utilities/Context/AuthContext";
 import {FormId, UserFormButtonProps} from "../UserFormsTypes/UserFormsTypes";
 
 export const UserActionButton: React.FunctionComponent<UserFormButtonProps> = props => {
-    const [message, setMessage] = React.useState<MessageState>({message: undefined, stateCount: 0});
+    const [messageState, setMessageState] = React.useState<MessageState>({message: undefined, stateCount: 0});
     const {registerUser, userLogin} = React.useContext(AuthContext);
     const {goBack, push} = useHistory();
 
@@ -28,8 +28,8 @@ export const UserActionButton: React.FunctionComponent<UserFormButtonProps> = pr
                         })
                     })
                     .catch(error => {
-                        setMessage(prevState => {
-                            const state = prevState ?? message;
+                        setMessageState(prevState => {
+                            const state = prevState ?? messageState;
                             return {
                                 ...state,
                                 message: error,
@@ -41,7 +41,7 @@ export const UserActionButton: React.FunctionComponent<UserFormButtonProps> = pr
         }
         if (props.formId === FormId.LOGIN) {
             const {
-                generic: {fieldValue: password},
+                password: {fieldValue: password},
                 email: {fieldValue: email}
             } = props.formState;
             if (email && password) {
@@ -52,8 +52,8 @@ export const UserActionButton: React.FunctionComponent<UserFormButtonProps> = pr
                         });
                     })
                     .catch(error => {
-                        setMessage(prevState => {
-                            const state = prevState ?? message;
+                        setMessageState(prevState => {
+                            const state = prevState ?? messageState;
                             return {
                                 ...state,
                                 message: error,
@@ -77,7 +77,7 @@ export const UserActionButton: React.FunctionComponent<UserFormButtonProps> = pr
                     disabled={props.formValidity}
                     color={"secondary"}>Go</Button>
             </div>
-            <UserSnackbar {...message}/>
+            <UserSnackbar {...messageState}/>
         </>
     );
 }
