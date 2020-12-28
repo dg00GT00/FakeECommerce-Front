@@ -3,7 +3,7 @@ import {TextField} from "@material-ui/core";
 import {UserInputTypes} from "../../Utilities/ProductModels/UserInputTypes";
 import {NavLink} from "react-router-dom";
 import {UserActionButton} from "../UserActions/UserActionButton";
-import {useUserFormValidation} from "../../Utilities/CustomHooks/useUserFormValidation";
+import {useUserAccountFormValidation} from "../../Utilities/CustomHooks/formValidation/useUserAccountFormValidation";
 import styles from "./UserLogin.module.scss";
 
 
@@ -12,7 +12,7 @@ export const UserLogin: React.FunctionComponent<UserInputTypes> = props => {
     const {
         validationState: {errorState, formState, emailState},
         validationFunctions: {emailValidation, genericFieldValidation, passwordHelperText}
-    } = useUserFormValidation(["generic", "repeatPassword"]);
+    } = useUserAccountFormValidation(["generic", "repeatPassword"]);
 
     return (
         <>

@@ -3,7 +3,7 @@ import {TextField} from "@material-ui/core";
 import {UserInputTypes} from "../../Utilities/ProductModels/UserInputTypes";
 import {UserActionButton} from "../UserActions/UserActionButton";
 import Tooltip from "@material-ui/core/Tooltip/Tooltip";
-import {useUserFormValidation} from "../../Utilities/CustomHooks/useUserFormValidation";
+import {useUserAccountFormValidation} from "../../Utilities/CustomHooks/formValidation/useUserAccountFormValidation";
 
 export const UserSignup: React.FunctionComponent<UserInputTypes> = props => {
 
@@ -19,7 +19,7 @@ export const UserSignup: React.FunctionComponent<UserInputTypes> = props => {
         errorState,
         emailState,
         formState
-    }} = useUserFormValidation();
+    }} = useUserAccountFormValidation();
 
     return (
         <>

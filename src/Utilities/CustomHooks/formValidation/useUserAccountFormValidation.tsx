@@ -1,6 +1,6 @@
 import * as React from "react";
-import {FieldId, FormState} from "../../UserManagerSection/UserFormsTypes/UserFormsTypes";
-import {emailExists} from "../../HttpRequests/UserRequestManager";
+import {FieldId, FormState} from "../../../UserManagerSection/UserFormsTypes/UserFormsTypes";
+import {emailExists} from "../../../HttpRequests/UserRequestManager";
 
 const passwordRegex = "(?=^.{6,10}$)(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&amp;*()_+}{&quot;:;'?/&gt;.&lt;,])(?!.*\\s).*$";
 
@@ -134,7 +134,7 @@ const errorStateTrigger = <T extends string>(formState: FormState<T>, omitFieldV
     return false;
 }
 
-export const useUserFormValidation = (omitFieldValidators?: FieldId[]): UserFormValidationType => {
+export const useUserAccountFormValidation = (omitFieldValidators?: FieldId[]): UserFormValidationType => {
     const [formState, formDispatch] = React.useReducer<React.Reducer<FormState<FieldId>, FormActions>>(formReducer, initialFormState);
     const [emailState, setEmailState] = React.useState(initialFormState);
     const [errorState, setErrorState] = React.useState(true);

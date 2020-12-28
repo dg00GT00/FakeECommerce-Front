@@ -41,9 +41,10 @@ export const UserActionButton: React.FunctionComponent<UserFormButtonProps> = pr
         }
         if (props.formId === FormId.LOGIN) {
             const {
-                password: {fieldValue: password},
+                generic: {fieldValue: password},
                 email: {fieldValue: email}
             } = props.formState;
+            console.log(props.formState);
             if (email && password) {
                 userLogin(email, password)
                     .then(_ => {
