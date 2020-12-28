@@ -1,6 +1,10 @@
 import * as React from "react";
 import {FieldId, FormState} from "../../../UserManagerSection/UserFormsTypes/UserFormsTypes";
 import {emailExists} from "../../../HttpRequests/UserRequestManager";
+import {GenericFormActions, genericFormReducer} from "./genericFormReducer";
+import {ActionTypes} from "./FormActionTypes";
+import {errorStateTrigger} from "./FormStateManager";
+import {useGenericFormValidation} from "./useGenericFormValidation";
 
 const passwordRegex = "(?=^.{6,10}$)(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&amp;*()_+}{&quot;:;'?/&gt;.&lt;,])(?!.*\\s).*$";
 
@@ -11,40 +15,17 @@ const initialFormState: FormState<FieldId> = {
     repeatPassword: {requiredValidity: false, patternValidity: false, submitButtonDisable: false},
 };
 
-enum ActionTypes {
-    REQUIRED = "REQUIRED",
-    GENERIC = "GENERIC",
-    PASSWORD = "PASSWORD",
-    REPEAT_PASSWORD = "REPEAT_PASSWORD",
-}
-
-type FormActions =
-    { type: ActionTypes.REQUIRED, fieldId: FieldId, fieldValidity: boolean }
-    | { type: ActionTypes.GENERIC, fieldValue: string }
+type FormActions = GenericFormActions<FieldId>
     | { type: ActionTypes.PASSWORD, fieldValue: string }
-    | { type: ActionTypes.REPEAT_PASSWORD, fieldValue: string }
+    | { type: ActionTypes.REPEAT_PASSWORD, fieldValue: string };
 
-
+/**
+ * @return must return at least the generic state come from the generic reducer
+ */
 const formReducer = (prevState: FormState<FieldId>, action: FormActions): FormState<FieldId> => {
+    prevState = genericFormReducer(prevState, (action as GenericFormActions<FieldId>));
     let newState: FormState<FieldId>;
     switch (action.type) {
-        case ActionTypes.REQUIRED:
-            return {
-                ...prevState,
-                [action.fieldId]: {
-                    ...prevState[action.fieldId],
-                    requiredValidity: !action.fieldValidity,
-                    submitButtonDisable: action.fieldValidity,
-                }
-            };
-        case ActionTypes.GENERIC:
-            return {
-                ...prevState,
-                generic: {
-                    ...prevState.generic,
-                    fieldValue: action.fieldValue
-                }
-            };
         case ActionTypes.PASSWORD:
             if (new RegExp(passwordRegex).test(action.fieldValue)) {
                 newState = {
@@ -102,11 +83,11 @@ const formReducer = (prevState: FormState<FieldId>, action: FormActions): FormSt
             newState.repeatPassword.fieldValue = action.fieldValue;
             return newState;
         default:
-            return initialFormState;
+            return prevState;
     }
 }
 
-type UserFormValidationType = {
+type UserAccountValidation = {
     validationState: {
         errorState: boolean,
         emailState: FormState<FieldId>,
@@ -118,24 +99,13 @@ type UserFormValidationType = {
         emailValidation: (event: any, formState: any, checkEmailExistence: boolean) => any,
         passwordValidation: (event: React.SyntheticEvent<HTMLInputElement | HTMLTextAreaElement>) => void,
         repeatPasswordValidation: (event: React.SyntheticEvent<HTMLInputElement | HTMLTextAreaElement>) => void,
-        passwordHelperText: (formState: FormState<FieldId>) => string | null
+        formHelperText: (formState: FormState<FieldId>, fieldId: FieldId) => string | null
     }
 }
 
-const errorStateTrigger = <T extends string>(formState: FormState<T>, omitFieldValidators?: T[], errorStateMiddleware?: (key: T, ...args: any[]) => FormState<T>): boolean => {
-    for (const key in formState) {
-        if (!omitFieldValidators?.includes(key as T)) {
-            const newFormState = errorStateMiddleware ? errorStateMiddleware(key) : formState;
-            if (!newFormState[(key as T)].submitButtonDisable) {
-                return true;
-            }
-        }
-    }
-    return false;
-}
-
-export const useUserAccountFormValidation = (omitFieldValidators?: FieldId[]): UserFormValidationType => {
+export const useUserAccountFormValidation = (omitFieldValidators?: FieldId[]): UserAccountValidation => {
     const [formState, formDispatch] = React.useReducer<React.Reducer<FormState<FieldId>, FormActions>>(formReducer, initialFormState);
+    const {genericFieldValidation, requiredValidation} = useGenericFormValidation(formDispatch);
     const [emailState, setEmailState] = React.useState(initialFormState);
     const [errorState, setErrorState] = React.useState(true);
 
@@ -148,9 +118,18 @@ export const useUserAccountFormValidation = (omitFieldValidators?: FieldId[]): U
         });
     }, [formState, emailState, omitFieldValidators]);
 
+    // TODO: Verify the rightness of regular expression in the view of Javascript
+    const passwordValidation = (event: React.SyntheticEvent<HTMLInputElement | HTMLTextAreaElement>): void => {
+        formDispatch({type: ActionTypes.PASSWORD, fieldValue: event.currentTarget.value});
+    }
+
+    const repeatPasswordValidation = (event: React.SyntheticEvent<HTMLInputElement | HTMLTextAreaElement>): void => {
+        formDispatch({type: ActionTypes.REPEAT_PASSWORD, fieldValue: event.currentTarget.value});
+    }
+
     function emailValidation(event: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>, formState: FormState<FieldId>, checkEmailExistence: boolean): void;
     function emailValidation(event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, formState: FormState<FieldId>, checkEmailExistence: boolean): void;
-    function emailValidation(event: any, formState: any, checkEmailExistence = true): void {
+    function emailValidation(event: any, formState: any, checkEmailExistence: boolean): void {
         if (event.target.checkValidity()) {
             if (checkEmailExistence) {
                 emailExists(event.target.value)
@@ -221,43 +200,13 @@ export const useUserAccountFormValidation = (omitFieldValidators?: FieldId[]): U
         }
     }
 
-    function requiredValidation(event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, fieldId: FieldId): void;
-    function requiredValidation(event: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>, fieldId: FieldId): void;
-    function requiredValidation(event: any, fieldId: any): any {
-        formDispatch({
-            fieldId,
-            type: ActionTypes.REQUIRED,
-            fieldValidity: event.target.checkValidity()
-        });
-    }
 
-    /**
-     * Encompasses the required validation plus the retrieval of it input value
-     * @param event the onBlur event
-     * @param fieldId the field id for requirement validation
-     */
-    function genericFieldValidation(event: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>, fieldId: FieldId): void;
-    function genericFieldValidation(event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, fieldId: FieldId): void;
-    function genericFieldValidation(event: any, fieldId: FieldId): void {
-        requiredValidation(event, fieldId);
-        formDispatch({type: ActionTypes.GENERIC, fieldValue: event.currentTarget.value});
-    }
-
-    // TODO: Verify the rightness of regular expression in the view of Javascript
-    const passwordValidation = (event: React.SyntheticEvent<HTMLInputElement | HTMLTextAreaElement>): void => {
-        formDispatch({type: ActionTypes.PASSWORD, fieldValue: event.currentTarget.value});
-    }
-
-    const repeatPasswordValidation = (event: React.SyntheticEvent<HTMLInputElement | HTMLTextAreaElement>): void => {
-        formDispatch({type: ActionTypes.REPEAT_PASSWORD, fieldValue: event.currentTarget.value});
-    }
-
-    const passwordHelperText = (formState: FormState<FieldId>): string | null => {
+    const formHelperText = (formState: FormState<FieldId>, fieldId: FieldId): string | null => {
         let message: string | null = null;
-        if (formState.password.requiredValidity) {
+        if (formState[fieldId].requiredValidity) {
             message = "* this field is required";
         }
-        if (formState.password.patternValidity) {
+        if (formState[fieldId].patternValidity) {
             message = "* this password is invalid";
         }
         return message;
@@ -274,7 +223,7 @@ export const useUserAccountFormValidation = (omitFieldValidators?: FieldId[]): U
             requiredValidation,
             genericFieldValidation,
             passwordValidation,
-            passwordHelperText,
+            formHelperText,
             repeatPasswordValidation
         }
     }

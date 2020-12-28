@@ -11,8 +11,8 @@ export const UserLogin: React.FunctionComponent<UserInputTypes> = props => {
     const {formId, showRequiredLabel, ...inputProps} = props;
     const {
         validationState: {errorState, formState, emailState},
-        validationFunctions: {emailValidation, genericFieldValidation, passwordHelperText}
-    } = useUserAccountFormValidation(["generic", "repeatPassword"]);
+        validationFunctions: {emailValidation, genericFieldValidation, formHelperText}
+    } = useUserAccountFormValidation(["repeatPassword", "password"]);
 
     return (
         <>
@@ -31,7 +31,7 @@ export const UserLogin: React.FunctionComponent<UserInputTypes> = props => {
                        helperText={emailState.email.requiredValidity ? "* this field is required" : null}
                        {...inputProps}/>
             <TextField color={"primary"}
-                       error={formState.password.requiredValidity}
+                       error={formState.generic.requiredValidity}
                        required
                        id="password"
                        label="Password"
@@ -39,10 +39,10 @@ export const UserLogin: React.FunctionComponent<UserInputTypes> = props => {
                        variant="outlined"
                        size={"small"}
                        fullWidth
-                       onBlur={event => genericFieldValidation(event, "password")}
-                       onChange={event => genericFieldValidation(event, "password")}
+                       onBlur={event => genericFieldValidation(event, "generic")}
+                       onChange={event => genericFieldValidation(event, "generic")}
                        FormHelperTextProps={{error: true}}
-                       helperText={passwordHelperText(formState)}
+                       helperText={formHelperText(formState, "generic")}
                        {...inputProps}/>
             <NavLink to={"/user/signup"} className={styles.no_account}>Have no account?</NavLink>
             <UserActionButton formId={formId} formValidity={errorState} formState={formState}/>

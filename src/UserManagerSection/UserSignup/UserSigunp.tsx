@@ -10,7 +10,7 @@ export const UserSignup: React.FunctionComponent<UserInputTypes> = props => {
     const {formId, showRequiredLabel, ...inputProps} = props;
     const {validationFunctions: {
         emailValidation,
-        passwordHelperText,
+        formHelperText,
         passwordValidation,
         repeatPasswordValidation,
         requiredValidation,
@@ -65,7 +65,7 @@ export const UserSignup: React.FunctionComponent<UserInputTypes> = props => {
                            onChange={passwordValidation}
                            onBlur={event => requiredValidation(event, "password")}
                            FormHelperTextProps={{error: true}}
-                           helperText={passwordHelperText(formState)}
+                           helperText={formHelperText(formState, "password")}
                            {...inputProps}/>
             </Tooltip>
             <TextField color={"primary"}

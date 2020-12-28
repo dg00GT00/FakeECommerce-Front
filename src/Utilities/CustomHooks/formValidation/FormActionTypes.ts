@@ -1,0 +1,6 @@
+export enum ActionTypes {
+    REQUIRED = "REQUIRED",
+    GENERIC = "GENERIC",
+    PASSWORD = "PASSWORD",
+    REPEAT_PASSWORD = "REPEAT_PASSWORD",
+}
