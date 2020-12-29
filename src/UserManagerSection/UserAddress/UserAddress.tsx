@@ -17,7 +17,7 @@ export const UserAddress: React.FunctionComponent<UserInputTypes> = props => {
     const {
         validationFunctions: {genericFieldValidation},
         validationState: {formState, errorState}
-    } = useAddressFormValidation();
+    } = useAddressFormValidation(["complement"]);
 
     return (
         <>
@@ -47,7 +47,6 @@ export const UserAddress: React.FunctionComponent<UserInputTypes> = props => {
                             funcValidation={genericFieldValidation}
                             {...props}/>
                 <UserAddressComplement className={styles.complement}
-                                       formState={formState}
                                        funcValidation={genericFieldValidation}
                                        {...props}/>
             </div>

@@ -17,13 +17,13 @@ const initialFormState: FormState<AddressFieldId> = {
     lastName: {requiredValidity: false, submitButtonDisable: false},
 }
 
-export const useAddressFormValidation = () => {
+export const useAddressFormValidation = (omitFieldValidation: AddressFieldId[]) => {
     const [errorState, setErrorState] = React.useState(true);
     const [formState, formDispatch] = React.useReducer<AddressReducer>(genericFormReducer, initialFormState);
     const {genericFieldValidation, requiredValidation} = useGenericFormValidation(formDispatch);
 
     React.useEffect(() => {
-        setErrorState(errorStateTrigger(formState));
+        setErrorState(errorStateTrigger(formState, omitFieldValidation));
     }, [formState]);
 
     return {
