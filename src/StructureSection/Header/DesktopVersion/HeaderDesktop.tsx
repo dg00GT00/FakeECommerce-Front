@@ -2,7 +2,7 @@ import * as React from "react";
 import styles from "./HeaderDesktop.module.scss"
 import {ReactComponent as Logo} from "../../../Assets/eCommerceBaseLogo.svg";
 import {HeaderProps} from "../HeaderProps";
-import {CartDefault} from "../../Cart/CartDefault";
+import {CartDefault} from "../../../ProductManagerSection/Cart/CartDefault";
 import {NavLink} from "react-router-dom";
 import {AuthContext} from "../../../Utilities/Context/AuthContext";
 import {Fade, Menu, MenuItem, SvgIcon, Tooltip} from "@material-ui/core";

@@ -8,7 +8,7 @@ import {ReactComponent as Logo} from "../../../Assets/eCommerceFooter.svg";
 
 import {Fade, Menu, MenuItem} from "@material-ui/core";
 import {HeaderProps} from "../HeaderProps";
-import {CartDefault} from "../../Cart/CartDefault";
+import {CartDefault} from "../../../ProductManagerSection/Cart/CartDefault";
 import {NavLink} from 'react-router-dom';
 
 

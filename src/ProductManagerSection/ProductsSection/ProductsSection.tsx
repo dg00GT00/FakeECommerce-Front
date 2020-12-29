@@ -1,5 +1,5 @@
 import * as React from "react";
-import {LandingMarketing} from "../LandingMarketing/LandingMarketing";
+import {LandingMarketing} from "../../StructureSection/LandingMarketing/LandingMarketing";
 import styles from "./ProductsSection.module.scss";
 import {createStyles, makeStyles} from "@material-ui/core/styles";
 import {CartContext} from "../../Utilities/Context/CartContext";
