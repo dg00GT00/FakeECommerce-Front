@@ -1,5 +1,5 @@
 import * as React from "react";
-import {FieldId, FormState} from "../../../UserManagerSection/UserFormsTypes/UserFormsTypes";
+import {AccountFieldId, FormState} from "../../../UserManagerSection/UserFormsTypes/UserFormsTypes";
 import {emailExists} from "../../../HttpRequests/UserRequestManager";
 import {GenericFormActions, genericFormReducer} from "./genericFormReducer";
 import {ActionTypes} from "./FormActionTypes";
@@ -8,23 +8,23 @@ import {useGenericFormValidation} from "./useGenericFormValidation";
 
 const passwordRegex = "(?=^.{6,10}$)(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&amp;*()_+}{&quot;:;'?/&gt;.&lt;,])(?!.*\\s).*$";
 
-const initialFormState: FormState<FieldId> = {
+const initialFormState: FormState<AccountFieldId> = {
     generic: {requiredValidity: false, submitButtonDisable: false},
     email: {requiredValidity: false, submitButtonDisable: false},
     password: {requiredValidity: false, patternValidity: false, submitButtonDisable: false},
     repeatPassword: {requiredValidity: false, patternValidity: false, submitButtonDisable: false},
 };
 
-type FormActions = GenericFormActions<FieldId>
+type FormActions = GenericFormActions<AccountFieldId>
     | { type: ActionTypes.PASSWORD, fieldValue: string }
     | { type: ActionTypes.REPEAT_PASSWORD, fieldValue: string };
 
 /**
  * @return must return at least the generic state come from the generic reducer
  */
-const formReducer = (prevState: FormState<FieldId>, action: FormActions): FormState<FieldId> => {
-    prevState = genericFormReducer(prevState, (action as GenericFormActions<FieldId>));
-    let newState: FormState<FieldId>;
+const formReducer = (prevState: FormState<AccountFieldId>, action: FormActions): FormState<AccountFieldId> => {
+    prevState = genericFormReducer(prevState, (action as GenericFormActions<AccountFieldId>));
+    let newState: FormState<AccountFieldId>;
     switch (action.type) {
         case ActionTypes.PASSWORD:
             if (new RegExp(passwordRegex).test(action.fieldValue)) {
@@ -90,8 +90,8 @@ const formReducer = (prevState: FormState<FieldId>, action: FormActions): FormSt
 type UserAccountValidation = {
     validationState: {
         errorState: boolean,
-        emailState: FormState<FieldId>,
-        formState: FormState<FieldId>
+        emailState: FormState<AccountFieldId>,
+        formState: FormState<AccountFieldId>
     },
     validationFunctions: {
         requiredValidation: (event: any, fieldId: any) => any,
@@ -99,12 +99,12 @@ type UserAccountValidation = {
         emailValidation: (event: any, formState: any, checkEmailExistence: boolean) => any,
         passwordValidation: (event: React.SyntheticEvent<HTMLInputElement | HTMLTextAreaElement>) => void,
         repeatPasswordValidation: (event: React.SyntheticEvent<HTMLInputElement | HTMLTextAreaElement>) => void,
-        formHelperText: (formState: FormState<FieldId>, fieldId: FieldId) => string | null
+        formHelperText: (formState: FormState<AccountFieldId>, fieldId: AccountFieldId) => string | null
     }
 }
 
-export const useUserAccountFormValidation = (omitFieldValidators?: FieldId[]): UserAccountValidation => {
-    const [formState, formDispatch] = React.useReducer<React.Reducer<FormState<FieldId>, FormActions>>(formReducer, initialFormState);
+export const useUserAccountFormValidation = (omitFieldValidators?: AccountFieldId[]): UserAccountValidation => {
+    const [formState, formDispatch] = React.useReducer<React.Reducer<FormState<AccountFieldId>, FormActions>>(formReducer, initialFormState);
     const {genericFieldValidation, requiredValidation} = useGenericFormValidation(formDispatch);
     const [emailState, setEmailState] = React.useState(initialFormState);
     const [errorState, setErrorState] = React.useState(true);
@@ -127,8 +127,8 @@ export const useUserAccountFormValidation = (omitFieldValidators?: FieldId[]): U
         formDispatch({type: ActionTypes.REPEAT_PASSWORD, fieldValue: event.currentTarget.value});
     }
 
-    function emailValidation(event: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>, formState: FormState<FieldId>, checkEmailExistence: boolean): void;
-    function emailValidation(event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, formState: FormState<FieldId>, checkEmailExistence: boolean): void;
+    function emailValidation(event: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>, formState: FormState<AccountFieldId>, checkEmailExistence: boolean): void;
+    function emailValidation(event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, formState: FormState<AccountFieldId>, checkEmailExistence: boolean): void;
     function emailValidation(event: any, formState: any, checkEmailExistence: boolean): void {
         if (event.target.checkValidity()) {
             if (checkEmailExistence) {
@@ -201,7 +201,7 @@ export const useUserAccountFormValidation = (omitFieldValidators?: FieldId[]): U
     }
 
 
-    const formHelperText = (formState: FormState<FieldId>, fieldId: FieldId): string | null => {
+    const formHelperText = (formState: FormState<AccountFieldId>, fieldId: AccountFieldId): string | null => {
         let message: string | null = null;
         if (formState[fieldId].requiredValidity) {
             message = "* this field is required";

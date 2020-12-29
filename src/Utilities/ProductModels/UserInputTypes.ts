@@ -1,4 +1,4 @@
-import {FieldId, FormId, FormState} from "../../UserManagerSection/UserFormsTypes/UserFormsTypes";
+import {AddressFieldId, FormId, FormState} from "../../UserManagerSection/UserFormsTypes/UserFormsTypes";
 
 export type UserInputTypes = {
     InputLabelProps: { classes: { root: string } },
@@ -6,6 +6,6 @@ export type UserInputTypes = {
     showRequiredLabel: boolean,
     formId: FormId,
     className?: string,
-    formState?: FormState<FieldId>,
-    funcValidation?: (event: any, fieldId?: FieldId) => void;
+    formState?: FormState<AddressFieldId>,
+    funcValidation?: (event: any, fieldId: AddressFieldId) => void;
 }

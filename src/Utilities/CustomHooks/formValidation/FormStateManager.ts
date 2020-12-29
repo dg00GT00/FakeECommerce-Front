@@ -19,16 +19,3 @@ export const errorStateTrigger = <T extends string>(formState: FormState<T>, omi
     }
     return false;
 }
-
-export const passwordHelperText = <T extends "password">(formState: FormState<T>): string | null => {
-    let message: string | null = null;
-    // @ts-ignore
-    if (formState.password.requiredValidity) {
-        message = "* this field is required";
-    }
-    // @ts-ignore
-    if (formState.password.patternValidity) {
-        message = "* this password is invalid";
-    }
-    return message;
-}
