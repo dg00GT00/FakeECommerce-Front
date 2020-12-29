@@ -27,7 +27,6 @@ export const UserCountry: React.FunctionComponent<UserInputTypes> = props => {
                    SelectProps={{native: true}}
                    FormHelperTextProps={{error: true}}
                    error={formState?.country.requiredValidity}
-                   helperText={formState?.country.requiredValidity ? "* this field is required" : null}
                    onBlur={event => funcValidation ? funcValidation(event, "country") : null}>
             <option/>
             <option value={"EUA"}>EUA</option>

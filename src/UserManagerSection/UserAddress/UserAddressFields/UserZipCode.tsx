@@ -17,7 +17,6 @@ export const UserZipCode: React.FunctionComponent<UserInputTypes> = props => {
                    className={className}
                    FormHelperTextProps={{error: true}}
                    error={formState?.zipcode.requiredValidity}
-                   helperText={formState?.zipcode.requiredValidity ? "* this field is required" : null}
                    onBlur={event => funcValidation ? funcValidation(event, "zipcode") : null}
                    {...inputProps}/>
     );

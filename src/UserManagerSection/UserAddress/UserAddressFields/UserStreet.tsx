@@ -18,7 +18,6 @@ export const UserStreet: React.FunctionComponent<UserInputTypes> = props => {
                    FormHelperTextProps={{error: true}}
                    onBlur={event => funcValidation ? funcValidation(event, "street") : null}
                    error={formState?.street.requiredValidity}
-                   helperText={formState?.street.requiredValidity ? "* this field is required" : null}
                    {...inputProps}/>
     )
 }

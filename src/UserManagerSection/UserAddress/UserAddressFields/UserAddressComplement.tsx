@@ -18,7 +18,6 @@ export const UserAddressComplement: React.FunctionComponent<UserInputTypes> = pr
                    FormHelperTextProps={{error: true}}
                    error={formState?.complement.requiredValidity}
                    onBlur={event => funcValidation ? funcValidation(event, "complement") : null}
-                   helperText={formState?.complement.requiredValidity ? "* this field is required": null}
                    {...inputProps}/>
     )
 }
