@@ -9,6 +9,8 @@ import {UserAddressComplement} from "./UserAddressFields/UserAddressComplement";
 import {UserInputTypes} from "../../Utilities/ProductModels/UserInputTypes";
 import {UserActionButton} from "../UserActions/UserActionButton";
 import {useAddressFormValidation} from "../../Utilities/CustomHooks/formValidation/useAddressFormValidation";
+import {UserFirstName} from "./UserAddressFields/UserFirstName";
+import {UserLastName} from "./UserAddressFields/UserLastName";
 
 
 export const UserAddress: React.FunctionComponent<UserInputTypes> = props => {
@@ -20,6 +22,12 @@ export const UserAddress: React.FunctionComponent<UserInputTypes> = props => {
     return (
         <>
             <div className={styles.card_content}>
+                <UserFirstName formState={formState}
+                               funcValidation={genericFieldValidation}
+                               {...props}/>
+                <UserLastName formState={formState}
+                              funcValidation={genericFieldValidation}
+                              {...props}/>
                 <UserCountry formState={formState}
                              funcValidation={genericFieldValidation}
                              {...props}/>

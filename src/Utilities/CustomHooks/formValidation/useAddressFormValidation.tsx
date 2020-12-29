@@ -13,6 +13,8 @@ const initialFormState: FormState<AddressFieldId> = {
     country: {requiredValidity: false, submitButtonDisable: false},
     street: {requiredValidity: false, submitButtonDisable: false},
     zipcode: {requiredValidity: false, submitButtonDisable: false},
+    firstName: {requiredValidity: false, submitButtonDisable: false},
+    lastName: {requiredValidity: false, submitButtonDisable: false},
 }
 
 export const useAddressFormValidation = () => {
