@@ -10,7 +10,9 @@ import {Fade, Menu, MenuItem} from "@material-ui/core";
 import {HeaderProps} from "../HeaderProps";
 import {CartDefault} from "../../../ProductManagerSection/Cart/CartDefault";
 import {NavLink} from 'react-router-dom';
-
+import {AuthContext} from "../../../Utilities/Context/AuthContext";
+import IconButton from "@material-ui/core/IconButton";
+import {UserAccountIcon} from "../UserAccountIcon";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -21,16 +23,22 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 export const HeaderMobile: React.FunctionComponent<HeaderProps> = props => {
+    const [anchorEl, setAnchorEl] = React.useState<null | Element>(null);
+    const {getJwt, user} = React.useContext(AuthContext);
     const style = useStyles();
-    const [anchorEl, setAnchorEl] = React.useState<null | SVGElement>(null);
 
-    const handleProfileMenuOpen = (event: React.MouseEvent<SVGElement>) => {
+    const handleProfileMenuOpen: React.MouseEventHandler = event => {
         setAnchorEl(event.currentTarget);
     };
 
     const handleMenuClose = () => {
         setAnchorEl(null);
     };
+
+    const logout: React.MouseEventHandler = event => {
+        user.deleteJwt();
+        handleMenuClose();
+    }
 
     return (
         <AppBar position="static">
@@ -43,18 +51,33 @@ export const HeaderMobile: React.FunctionComponent<HeaderProps> = props => {
                     open={Boolean(anchorEl)}
                     onClose={handleMenuClose}
                     TransitionComponent={Fade}>
-                    <MenuItem>
-                        <NavLink to={props.loginPath}
-                                 style={{textDecoration: "none", color: "currentColor"}}>Login
-                        </NavLink></MenuItem>
-                    <MenuItem>
-                        <NavLink to={props.signupPath}
-                                 style={{textDecoration: "none", color: "currentColor"}}>Signup
-                        </NavLink></MenuItem>
+                    {getJwt() ?
+                        <MenuItem className={style.root} onClick={logout}>Logout</MenuItem> :
+                        <>
+                            <MenuItem>
+                                <NavLink to={props.loginPath}
+                                         style={{textDecoration: "none", color: "currentColor"}}>
+                                    Login
+                                </NavLink>
+                            </MenuItem>
+                            <MenuItem>
+                                <NavLink to={props.signupPath}
+                                         style={{textDecoration: "none", color: "currentColor"}}>
+                                    Signup
+                                </NavLink>
+                            </MenuItem>
+                        </>
+                    }
                 </Menu>
                 <div className={styles.menu_actions}>
                     <CartDefault classNameButton={""} colorButton={"inherit"}/>
-                    <AccountBoxRoundedIcon className={""} onClick={handleProfileMenuOpen}/>
+                    {
+                        getJwt() ?
+                            <IconButton onClick={handleProfileMenuOpen}>
+                                <UserAccountIcon fill={"white"}/>
+                            </IconButton> :
+                            <AccountBoxRoundedIcon className={""} onClick={handleProfileMenuOpen}/>
+                    }
                 </div>
             </Toolbar>
         </AppBar>
