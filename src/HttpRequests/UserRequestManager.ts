@@ -4,13 +4,23 @@ import {ErrorModel} from "../Utilities/UserModels/ErrorModel";
 import {api} from "./AxiosInstance";
 import jwtDecode from "jwt-decode";
 import {AxiosError} from "axios";
+import {AddressFieldId, FormState} from "../UserManagerSection/UserFormsTypes/UserFormsTypes";
+import {UserAddressModel} from "../Utilities/UserModels/UserAddressModel";
+import {addressFormMapper} from "../Utilities/Mappers/AddressFormMapper";
 
-const messageByStatusCode = (statusCode: number | undefined): string => {
+const userAccountMessageByStatusCode = (statusCode: number | undefined): string => {
     if (statusCode === ResponseStatusCode["401"]) {
         return "Email or password wrong!";
     }
     if (statusCode === ResponseStatusCode["400"]) {
         return "Error when creating an account";
+    }
+    return "Something went wrong. Try again!";
+}
+
+const userAddressMessageByStatusCode = (statusCode: number | undefined): string => {
+    if (statusCode === ResponseStatusCode["400"]) {
+        return "Error when setting address";
     }
     return "Something went wrong. Try again!";
 }
@@ -49,7 +59,7 @@ export class UserRequestManager {
             this.jwt = (user.data as FullUserModel).token;
             return (user.data as UserModel);
         } catch (e) {
-            const error = messageByStatusCode((e as AxiosError).response?.status);
+            const error = userAccountMessageByStatusCode((e as AxiosError).response?.status);
             return Promise.reject(error);
         }
     }
@@ -65,13 +75,28 @@ export class UserRequestManager {
             this.jwt = (login.data as FullUserModel).token;
             return (login.data as UserModel);
         } catch (e) {
-            const error = messageByStatusCode((e as AxiosError).response?.status);
+            const error = userAccountMessageByStatusCode((e as AxiosError).response?.status);
             return Promise.reject(error);
         }
     }
 
-    public async emailExists(email: string): Promise<boolean> {
-        return (await api.get<boolean>(`/account/emailexists?email=${email}`)).data;
+    public async registerUserAddress(addressForm: FormState<AddressFieldId>): Promise<UserAddressModel> {
+        const userAddress = addressFormMapper(addressForm);
+        try {
+            const address = await api.put<UserAddressModel | ErrorModel>("/account/address",
+                {...userAddress},
+                {
+                    headers: {
+                        "Content-Type": "application/json; charset=UTF-8",
+                        "Authorization": `Bearer ${this.jwt}`
+                    }
+                }
+            );
+            return address.data as UserAddressModel;
+        } catch (e) {
+            const error = userAddressMessageByStatusCode((e as AxiosError).response?.status);
+            return Promise.reject(error);
+        }
     }
 
     public deleteJwt(): void {

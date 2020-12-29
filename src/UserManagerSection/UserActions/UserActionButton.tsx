@@ -5,13 +5,35 @@ import {MessageState} from "./UserActionTypes";
 import {useHistory} from "react-router-dom";
 import {UserSnackbar} from "./UserSnackbar";
 import {AuthContext} from "../../Utilities/Context/AuthContext";
-import {FormId, UserFormButtonProps} from "../UserFormsTypes/UserFormsTypes";
+import {FormId, FormState, UserFormButtonProps} from "../UserFormsTypes/UserFormsTypes";
+
+const checkFormValues = (formObj: FormState<any>): boolean => {
+    for (const key in formObj) {
+        if (formObj.hasOwnProperty(key) && formObj[key].fieldValue) {
+            return true;
+        }
+    }
+    return false;
+}
+
+type SignupType = Record<"email" | "password" | "generic", { fieldValue: string }>;
+type LoginType = Record<"generic" | "email", { fieldValue: string }>;
 
 export const UserActionButton: React.FunctionComponent<UserFormButtonProps> = props => {
     const [messageState, setMessageState] = React.useState<MessageState>({message: undefined, stateCount: 0});
-    const {registerUser, userLogin} = React.useContext(AuthContext);
+    const {registerUser, userLogin, userAddress} = React.useContext(AuthContext);
     const {goBack, push} = useHistory();
 
+    const promiseError = React.useCallback((errorMessage: string) => {
+        setMessageState(prevState => {
+            const state = prevState ?? messageState;
+            return {
+                ...state,
+                message: errorMessage,
+                stateCount: state.stateCount === 0 ? 1 : 0
+            }
+        });
+    }, [messageState]);
 
     const submitForm: React.MouseEventHandler = event => {
         if (props.formId === FormId.SIGNUP) {
@@ -19,62 +41,41 @@ export const UserActionButton: React.FunctionComponent<UserFormButtonProps> = pr
                 email: {fieldValue: email},
                 password: {fieldValue: password},
                 generic: {fieldValue: username}
-            } = props.formState;
-            if (username && email && password) {
+            } = (props.formState as SignupType);
+
+            if (checkFormValues(props.formState)) {
                 registerUser(username, email, password)
                     .then(_ => {
                         push({
                             pathname: "/user/address"
                         })
                     })
-                    .catch(error => {
-                        setMessageState(prevState => {
-                            const state = prevState ?? messageState;
-                            return {
-                                ...state,
-                                message: error,
-                                stateCount: state.stateCount === 0 ? 1 : 0
-                            }
-                        });
-                    });
+                    .catch(promiseError);
             }
         }
         if (props.formId === FormId.LOGIN) {
             const {
                 generic: {fieldValue: password},
                 email: {fieldValue: email}
-            } = props.formState;
-            console.log(props.formState);
-            if (email && password) {
+            } = (props.formState as LoginType);
+
+            if (checkFormValues(props.formState)) {
                 userLogin(email, password)
                     .then(_ => {
                         push({
                             pathname: "/"
                         });
                     })
-                    .catch(error => {
-                        setMessageState(prevState => {
-                            const state = prevState ?? messageState;
-                            return {
-                                ...state,
-                                message: error,
-                                stateCount: state.stateCount === 0 ? 1 : 0
-                            }
-                        });
-                    });
+                    .catch(promiseError);
             }
         }
         if (props.formId === FormId.ADDRESS) {
-            const {
-                city: {fieldValue: city},
-                state: {fieldValue: state},
-                country: {fieldValue: country},
-                zipcode: {fieldValue: zipcode},
-                complement: {fieldValue: complement},
-                street: {fieldValue: street}
-            } = props.formState;
-            if (city && state && country && zipcode && complement && street) {
-
+            if (checkFormValues(props.formState)) {
+                userAddress(props.formState)
+                    .then(_ => push({
+                        pathname: "/"
+                    }))
+                    .catch(promiseError);
             }
         }
     }

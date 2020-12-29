@@ -1,6 +1,8 @@
 import * as React from "react";
 import {UserRequestManager} from "../../HttpRequests/UserRequestManager";
 import {UserModel} from "../UserModels/FullUserModel";
+import {AddressFieldId, FormState} from "../../UserManagerSection/UserFormsTypes/UserFormsTypes";
+import {UserAddressModel} from "../UserModels/UserAddressModel";
 
 const userAuth = new UserRequestManager();
 
@@ -9,6 +11,7 @@ export const AuthContext = React.createContext({
     getJwt: () => ({} as {[i: string]: string | null}).value,
     user: userAuth,
     userLogin: async (email: string, password: string) => Promise.resolve({displayName: "", email: ""}),
+    userAddress: async (addressForm: FormState<AddressFieldId>) => Promise.resolve({}),
     registerUser: async (userName: string, email: string, password: string) => Promise.resolve({
         displayName: "",
         email: ""
@@ -17,6 +20,10 @@ export const AuthContext = React.createContext({
 
 export const AuthContextProvider: React.FunctionComponent = props => {
     const user = React.useRef<UserRequestManager>(userAuth);
+
+    const userAddress = async (addressForm: FormState<AddressFieldId>): Promise<UserAddressModel> => {
+        return await userAuth.registerUserAddress(addressForm);
+    }
 
     const registerUser = async (userName: string, email: string, password: string): Promise<UserModel> => {
         return await userAuth.registerUser(userName, email, password);
@@ -31,7 +38,7 @@ export const AuthContextProvider: React.FunctionComponent = props => {
     }
 
     return (
-        <AuthContext.Provider value={{user: user.current, getJwt, registerUser, userLogin}}>
+        <AuthContext.Provider value={{user: user.current, getJwt, registerUser, userLogin, userAddress}}>
             {props.children}
         </AuthContext.Provider>
     )
