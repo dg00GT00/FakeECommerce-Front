@@ -7,16 +7,18 @@ export const UserAddressComplement: React.FunctionComponent<UserInputTypes> = pr
 
     return (
         <TextField color={"primary"}
+                   fullWidth
+                   required
                    id="address-complement"
                    label="Complement"
                    type="text"
                    variant="outlined"
                    size={"small"}
                    className={className}
-                   fullWidth
-                   error={formState?.generic.requiredValidity}
-                   onBlur={event => funcValidation ? funcValidation(event, "generic") : null}
-                   helperText={formState?.generic.requiredValidity ? "* this field is required": null}
+                   FormHelperTextProps={{error: true}}
+                   error={formState?.complement.requiredValidity}
+                   onBlur={event => funcValidation ? funcValidation(event, "complement") : null}
+                   helperText={formState?.complement.requiredValidity ? "* this field is required": null}
                    {...inputProps}/>
     )
 }

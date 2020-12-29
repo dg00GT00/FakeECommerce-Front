@@ -22,12 +22,15 @@ export const UserState: React.FunctionComponent<UserInputTypes> = props => {
                    select={true}
                    required
                    fullWidth
+                   onBlur={event => props.funcValidation ? props.funcValidation(event, "state") : null}
+                   error={props.formState?.state.requiredValidity}
+                   FormHelperTextProps={{error: true}}
                    InputLabelProps={props.InputLabelProps}
                    InputProps={props.InputProps}
                    SelectProps={{native: true}}>
             <option/>
-            <option value={0}>A state</option>
-            <option value={1}>Another state</option>
+            <option value={"A state"}>A state</option>
+            <option value={"Another state"}>Another state</option>
         </TextField>
     );
 }

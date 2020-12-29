@@ -14,6 +14,7 @@ export const UserCountry: React.FunctionComponent<UserInputTypes> = props => {
 
     return (
         <TextField color={"primary"}
+                   {...inputProps}
                    fullWidth
                    required
                    onChange={handleChange}
@@ -23,18 +24,18 @@ export const UserCountry: React.FunctionComponent<UserInputTypes> = props => {
                    variant="outlined"
                    size={"small"}
                    select={true}
-                   {...inputProps}
                    SelectProps={{native: true}}
-                   error={formState?.generic.requiredValidity}
-                   helperText={formState?.generic.requiredValidity ? "* this field is required" : null}
-                   onBlur={event => funcValidation ? funcValidation(event, "generic") : null}>
+                   FormHelperTextProps={{error: true}}
+                   error={formState?.country.requiredValidity}
+                   helperText={formState?.country.requiredValidity ? "* this field is required" : null}
+                   onBlur={event => funcValidation ? funcValidation(event, "country") : null}>
             <option/>
-            <option value={0}>EUA</option>
-            <option value={1}>New Zealand</option>
-            <option value={2}>France</option>
-            <option value={3}>Brazil</option>
-            <option value={4}>Canada</option>
-            <option value={5}>South Africa</option>
+            <option value={"EUA"}>EUA</option>
+            <option value={"New Zealand"}>New Zealand</option>
+            <option value={"France"}>France</option>
+            <option value={"Brazil"}>Brazil</option>
+            <option value={"Canada"}>Canada</option>
+            <option value={"South Africa"}>South Africa</option>
         </TextField>
     );
 }

@@ -1,11 +1,9 @@
 import * as React from "react";
 import {TextField} from "@material-ui/core";
 import {UserInputTypes} from "../../../Utilities/ProductModels/UserInputTypes";
-import {useUserAccountFormValidation} from "../../../Utilities/CustomHooks/formValidation/useUserAccountFormValidation";
 
-export const UserCity: React.FunctionComponent<UserInputTypes & { className: string }> = props => {
+export const UserCity: React.FunctionComponent<UserInputTypes> = props => {
     const [city, setCity] = React.useState("");
-    const {validationFunctions, validationState} = useUserAccountFormValidation();
 
     const handleChange = (event: React.ChangeEvent<{ name?: string; value: unknown }>) => {
         const value = event.target.value as string;
@@ -25,11 +23,13 @@ export const UserCity: React.FunctionComponent<UserInputTypes & { className: str
                    InputLabelProps={props.InputLabelProps}
                    InputProps={props.InputProps}
                    SelectProps={{native: true}}
+                   error={props.formState?.city.requiredValidity}
+                   onBlur={event => props.funcValidation ? props.funcValidation(event, "city") : null}
                    fullWidth
                    required>
             <option/>
-            <option value={0}>A city</option>
-            <option value={1}>Another city</option>
+            <option value={"A city"}>A city</option>
+            <option value={"Another city"}>Another city</option>
         </TextField>
     );
 }

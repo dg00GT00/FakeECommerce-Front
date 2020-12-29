@@ -6,12 +6,20 @@ import {ComplementaryColors} from "../../Utilities/Theme/CustomTheme";
 import {UserSignup} from "../../UserManagerSection/UserSignup/UserSigunp";
 import {UserLogin} from "../../UserManagerSection/UserLogin/UserLogin";
 import {FormId} from "../../UserManagerSection/UserFormsTypes/UserFormsTypes";
+import {UserAddress} from "../../UserManagerSection/UserAddress/UserAddress";
+import createStyles from "@material-ui/core/styles/createStyles";
+import {Theme} from "@material-ui/core/styles/createMuiTheme";
 
-const userStyle = makeStyles({
-    root: {
-        backgroundColor: ComplementaryColors.tertiary.main,
-        padding: "0 1%"
-    }
+const userStyle = makeStyles((theme: Theme) => {
+    return createStyles({
+        root: {
+            backgroundColor: ComplementaryColors.tertiary.main,
+            padding: "0 1%",
+        },
+        background: {
+            backgroundColor: theme.palette.secondary.main
+        }
+    })
 });
 
 export const UserRouteManager: React.FunctionComponent = () => {
@@ -39,6 +47,11 @@ export const UserRouteManager: React.FunctionComponent = () => {
             <Route exact path={`${path}/login`}>
                 <UserCard cardType={"Login"} formId={"login"}>
                     <UserLogin {...customInputLabel} formId={FormId.LOGIN} showRequiredLabel={true}/>
+                </UserCard>
+            </Route>
+            <Route exact path={`${path}/address`}>
+                <UserCard cardType={"Address"} formId={"address"} background={style.background}>
+                    <UserAddress {...customInputLabel} formId={FormId.ADDRESS} showRequiredLabel={true}/>
                 </UserCard>
             </Route>
         </>

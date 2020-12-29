@@ -1,5 +1,8 @@
 export type UserFormButtonProps = { formId: FormId, formValidity: boolean, formState: FormState<any> };
-export type FieldId = "generic" | "email" | "password" | "repeatPassword";
+
+export type AccountFieldId = "generic" | "email" | "password" | "repeatPassword";
+
+export type AddressFieldId = "complement" | "country" | "city" | "state" | "street" | "zipcode"
 
 export type FormState<T extends string | number | symbol> = Record<T, {
     requiredValidity: boolean,

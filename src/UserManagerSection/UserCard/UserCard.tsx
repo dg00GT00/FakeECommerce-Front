@@ -22,13 +22,13 @@ const userMangerStyles = makeStyles((theme: Theme) => {
     })
 });
 
-type UserCardProps = { cardType: string, formId: string};
+type UserCardProps = { cardType: string, formId: string, background?: string};
 
 export const UserCard: React.FunctionComponent<UserCardProps> = props => {
     const style = userMangerStyles();
 
     return (
-        <div className={[styles.card_page, style.background].join(" ")}>
+        <div className={[styles.card_page, style.background, props.background].join(" ")}>
             <Paper className={styles.card}>
                 <div className={styles.card_identity}>
                     <Logo className={styles.logo}/>

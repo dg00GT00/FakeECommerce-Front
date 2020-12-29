@@ -14,9 +14,11 @@ export const UserStreet: React.FunctionComponent<UserInputTypes> = props => {
                    size={"small"}
                    required
                    fullWidth
-                   onBlur={event => funcValidation ? funcValidation(event, "generic") : null}
-                   error={formState?.generic.requiredValidity}
-                   helperText={formState?.generic.requiredValidity ? "* this field is required" : null}
+                   className={className}
+                   FormHelperTextProps={{error: true}}
+                   onBlur={event => funcValidation ? funcValidation(event, "street") : null}
+                   error={formState?.street.requiredValidity}
+                   helperText={formState?.street.requiredValidity ? "* this field is required" : null}
                    {...inputProps}/>
     )
 }

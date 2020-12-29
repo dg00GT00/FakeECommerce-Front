@@ -24,7 +24,7 @@ export const UserActionButton: React.FunctionComponent<UserFormButtonProps> = pr
                 registerUser(username, email, password)
                     .then(_ => {
                         push({
-                            pathname: "/"
+                            pathname: "/user/address"
                         })
                     })
                     .catch(error => {
@@ -62,6 +62,19 @@ export const UserActionButton: React.FunctionComponent<UserFormButtonProps> = pr
                             }
                         });
                     });
+            }
+        }
+        if (props.formId === FormId.ADDRESS) {
+            const {
+                city: {fieldValue: city},
+                state: {fieldValue: state},
+                country: {fieldValue: country},
+                zipcode: {fieldValue: zipcode},
+                complement: {fieldValue: complement},
+                street: {fieldValue: street}
+            } = props.formState;
+            if (city && state && country && zipcode && complement && street) {
+
             }
         }
     }
