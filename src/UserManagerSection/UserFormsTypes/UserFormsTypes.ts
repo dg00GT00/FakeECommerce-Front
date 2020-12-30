@@ -8,6 +8,7 @@ export type FormState<T extends string | number | symbol> = Record<T, {
     requiredValidity: boolean,
     submitButtonDisable: boolean,
     fieldValue?: string,
+    fieldValueFromApi?: boolean,
     patternValidity?: boolean }>;
 
 export enum FormId {

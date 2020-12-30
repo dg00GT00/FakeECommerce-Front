@@ -3,8 +3,24 @@ import {AddressFieldId, FormState} from "../../../UserManagerSection/UserFormsTy
 import {useGenericFormValidation} from "./useGenericFormValidation";
 import {GenericFormActions, genericFormReducer} from "./genericFormReducer";
 import {errorStateTrigger} from "./FormStateManager";
+import {ActionTypes} from "./FormActionTypes";
 
-type AddressReducer = React.Reducer<FormState<AddressFieldId>, GenericFormActions<AddressFieldId>>;
+type AddressFormActions =
+    | GenericFormActions<AddressFieldId>
+    | { type: ActionTypes.RESET, newFormState: FormState<AddressFieldId> }
+
+type AddressReducer = React.Reducer<FormState<AddressFieldId>, AddressFormActions>;
+
+type AddressFormType = {
+    validationFunctions: {
+        requiredValidation: (event: any, fieldId: any) => any,
+        genericFieldValidation: (event: any, fieldId: any) => void
+    },
+    validationState: {
+        errorState: boolean,
+        addressFormReducer: [FormState<AddressFieldId>, React.Dispatch<AddressFormActions>]
+    }
+}
 
 const initialFormState: FormState<AddressFieldId> = {
     complement: {requiredValidity: false, submitButtonDisable: false},
@@ -14,17 +30,30 @@ const initialFormState: FormState<AddressFieldId> = {
     street: {requiredValidity: false, submitButtonDisable: false},
     zipcode: {requiredValidity: false, submitButtonDisable: false},
     firstName: {requiredValidity: false, submitButtonDisable: false},
-    lastName: {requiredValidity: false, submitButtonDisable: false},
+    lastName: {requiredValidity: false, submitButtonDisable: false}
 }
 
-export const useAddressFormValidation = (omitFieldValidation: AddressFieldId[]) => {
+const addressFormReducer = (prevState: FormState<AddressFieldId>, actions: AddressFormActions): FormState<AddressFieldId> => {
+    prevState = genericFormReducer(prevState, actions as GenericFormActions<AddressFieldId>);
+    switch (actions.type) {
+        case ActionTypes.RESET:
+            for (const key in actions.newFormState) {
+                actions.newFormState[key as AddressFieldId].fieldValueFromApi = true;
+            }
+            return actions.newFormState;
+        default:
+            return prevState;
+    }
+}
+
+export const useAddressFormValidation = (omitFieldValidation: AddressFieldId[]): AddressFormType => {
     const [errorState, setErrorState] = React.useState(true);
-    const [formState, formDispatch] = React.useReducer<AddressReducer>(genericFormReducer, initialFormState);
+    const [formState, formDispatch] = React.useReducer<AddressReducer>(addressFormReducer, initialFormState);
     const {genericFieldValidation, requiredValidation} = useGenericFormValidation(formDispatch);
 
     React.useEffect(() => {
         setErrorState(errorStateTrigger(formState, omitFieldValidation));
-    }, [formState]);
+    }, [formState, omitFieldValidation]);
 
     return {
         validationFunctions: {
@@ -32,7 +61,7 @@ export const useAddressFormValidation = (omitFieldValidation: AddressFieldId[]) 
             requiredValidation
         },
         validationState: {
-            formState,
+            addressFormReducer: [formState, formDispatch],
             errorState
         }
     }

@@ -8,4 +8,4 @@ export type UserInputTypes = {
     className?: string,
     formState?: FormState<AddressFieldId>,
     funcValidation?: (event: any, fieldId: AddressFieldId) => void;
-}
+};

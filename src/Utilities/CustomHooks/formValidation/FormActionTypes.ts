@@ -1,4 +1,5 @@
 export enum ActionTypes {
+    RESET =  "RESET",
     REQUIRED = "REQUIRED",
     GENERIC = "GENERIC",
     PASSWORD = "PASSWORD",

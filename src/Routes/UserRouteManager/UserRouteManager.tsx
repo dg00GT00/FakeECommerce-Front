@@ -54,6 +54,11 @@ export const UserRouteManager: React.FunctionComponent = () => {
                     <UserAddress {...customInputLabel} formId={FormId.ADDRESS} showRequiredLabel={true}/>
                 </UserCard>
             </Route>
+            <Route exact path={`${path}/address/update`}>
+                <UserCard cardType={"Address"} formId={"address"} background={style.background}>
+                    <UserAddress {...customInputLabel} formId={FormId.ADDRESS} showRequiredLabel={true}/>
+                </UserCard>
+            </Route>
         </>
     );
 }
