@@ -20,20 +20,20 @@ type SignupType = Record<"email" | "password" | "generic", { fieldValue: string 
 type LoginType = Record<"generic" | "email", { fieldValue: string }>;
 
 export const UserActionButton: React.FunctionComponent<UserFormButtonProps> = props => {
-    const [messageState, setMessageState] = React.useState<MessageState>({message: undefined, stateCount: 0});
+    const message = React.useRef<MessageState>({message: undefined, stateCount: 0});
+    const [userSnack, setUserSnack] = React.useState<JSX.Element | null>(null);
     const {registerUser, userLogin, userAddress} = React.useContext(AuthContext);
     const {goBack, push} = useHistory();
 
     const promiseError = React.useCallback((errorMessage: string) => {
-        setMessageState(prevState => {
-            const state = prevState ?? messageState;
-            return {
-                ...state,
+        setUserSnack(_ => {
+            message.current = {
                 message: errorMessage,
-                stateCount: state.stateCount === 0 ? 1 : 0
-            }
+                stateCount: message.current.stateCount === 0 ? 1 : 0
+            };
+            return <UserSnackbar {...message.current}/>
         });
-    }, [messageState]);
+    }, []);
 
     const submitForm: React.MouseEventHandler = event => {
         if (props.formId === FormId.SIGNUP) {
@@ -92,7 +92,7 @@ export const UserActionButton: React.FunctionComponent<UserFormButtonProps> = pr
                     disabled={props.formValidity}
                     color={"secondary"}>Go</Button>
             </div>
-            <UserSnackbar {...messageState}/>
+            {userSnack}
         </>
     );
 }
