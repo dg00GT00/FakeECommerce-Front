@@ -6,21 +6,28 @@ import jwtDecode from "jwt-decode";
 import {AxiosError} from "axios";
 import {AddressFieldId, FormState} from "../UserManagerSection/UserFormsTypes/UserFormsTypes";
 import {UserAddressModel} from "../Utilities/UserModels/UserAddressModel";
-import {addressFormMapper} from "../Utilities/Mappers/AddressFormMapper";
+import {addressToFormMapper, formToAddressMapper} from "../Utilities/Mappers/AddressFormMapper";
 
 const userAccountMessageByStatusCode = (statusCode: number | undefined): string => {
     if (statusCode === ResponseStatusCode["401"]) {
         return "Email or password wrong!";
     }
     if (statusCode === ResponseStatusCode["400"]) {
-        return "Error when creating an account";
+        return "Error at creating an account";
     }
     return "Something went wrong. Try again!";
 }
 
 const userAddressMessageByStatusCode = (statusCode: number | undefined): string => {
     if (statusCode === ResponseStatusCode["400"]) {
-        return "Error when setting address";
+        return "Error during setting address";
+    }
+    return "Something went wrong. Try again!";
+}
+
+const userAddressFromApiByStatusCode = (statusCode: number | undefined): string => {
+    if (statusCode === ResponseStatusCode["401"]) {
+        return "Account timeout. Effect login";
     }
     return "Something went wrong. Try again!";
 }
@@ -81,7 +88,7 @@ export class UserRequestManager {
     }
 
     public async registerUserAddress(addressForm: FormState<AddressFieldId>): Promise<UserAddressModel> {
-        const userAddress = addressFormMapper(addressForm);
+        const userAddress = formToAddressMapper(addressForm);
         try {
             const address = await api.put<UserAddressModel | ErrorModel>("/account/address",
                 {...userAddress},
@@ -95,6 +102,21 @@ export class UserRequestManager {
             return address.data as UserAddressModel;
         } catch (e) {
             const error = userAddressMessageByStatusCode((e as AxiosError).response?.status);
+            return Promise.reject(error);
+        }
+    }
+
+    public async getUserAddress(): Promise<FormState<AddressFieldId>> {
+        try {
+            const address = await api.get<UserAddressModel | ErrorModel>("/account/address", {
+                headers: {
+                    "Content-Type": "application/json; charset=UTF-8",
+                    "Authorization": `Bearer ${this.jwt}`
+                }
+            });
+            return addressToFormMapper((address.data as UserAddressModel));
+        } catch (e) {
+            const error = userAddressFromApiByStatusCode((e as AxiosError).response?.status);
             return Promise.reject(error);
         }
     }
