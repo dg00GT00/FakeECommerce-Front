@@ -2,6 +2,16 @@ import * as React from "react";
 import Alert from "@material-ui/lab/Alert/Alert";
 import Snackbar from "@material-ui/core/Snackbar/Snackbar";
 import {MessageState} from "./UserActionTypes";
+import {createStyles, makeStyles} from "@material-ui/core/styles";
+import {Theme} from "@material-ui/core";
+
+const snackbarStyle = makeStyles<Theme, MessageState>((theme) => {
+    return createStyles({
+        overrideColor: {
+            background: props => props.color ?? theme.palette.error.main
+        }
+    })
+})
 
 type SnackbarMessage = {
     message: string | undefined;
@@ -11,7 +21,12 @@ type SnackbarMessage = {
 // Avoids the snackbar to loop after each stateCount increment
 let outerStateCount = 0;
 
-export const UserSnackbar: React.FunctionComponent<MessageState> = props => {
+export const UserSnackbar: React.FunctionComponent<MessageState> = ({
+                                                                        severity = "error",
+                                                                        ...props
+                                                                    }) => {
+    const style = snackbarStyle(props);
+
     const [open, setOpen] = React.useState(false);
     const [messageInfo, setMessageInfo] = React.useState<SnackbarMessage | undefined>(undefined);
 
@@ -48,7 +63,16 @@ export const UserSnackbar: React.FunctionComponent<MessageState> = props => {
             key={messageInfo?.key}
             onExited={handleExited}
             onClose={handleClose}>
-            <Alert onClose={handleClose} severity={"error"} variant={"filled"}>
+            <Alert onClose={handleClose}
+                   severity={severity}
+                   variant={"filled"}
+                   classes={{
+                       filledError: style.overrideColor,
+                       filledInfo: style.overrideColor,
+                       filledSuccess: style.overrideColor,
+                       filledWarning: style.overrideColor,
+                   }}
+                   action={props.children}>
                 {messageInfo?.message}
             </Alert>
         </Snackbar>
