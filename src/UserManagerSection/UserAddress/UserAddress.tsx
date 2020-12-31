@@ -39,7 +39,6 @@ export const UserAddress: React.FunctionComponent<UserInputTypes> = props => {
 
             getUserAddress()
                 .then(response => {
-                    console.log(response);
                     resetFormState((response as FormState<AddressFieldId>));
                 })
                 .catch(error => {
@@ -88,6 +87,7 @@ export const UserAddress: React.FunctionComponent<UserInputTypes> = props => {
                             funcValidation={genericFieldValidation}
                             {...props}/>
                 <UserAddressComplement className={styles.complement}
+                                       formState={addressFormState}
                                        funcValidation={getFieldValueValidation}
                                        {...props}/>
             </div>

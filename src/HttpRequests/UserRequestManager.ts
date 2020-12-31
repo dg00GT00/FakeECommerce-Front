@@ -22,6 +22,9 @@ const userAddressMessageByStatusCode = (statusCode: number | undefined): string 
     if (statusCode === ResponseStatusCode["400"]) {
         return "Error during setting address";
     }
+    if (statusCode === ResponseStatusCode["401"]) {
+        return "Account timeout. Effect login";
+    }
     return "Something went wrong. Try again!";
 }
 

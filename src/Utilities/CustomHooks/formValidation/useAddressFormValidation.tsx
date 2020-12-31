@@ -25,6 +25,7 @@ type AddressFormType = {
 }
 
 const initialFormState: FormState<AddressFieldId> = {
+    // The "complement" field is not required therefore the "submitButtonDisable" is always "true"
     complement: {requiredValidity: false, submitButtonDisable: true},
     state: {requiredValidity: false, submitButtonDisable: false},
     city: {requiredValidity: false, submitButtonDisable: false},
@@ -48,6 +49,10 @@ const addressFormReducer = (prevState: FormState<AddressFieldId>, actions: Addre
     }
 }
 
+/**
+ * Validates the input of address user form
+ * @param omitFieldValidation an array of field that will be not counted when checking the field error state
+ */
 export const useAddressFormValidation = (omitFieldValidation: AddressFieldId[]): AddressFormType => {
     const [errorState, setErrorState] = React.useState(true);
     const [addressFormState, formDispatch] = React.useReducer<AddressReducer>(addressFormReducer, initialFormState);
