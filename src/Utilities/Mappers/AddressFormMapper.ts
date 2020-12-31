@@ -1,22 +1,23 @@
 import {AddressFieldId, FormState} from "../../UserManagerSection/UserFormsTypes/UserFormsTypes";
 import {UserAddressModel} from "../UserModels/UserAddressModel";
 
-const addressSeparator = ", "
+// Separator apply due to features of user address
+//TODO: Change the way at which data is inserted on the user address table in order of avoid composite columns
+const addressSeparator = " -###- "
 
 const buildUserStreetAddress = (streetName: string, country: string, streetComplement?: string): string => {
-    let userStreet = streetName;
     if (streetComplement) {
-        userStreet = [streetName, streetComplement, country].join(addressSeparator);
+        return [streetName, streetComplement, country].join(addressSeparator);
     }
-    return [userStreet, country].join(addressSeparator);
+    return [streetName, country].join(addressSeparator);
 }
 
 const destructUserStreetAddress = (userStreetAddress: string): { street: string, country: string, complement?: string } => {
     const addressArray = userStreetAddress.split(addressSeparator);
     return {
         street: addressArray[0],
-        country: addressArray.length > 2 ? addressArray[2] : addressArray[1],
-        complement: addressArray.length > 2 ? addressArray[1] : undefined
+        country: addressArray.length === 3 ? addressArray[2] : addressArray[1],
+        complement: addressArray.length === 3 ? addressArray[1] : undefined
     };
 }
 
