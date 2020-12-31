@@ -19,6 +19,7 @@ export const UserAddressComplement: React.FunctionComponent<UserInputTypes> = pr
                    variant="outlined"
                    size={"small"}
                    className={className}
+                   onBlur={event => funcValidation ? funcValidation(event, "complement") : null}
                    {...inputProps}/>
     )
 }
