@@ -3,7 +3,7 @@ import styles from "./HeaderDesktop.module.scss"
 import {ReactComponent as Logo} from "../../../Assets/eCommerceBaseLogo.svg";
 import {HeaderProps} from "../HeaderProps";
 import {CartDefault} from "../../../ProductManagerSection/Cart/CartDefault";
-import {NavLink} from "react-router-dom";
+import {NavLink, useHistory} from "react-router-dom";
 import {AuthContext} from "../../../Utilities/Context/AuthContext";
 import {Fade, Menu, MenuItem, Tooltip} from "@material-ui/core";
 import IconButton from "@material-ui/core/IconButton";
@@ -20,6 +20,7 @@ const logoutStyle = makeStyles({
 export const HeaderDesktop: React.FunctionComponent<HeaderProps> = props => {
     const [anchorEl, setAnchorEl] = React.useState<null | Element>(null);
     const {getJwt, user} = React.useContext(AuthContext);
+    const {push} = useHistory();
     const style = logoutStyle();
 
     const logout: React.MouseEventHandler = event => {
@@ -53,6 +54,7 @@ export const HeaderDesktop: React.FunctionComponent<HeaderProps> = props => {
                     horizontal: "center",
                 }}>
                 <MenuItem className={style.root} onClick={logout}>Logout</MenuItem>
+                <MenuItem className={style.root} onClick={_ => push("/user/address/update")}>Update Address</MenuItem>
             </Menu>
             <Tooltip title={user.getDisplayNameFromJwt() ?? {}} className={styles.user_account} placement={"top"}>
                 <IconButton onClick={handleProfileMenuOpen}>
