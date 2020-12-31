@@ -5,6 +5,7 @@ import {useInputTextFromApi} from "../../../Utilities/CustomHooks/useInputTextFr
 
 export const UserLastName: React.FunctionComponent<UserInputTypes> = props => {
     const {className, formId, formState, funcValidation, showRequiredLabel, ...inputProps} = props;
+
     const ref = React.useRef<HTMLDivElement | null>(null);
     useInputTextFromApi("lastName", {ref, formState});
 
