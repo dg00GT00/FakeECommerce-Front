@@ -1,10 +1,14 @@
 import * as React from "react";
 import {TextField} from "@material-ui/core";
 import {UserInputTypes} from "../../../Utilities/ProductModels/UserInputTypes";
+import {useInputTextFromApi} from "../../../Utilities/CustomHooks/useInputTextFromApi";
 
 
 export const UserState: React.FunctionComponent<UserInputTypes> = props => {
+    const {className, formId, formState, funcValidation, showRequiredLabel, ...inputProps} = props;
     const [state, setState] = React.useState("");
+
+    useInputTextFromApi("state", {formState: formState, fieldValueState: setState});
 
     const handleChange = (event: React.ChangeEvent<{ name?: string; value: unknown }>) => {
         const value = event.target.value as string;
@@ -13,7 +17,9 @@ export const UserState: React.FunctionComponent<UserInputTypes> = props => {
 
     return (
         <TextField color={"primary"}
+                   {...inputProps}
                    onChange={handleChange}
+                   inputProps={{value: state}}
                    value={state}
                    id="state"
                    label="State"
@@ -25,8 +31,6 @@ export const UserState: React.FunctionComponent<UserInputTypes> = props => {
                    onBlur={event => props.funcValidation ? props.funcValidation(event, "state") : null}
                    error={props.formState?.state.requiredValidity}
                    FormHelperTextProps={{error: true}}
-                   InputLabelProps={props.InputLabelProps}
-                   InputProps={props.InputProps}
                    SelectProps={{native: true}}>
             <option/>
             <option value={"A state"}>A state</option>

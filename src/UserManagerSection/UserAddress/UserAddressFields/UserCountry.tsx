@@ -1,11 +1,14 @@
 import * as React from "react";
 import {TextField} from "@material-ui/core";
 import {UserInputTypes} from "../../../Utilities/ProductModels/UserInputTypes";
+import {useInputTextFromApi} from "../../../Utilities/CustomHooks/useInputTextFromApi";
 
 export const UserCountry: React.FunctionComponent<UserInputTypes> = props => {
     const {className, formId, formState, funcValidation, showRequiredLabel, ...inputProps} = props;
-
     const [country, setCountry] = React.useState<string>("");
+
+    const ref = React.useRef<HTMLDivElement | null>(null);
+    useInputTextFromApi("country", {ref, formState, fieldValueState: setCountry});
 
     const handleChange = (event: React.ChangeEvent<{ name?: string; value: unknown }>) => {
         const value = event.target.value as string;
@@ -15,6 +18,8 @@ export const UserCountry: React.FunctionComponent<UserInputTypes> = props => {
     return (
         <TextField color={"primary"}
                    {...inputProps}
+                   inputProps={{value: country}}
+                   ref={ref}
                    fullWidth
                    required
                    onChange={handleChange}
