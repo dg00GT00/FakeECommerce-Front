@@ -14,16 +14,18 @@ type AddressReducer = React.Reducer<FormState<AddressFieldId>, AddressFormAction
 type AddressFormType = {
     validationFunctions: {
         requiredValidation: (event: any, fieldId: any) => any,
-        genericFieldValidation: (event: any, fieldId: any) => void
+        genericFieldValidation: (event: any, fieldId: any) => void,
+        resetFormState: (newFormState: FormState<AddressFieldId>) => void,
+        getFieldValueValidation: (event: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>, fieldId: AddressFieldId) => void
     },
     validationState: {
         errorState: boolean,
-        addressFormReducer: [FormState<AddressFieldId>, React.Dispatch<AddressFormActions>]
+        addressFormState: FormState<AddressFieldId>
     }
 }
 
 const initialFormState: FormState<AddressFieldId> = {
-    complement: {requiredValidity: false, submitButtonDisable: false},
+    complement: {requiredValidity: false, submitButtonDisable: true},
     state: {requiredValidity: false, submitButtonDisable: false},
     city: {requiredValidity: false, submitButtonDisable: false},
     country: {requiredValidity: false, submitButtonDisable: false},
@@ -48,20 +50,31 @@ const addressFormReducer = (prevState: FormState<AddressFieldId>, actions: Addre
 
 export const useAddressFormValidation = (omitFieldValidation: AddressFieldId[]): AddressFormType => {
     const [errorState, setErrorState] = React.useState(true);
-    const [formState, formDispatch] = React.useReducer<AddressReducer>(addressFormReducer, initialFormState);
+    const [addressFormState, formDispatch] = React.useReducer<AddressReducer>(addressFormReducer, initialFormState);
     const {genericFieldValidation, requiredValidation} = useGenericFormValidation(formDispatch);
 
+    // Wrapped in the "React.useCallback" hook in order to avoid looping
+    const resetFormState = React.useCallback((newFormState: FormState<AddressFieldId>): void => {
+        formDispatch({type: ActionTypes.RESET, newFormState});
+    },[]);
+
+    const getFieldValueValidation = (event: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>, fieldId: AddressFieldId): void => {
+        formDispatch({type: ActionTypes.GENERIC, fieldId, fieldValue: event.target.value});
+    }
+
     React.useEffect(() => {
-        setErrorState(errorStateTrigger(formState, omitFieldValidation));
-    }, [formState, omitFieldValidation]);
+        setErrorState(errorStateTrigger(addressFormState, omitFieldValidation));
+    }, [addressFormState, omitFieldValidation]);
 
     return {
         validationFunctions: {
             genericFieldValidation,
+            getFieldValueValidation,
+            resetFormState,
             requiredValidation
         },
         validationState: {
-            addressFormReducer: [formState, formDispatch],
+            addressFormState,
             errorState
         }
     }

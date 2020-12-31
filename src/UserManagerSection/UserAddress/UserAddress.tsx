@@ -15,15 +15,14 @@ import {AuthContext} from "../../Utilities/Context/AuthContext";
 import {useHistory} from "react-router-dom";
 import {UserSnackbar} from "../UserActions/UserSnackbar";
 import {MessageState} from "../UserActions/UserActionTypes";
-import {ActionTypes} from "../../Utilities/CustomHooks/formValidation/FormActionTypes";
 import {AddressFieldId, FormState} from "../UserFormsTypes/UserFormsTypes";
 import {useTheme} from "@material-ui/core";
 import Button from "@material-ui/core/Button/Button";
 
 export const UserAddress: React.FunctionComponent<UserInputTypes> = props => {
     const {
-        validationFunctions: {genericFieldValidation},
-        validationState: {addressFormReducer: [formState, dispatchFormState], errorState}
+        validationFunctions: {genericFieldValidation, getFieldValueValidation, resetFormState},
+        validationState: {addressFormState, errorState}
     } = useAddressFormValidation(["complement"]);
 
     const message = React.useRef<MessageState>({message: undefined, stateCount: 0});
@@ -40,7 +39,8 @@ export const UserAddress: React.FunctionComponent<UserInputTypes> = props => {
 
             getUserAddress()
                 .then(response => {
-                    dispatchFormState({type: ActionTypes.RESET, newFormState: (response as FormState<AddressFieldId>)});
+                    console.log(response);
+                    resetFormState((response as FormState<AddressFieldId>));
                 })
                 .catch(error => {
                     setUserSnack(_ => {
@@ -58,41 +58,41 @@ export const UserAddress: React.FunctionComponent<UserInputTypes> = props => {
                     });
                 })
         }
-    }, [dispatchFormState, pathname, dark, push, getUserAddress]);
+    }, [resetFormState, pathname, dark, push, getUserAddress]);
 
     return (
         <>
             <div className={styles.card_content}>
-                <UserFirstName formState={formState}
+                <UserFirstName formState={addressFormState}
                                funcValidation={genericFieldValidation}
                                {...props}/>
-                <UserLastName formState={formState}
+                <UserLastName formState={addressFormState}
                               funcValidation={genericFieldValidation}
                               {...props}/>
-                <UserCountry formState={formState}
+                <UserCountry formState={addressFormState}
                              funcValidation={genericFieldValidation}
                              {...props}/>
-                <UserState formState={formState}
+                <UserState formState={addressFormState}
                            funcValidation={genericFieldValidation}
                            {...props}/>
                 <UserZipCode className={styles.zip_code}
-                             formState={formState}
+                             formState={addressFormState}
                              funcValidation={genericFieldValidation}
                              {...props}/>
                 <UserCity className={styles.city}
-                          formState={formState}
+                          formState={addressFormState}
                           funcValidation={genericFieldValidation}
                           {...props}/>
                 <UserStreet className={styles.street}
-                            formState={formState}
+                            formState={addressFormState}
                             funcValidation={genericFieldValidation}
                             {...props}/>
                 <UserAddressComplement className={styles.complement}
-                                       funcValidation={genericFieldValidation}
+                                       funcValidation={getFieldValueValidation}
                                        {...props}/>
             </div>
             {props.showRequiredLabel ? <p>* fields required</p> : null}
-            <UserActionButton formId={props.formId} formValidity={errorState} formState={formState}/>
+            <UserActionButton formId={props.formId} formValidity={errorState} formState={addressFormState}/>
             {userSnack}
         </>
     );
