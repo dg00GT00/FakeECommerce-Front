@@ -1,39 +1,11 @@
-import {FullUserModel, UserModel} from "../Utilities/UserModels/FullUserModel";
-import {ResponseStatusCode} from "../Utilities/RouterValidation/ResponseStatusCodes";
-import {ErrorModel} from "../Utilities/UserModels/ErrorModel";
-import {api} from "./AxiosInstance";
-import jwtDecode from "jwt-decode";
 import {AxiosError} from "axios";
+import jwtDecode from "jwt-decode";
+import {api} from "./AxiosInstance";
+import {FullUserModel, UserModel} from "../Utilities/UserModels/FullUserModel";
+import {ErrorModel} from "../Utilities/UserModels/ErrorModel";
 import {AddressFieldId, FormState} from "../UserManagerSection/UserFormsTypes/UserFormsTypes";
 import {UserAddressModel} from "../Utilities/UserModels/UserAddressModel";
 import {addressToFormMapper, formToAddressMapper} from "../Utilities/Mappers/AddressFormMapper";
-
-const userAccountMessageByStatusCode = (statusCode: number | undefined): string => {
-    if (statusCode === ResponseStatusCode["401"]) {
-        return "Email or password wrong!";
-    }
-    if (statusCode === ResponseStatusCode["400"]) {
-        return "Error at creating an account";
-    }
-    return "Something went wrong. Try again!";
-}
-
-const userAddressMessageByStatusCode = (statusCode: number | undefined): string => {
-    if (statusCode === ResponseStatusCode["400"]) {
-        return "Error during setting address";
-    }
-    if (statusCode === ResponseStatusCode["401"]) {
-        return "Account timeout. Effect login";
-    }
-    return "Something went wrong. Try again!";
-}
-
-const userAddressFromApiByStatusCode = (statusCode: number | undefined): string => {
-    if (statusCode === ResponseStatusCode["401"]) {
-        return "Account timeout. Effect login";
-    }
-    return "Something went wrong. Try again!";
-}
 
 export class UserRequestManager {
     private jwt_key = "jwt";
@@ -69,8 +41,7 @@ export class UserRequestManager {
             this.jwt = (user.data as FullUserModel).token;
             return (user.data as UserModel);
         } catch (e) {
-            const error = userAccountMessageByStatusCode((e as AxiosError).response?.status);
-            return Promise.reject(error);
+            return Promise.reject((e as AxiosError).response?.status);
         }
     }
 
@@ -85,8 +56,7 @@ export class UserRequestManager {
             this.jwt = (login.data as FullUserModel).token;
             return (login.data as UserModel);
         } catch (e) {
-            const error = userAccountMessageByStatusCode((e as AxiosError).response?.status);
-            return Promise.reject(error);
+            return Promise.reject((e as AxiosError).response?.status);
         }
     }
 
@@ -104,8 +74,7 @@ export class UserRequestManager {
             );
             return address.data as UserAddressModel;
         } catch (e) {
-            const error = userAddressMessageByStatusCode((e as AxiosError).response?.status);
-            return Promise.reject(error);
+            return Promise.reject((e as AxiosError).response?.status);
         }
     }
 
@@ -119,8 +88,7 @@ export class UserRequestManager {
             });
             return addressToFormMapper((address.data as UserAddressModel));
         } catch (e) {
-            const error = userAddressFromApiByStatusCode((e as AxiosError).response?.status);
-            return Promise.reject(error);
+            return Promise.reject((e as AxiosError).response?.status);
         }
     }
 
