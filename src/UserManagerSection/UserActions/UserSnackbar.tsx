@@ -1,17 +1,17 @@
 import * as React from "react";
 import Alert from "@material-ui/lab/Alert/Alert";
 import Snackbar from "@material-ui/core/Snackbar/Snackbar";
-import {MessageState} from "./UserActionTypes";
+import {MessageStateProps} from "./UserActionTypes";
 import {createStyles, makeStyles} from "@material-ui/core/styles";
 import {Theme} from "@material-ui/core";
 
-const snackbarStyle = makeStyles<Theme, MessageState>((theme) => {
+const snackbarStyle = makeStyles<Theme, MessageStateProps>((theme) => {
     return createStyles({
         overrideColor: {
             background: props => props.color ?? theme.palette.error.main
         }
     })
-})
+});
 
 type SnackbarMessage = {
     message: string | undefined;
@@ -19,31 +19,29 @@ type SnackbarMessage = {
 }
 
 // Avoids the snackbar to loop after each stateCount increment
-let outerStateCount = 0;
+let outerStateCount: number;
 
-export const UserSnackbar: React.FunctionComponent<MessageState> = ({
-                                                                        severity = "error",
-                                                                        ...props
-                                                                    }) => {
+export const UserSnackbar: React.FunctionComponent<MessageStateProps> = ({severity = "error", ...props}) => {
+    const {children, message, messageStateCount} = props;
     const style = snackbarStyle(props);
 
     const [open, setOpen] = React.useState(false);
     const [messageInfo, setMessageInfo] = React.useState<SnackbarMessage | undefined>(undefined);
 
     React.useEffect(() => {
-        if (props.message && outerStateCount !== props.stateCount) {
-            outerStateCount = props.stateCount;
+        if (message && outerStateCount !== messageStateCount) {
+            outerStateCount = messageStateCount;
             setMessageInfo(prevState => {
                 const state = prevState ?? {};
                 setOpen(true);
                 return {
                     ...state,
-                    message: props.message,
+                    message: message,
                     key: new Date().getTime()
-                }
+                };
             });
         }
-    }, [messageInfo, props.message, props.stateCount]);
+    }, [messageInfo, message, messageStateCount]);
 
     const handleClose = (event?: React.SyntheticEvent, reason?: string) => {
         setOpen(false);
@@ -72,7 +70,7 @@ export const UserSnackbar: React.FunctionComponent<MessageState> = ({
                        filledSuccess: style.overrideColor,
                        filledWarning: style.overrideColor,
                    }}
-                   action={props.children}>
+                   action={children}>
                 {messageInfo?.message}
             </Alert>
         </Snackbar>

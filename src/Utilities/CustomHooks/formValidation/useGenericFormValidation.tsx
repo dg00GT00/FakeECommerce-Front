@@ -3,7 +3,7 @@ import {ActionTypes} from "./FormActionTypes";
 import {GenericFormActions} from "./genericFormReducer";
 
 type GenericFormValidation<T extends string> = {
-    requiredValidation: (event: any, fieldId: T) => any,
+    requiredValidation: (event: any, fieldId: T) => void,
     genericFieldValidation: (event: any, fieldId: T) => void,
 }
 
@@ -22,7 +22,7 @@ export const useGenericFormValidation = <T extends string>(genericFormDispatch: 
      */
     function requiredValidation(event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, fieldId: T): void;
     function requiredValidation(event: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>, fieldId: T): void;
-    function requiredValidation(event: any, fieldId: T): any {
+    function requiredValidation(event: any, fieldId: T): void {
         genericFormDispatch({
             fieldId,
             type: ActionTypes.REQUIRED,

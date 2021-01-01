@@ -29,8 +29,6 @@ const clearButtonStyles = makeStyles((theme: Theme) => {
     })
 })
 
-
-// TODO: Refactor the code in order to eliminate repetition
 export const ProductFiltersMobile: React.FunctionComponent = () => {
 
     const {setClear} = React.useContext(ClearFiltersContext);

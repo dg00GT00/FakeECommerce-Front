@@ -68,7 +68,7 @@ export const ProductFilterDialog: React.FunctionComponent<ProductDialogProps> = 
 
     React.useEffect(() => {
         setIndicatorStyle({});
-    }, [clearSwitch])
+    }, [clearSwitch]);
 
     return (
         <Dialog onClose={props.onClose}
