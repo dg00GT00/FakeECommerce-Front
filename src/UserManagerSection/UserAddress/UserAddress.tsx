@@ -13,11 +13,8 @@ import {UserFirstName} from "./UserAddressFields/UserFirstName";
 import {UserLastName} from "./UserAddressFields/UserLastName";
 import {AuthContext} from "../../Utilities/Context/AuthContext";
 import {useHistory} from "react-router-dom";
-import {UserSnackbar} from "../UserActions/UserSnackbar";
-import {MessageState} from "../UserActions/UserActionTypes";
-import {AddressFieldId, FormState} from "../UserFormsTypes/UserFormsTypes";
-import {useTheme} from "@material-ui/core";
-import Button from "@material-ui/core/Button/Button";
+import {AddressFieldId, FormId, FormState} from "../UserFormsTypes/UserFormsTypes";
+import {useSnackMessageError} from "../../Utilities/CustomHooks/UserSnackbar/useSnackMessageError";
 
 export const UserAddress: React.FunctionComponent<UserInputTypes> = props => {
     const {
@@ -25,39 +22,23 @@ export const UserAddress: React.FunctionComponent<UserInputTypes> = props => {
         validationState: {addressFormState, errorState}
     } = useAddressFormValidation(["complement"]);
 
-    const message = React.useRef<MessageState>({message: undefined, stateCount: 0});
-    const [userSnack, setUserSnack] = React.useState<JSX.Element | null>(null);
+    const [errorSnack, setErrorSnack] = useSnackMessageError();
+    const firstRender = React.useRef(true);
     const {getUserAddress} = React.useContext(AuthContext);
-    const {palette: {primary: {dark}}} = useTheme();
-    const {location: {pathname}, push} = useHistory();
+    const {location: {pathname}} = useHistory();
 
     React.useEffect(() => {
-        if ("/user/address/update" === pathname) {
-            const goToLogin: React.MouseEventHandler = event => {
-                push("/user/login");
+        if (firstRender.current) {
+            if ("/user/address/update" === pathname) {
+                firstRender.current = false;
+                getUserAddress()
+                    .then(response => {
+                        resetFormState((response as FormState<AddressFieldId>));
+                    })
+                    .catch(statusCode => setErrorSnack(FormId.ADDRESS, statusCode));
             }
-
-            getUserAddress()
-                .then(response => {
-                    resetFormState((response as FormState<AddressFieldId>));
-                })
-                .catch(error => {
-                    setUserSnack(_ => {
-                        message.current = {
-                            message: error,
-                            stateCount: message.current.stateCount === 0 ? 1 : 0
-                        };
-                        return (
-                            <UserSnackbar {...message.current}
-                                          color={dark}
-                                          severity={"warning"}>
-                                <Button color={"secondary"} onClick={goToLogin}>Login</Button>
-                            </UserSnackbar>
-                        )
-                    });
-                })
         }
-    }, [resetFormState, pathname, dark, push, getUserAddress]);
+    }, [setErrorSnack, resetFormState, pathname, getUserAddress]);
 
     return (
         <>
@@ -93,7 +74,7 @@ export const UserAddress: React.FunctionComponent<UserInputTypes> = props => {
             </div>
             {props.showRequiredLabel ? <p>* fields required</p> : null}
             <UserActionButton formId={props.formId} formValidity={errorState} formState={addressFormState}/>
-            {userSnack}
+            {errorSnack}
         </>
     );
 }

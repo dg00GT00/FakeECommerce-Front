@@ -2,10 +2,9 @@ import * as React from "react";
 import styles from "../UserCard/UserCard.module.scss";
 import Button from "@material-ui/core/Button/Button";
 import {useHistory} from "react-router-dom";
-import {UserSnackbar} from "./UserSnackbar";
 import {AuthContext} from "../../Utilities/Context/AuthContext";
 import {FormId, FormState, UserFormButtonProps} from "../UserFormsTypes/UserFormsTypes";
-import {MessageStateProps} from "./UserActionTypes";
+import {useSnackMessageError} from "../../Utilities/CustomHooks/UserSnackbar/useSnackMessageError";
 
 const checkFormValues = (formObj: FormState<any>): boolean => {
     for (const key in formObj) {
@@ -20,20 +19,13 @@ type SignupType = Record<"email" | "password" | "generic", { fieldValue: string 
 type LoginType = Record<"generic" | "email", { fieldValue: string }>;
 
 export const UserActionButton: React.FunctionComponent<UserFormButtonProps> = props => {
-    const message = React.useRef<MessageStateProps>({message: "", messageStateCount: 0});
-    const [userSnack, setUserSnack] = React.useState<JSX.Element | null>(null);
+    const [errorSnack, setErrorSnack] = useSnackMessageError();
     const {registerUser, userLogin, userAddress} = React.useContext(AuthContext);
     const {goBack, push} = useHistory();
 
-    const promiseError = React.useCallback((errorMessage: string) => {
-        setUserSnack(_ => {
-            message.current = {
-                message: errorMessage,
-                messageStateCount: message.current.messageStateCount === 0 ? 1 : 0
-            };
-            return <UserSnackbar {...message.current}/>
-        });
-    }, []);
+    const promiseError = React.useCallback((formId: FormId, statusCode: number) => {
+        setErrorSnack(formId, statusCode);
+    }, [setErrorSnack]);
 
     const submitForm: React.MouseEventHandler = event => {
         if (props.formId === FormId.SIGNUP) {
@@ -50,7 +42,7 @@ export const UserActionButton: React.FunctionComponent<UserFormButtonProps> = pr
                             pathname: "/user/address"
                         })
                     })
-                    .catch(promiseError);
+                    .catch(statusCode => promiseError(props.formId, statusCode));
             }
         }
         if (props.formId === FormId.LOGIN) {
@@ -61,12 +53,8 @@ export const UserActionButton: React.FunctionComponent<UserFormButtonProps> = pr
 
             if (checkFormValues(props.formState)) {
                 userLogin(email, password)
-                    .then(_ => {
-                        push({
-                            pathname: "/"
-                        });
-                    })
-                    .catch(promiseError);
+                    .then(_ => goBack())
+                    .catch(statusCode => promiseError(props.formId, statusCode));
             }
         }
         if (props.formId === FormId.ADDRESS) {
@@ -75,7 +63,7 @@ export const UserActionButton: React.FunctionComponent<UserFormButtonProps> = pr
                     .then(_ => push({
                         pathname: "/"
                     }))
-                    .catch(promiseError);
+                    .catch(statusCode => promiseError(props.formId, statusCode));
             }
         }
     }
@@ -92,7 +80,7 @@ export const UserActionButton: React.FunctionComponent<UserFormButtonProps> = pr
                     disabled={props.formValidity}
                     color={"secondary"}>Go</Button>
             </div>
-            {userSnack}
+            {errorSnack}
         </>
     );
 }
