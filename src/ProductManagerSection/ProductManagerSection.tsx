@@ -5,6 +5,7 @@ import {MainLanding} from "../StructureSection/HeroSection/MainTextHero/MainLand
 import {ProductsSection} from "./ProductsSection/ProductsSection";
 import {Testimonials} from "../StructureSection/Testimonials/Testimonials";
 import {Footer} from "../StructureSection/Footer/Footer";
+import {ProductModalRouteManager} from "../Routes/ProductRouteManager/ProductModalRouteManager";
 
 export const ProductManagerSection: React.FunctionComponent = () => {
     return (
@@ -12,6 +13,7 @@ export const ProductManagerSection: React.FunctionComponent = () => {
             <CartContextProvider>
                 <Header/>
                 <MainLanding/>
+                <ProductModalRouteManager/>
                 <ProductsSection/>
             </CartContextProvider>
             <Testimonials/>

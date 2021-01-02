@@ -1,0 +1,75 @@
+.dialog {
+    display: flex;
+    padding: 2%;
+    justify-content: space-between;
+
+    .divider {
+        width: 6px;
+        height: 200px;
+        align-self: center;
+    }
+
+    .product_image {
+        width: 50%;
+        flex: 1;
+
+        img {
+            height: 600px;
+            padding: 10%;
+            width: 100%;
+            object-fit: contain;
+        }
+    }
+
+    .content {
+        flex: 1;
+        display: grid;
+        padding: 0 0 0 5%;
+        grid-template-rows: repeat(3, 100px);
+        grid-template-columns: 30% repeat(3, auto) 170px;
+        grid-template-areas: "title title title title title"
+                             "price price price price price"
+                             "amount buy buy buy cart"
+                             "desc desc desc desc desc";
+
+        .title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            padding: initial;
+            grid-area: title;
+        }
+
+        .price {
+            grid-area: price;
+            align-self: center;
+            font-size: 1.5rem;
+            font-weight: 700;
+            opacity: 0.6;
+        }
+
+        .amount {
+            grid-area: amount;
+            align-self: center;
+        }
+
+        .buy_now {
+            width: 75%;
+            grid-area: buy;
+            align-self: center;
+            height: max-content;
+            justify-self: center;
+        }
+
+        .cart {
+            grid-area: cart;
+            align-self: center;
+            height: max-content;
+        }
+
+        .description {
+            padding-top: 40px;
+            grid-area: desc;
+            line-height: 1.5rem;
+        }
+    }
+}

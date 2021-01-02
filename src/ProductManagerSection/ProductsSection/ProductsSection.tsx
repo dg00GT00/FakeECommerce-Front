@@ -11,7 +11,7 @@ const useStyles = makeStyles(theme => createStyles({
     root: {
         backgroundColor: theme.palette.primary.main
     }
-}))
+}));
 
 export const ProductsSection: React.FunctionComponent = () => {
     const style = useStyles();
@@ -39,7 +39,7 @@ export const ProductsSection: React.FunctionComponent = () => {
                 });
             }
         })
-    }, [setCartStyle, productContext.amount])
+    }, [setCartStyle, productContext.amount]);
 
     return (
         <section>
@@ -55,5 +55,5 @@ export const ProductsSection: React.FunctionComponent = () => {
                 </div>
             </ProductsContextProvider>
         </section>
-    )
+    );
 }
