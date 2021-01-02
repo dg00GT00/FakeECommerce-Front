@@ -86,7 +86,7 @@ function parseSearchParams(locationState: FilterState, searchParams: string): Se
     return filterParams;
 }
 
-export const ProductRouteManager: React.FunctionComponent<ProductFilterType> = props => {
+export const ProductGridRouteManager: React.FunctionComponent<ProductFilterType> = props => {
     return (
         <>
             <Route exact path={"/"}>

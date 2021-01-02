@@ -7,7 +7,7 @@ import {NavLink} from "react-router-dom";
 import {createStyles, makeStyles} from "@material-ui/core/styles";
 import {ProductsContext} from "../ProductContext/ProductsContext";
 import {handleScrollGridItems, PRODUCT_GRID_ID} from "../../../Utilities/ProductGridScroll";
-import {ProductRouteManager} from "../../../Routes/ProductRouteManager/ProductRouteManager";
+import {ProductGridRouteManager} from "../../../Routes/ProductRouteManager/ProductGridRouteManager";
 import {ClearFiltersProvider} from "../../../Utilities/Context/ClearFiltersContext";
 import {FilterOptions, ProductFilterState} from "../../../Utilities/ProductModels/ProductFiltersEnum";
 import {MobileFiltersContextProvider} from "../../../Utilities/Context/MobileFiltersContext";
@@ -57,7 +57,7 @@ export const ProductPaginationManager: React.FunctionComponent = () => {
                 </MobileFiltersContextProvider>
             </ClearFiltersProvider>
             <div className={styles.grid_content} id={PRODUCT_GRID_ID}>
-                <ProductRouteManager pageNumber={pageNumber}/>
+                <ProductGridRouteManager pageNumber={pageNumber}/>
             </div>
             <Pagination size={"large"}
                         showFirstButton

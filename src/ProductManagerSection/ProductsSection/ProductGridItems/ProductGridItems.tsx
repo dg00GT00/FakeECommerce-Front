@@ -4,13 +4,13 @@ import {NotFound} from "../../../Utilities/RouterValidation/NotFound";
 import {ProductsContext} from "../ProductContext/ProductsContext";
 import {ProductGridSkeleton} from "../ProductGridSkeleton/ProductGridSkeleton";
 import {withRouter} from "react-router-dom";
-import {ProductRouteManagerProps} from "../../../Routes/ProductRouteManager/ProductRouteManagerProps";
+import {ProductGridRouteManagerProps} from "../../../Routes/ProductRouteManager/ProductGridRouteManagerProps";
 
 type GridItemsType =
     React.FunctionComponentElement<typeof ProductCard>[]
     | React.FunctionComponentElement<typeof NotFound>;
 
-const ProductGrid: React.FunctionComponent<ProductRouteManagerProps> = ({location: {pathname}, ...props}) => {
+const ProductGrid: React.FunctionComponent<ProductGridRouteManagerProps> = ({location: {pathname}, ...props}) => {
     // Deconstruct the props in order to prevent infinity request loop
     const {pageNumber, searchFrag, productBrand, productType, sortFilter} = props;
     const {productReq, setPageCount, setPageNumber, checkHomePageToggle} = React.useContext(ProductsContext);
