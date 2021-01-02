@@ -1,6 +1,7 @@
 import {api} from "./AxiosInstance";
 import {FullProductType} from "../Utilities/ProductModels/FullProductModel";
-import {productCardMapper, ProductCartType} from "../Utilities/Mappers/ProductCardMapper";
+import {productCardMapper} from "../Utilities/Mappers/ProductCardMapper";
+import {ProductCardProps} from "../Utilities/ProductProps/ProductCardProps";
 
 export type ProductFilterType = {
     sortFilter?: string,
@@ -24,7 +25,7 @@ export class ProductRequestManager {
                                     productType,
                                     productBrand,
                                     searchFrag
-                                }: ProductFilterType): Promise<ProductCartType[] | null> {
+                                }: ProductFilterType): Promise<ProductCardProps[] | null> {
 
         const productListUrl = [
             this.baseApiUrl,
@@ -38,6 +39,11 @@ export class ProductRequestManager {
         const response = await api.get<FullProductType>(productListUrl);
         this.productAmount = response.data.count;
         return (response.data.data.length === 0) ? null : productCardMapper(response.data);
+    }
+
+    public async getProduct(id: number): Promise<ProductCardProps> {
+        const response = await api.get<ProductCardProps>(`/products/${id}`);
+        return response.data;
     }
 
     public getProductPageAmount(): number | never {
