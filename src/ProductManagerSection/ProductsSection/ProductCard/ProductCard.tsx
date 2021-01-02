@@ -12,6 +12,7 @@ import {ReactComponent as CartArrowDown} from "../../../Assets/cartArrowDown.svg
 import {ButtonBase, useTheme} from "@material-ui/core";
 import {CartContext} from "../../../Utilities/Context/CartContext";
 import {ProductCardProps} from '../../../Utilities/ProductProps/ProductCardProps';
+import {useHistory} from "react-router-dom";
 
 
 const useStyles = makeStyles({
@@ -44,6 +45,7 @@ export const ProductCard: React.FunctionComponent<ProductCardProps> = props => {
     const [cardHighlighted, setCardHighlight] = React.useState<CardHighlightType | undefined>();
 
     const theme = useTheme();
+    const {push} = useHistory();
     const cardHeaderStyle = useStyles();
 
     const primaryColor = theme.palette.primary.main;
@@ -80,11 +82,18 @@ export const ProductCard: React.FunctionComponent<ProductCardProps> = props => {
         }
     }
 
-    const toggleProductSelection = () => {
+    const toggleProductSelection = (): void => {
         selectProduct(prevState => {
             isProductSelected = !prevState
             productSelectionManager();
             return isProductSelected;
+        });
+    }
+
+    const seeProductDetail = (event: React.MouseEvent, id: number): void => {
+        push({
+            pathname: "/products",
+            search: new URLSearchParams({id: id.toString()}).toString()
         });
     }
 
@@ -99,7 +108,7 @@ export const ProductCard: React.FunctionComponent<ProductCardProps> = props => {
                                     <ShareRounded/>
                                 } disableTypography>
                     </CardHeader>
-                    <CardActionArea className={styles.card_action_area}>
+                    <CardActionArea className={styles.card_action_area} onClick={event => seeProductDetail(event, props.id)}>
                         <CardMedia className={styles.media} image={props.pictureUrl}/>
                         <CardContent className={styles.card_content}>
                             <p>
