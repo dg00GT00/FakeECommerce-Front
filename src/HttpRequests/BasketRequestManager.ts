@@ -14,8 +14,8 @@ export class BasketRequestManager {
     public addProduct(product: BasketModel): void {
         for (const p of this._basketProducts) {
             if (p.id === product.id) {
-                p.quantity += p.quantity;
-                break;
+                p.quantity += product.quantity;
+                return;
             }
         }
         this._basketProducts.push(product);
@@ -26,7 +26,7 @@ export class BasketRequestManager {
             let p = this._basketProducts[i];
             if (p.id === product.id) {
                 if (p.quantity > 1) {
-                    p.quantity -= p.quantity;
+                    p.quantity -= product.quantity;
                     return;
                 } else {
                     this._basketProducts.splice(i, 1);
