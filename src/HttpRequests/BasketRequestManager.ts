@@ -11,6 +11,17 @@ export class BasketRequestManager {
         return quantity;
     }
 
+    public getProductAmountById(id: number): number {
+        let quantity = 0;
+        for (const product of this._basketProducts) {
+            if (product.id === id) {
+                quantity = product.quantity;
+                break;
+            }
+        }
+        return quantity;
+    }
+
     public addProduct(product: BasketModel): void {
         for (const p of this._basketProducts) {
             if (p.id === product.id) {
