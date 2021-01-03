@@ -29,8 +29,9 @@
         grid-template-columns: 30% repeat(3, auto) 170px;
         grid-template-areas: "title title title title title"
                              "price price price price price"
-                             "amount buy buy buy cart"
-                             "desc desc desc desc desc";
+                             "amount buy buy buy add_cart"
+                             "desc desc desc desc desc"
+                             "cart cart cart cart cart";
 
         .title {
             font-size: 1.5rem;
@@ -60,8 +61,8 @@
             justify-self: center;
         }
 
-        .cart {
-            grid-area: cart;
+        .add_cart {
+            grid-area: add_cart;
             align-self: center;
             height: max-content;
         }
@@ -70,6 +71,16 @@
             padding-top: 40px;
             grid-area: desc;
             line-height: 1.5rem;
+        }
+
+        .cart {
+            grid-area: cart;
+            align-self: end;
+            justify-self: end;
+            svg {
+                height: auto;
+                width: 1.5em;
+            }
         }
     }
 }

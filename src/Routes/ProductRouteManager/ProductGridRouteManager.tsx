@@ -1,7 +1,7 @@
 import * as React from "react";
 import {Route} from "react-router-dom";
 import {ProductGridItems} from "../../ProductManagerSection/ProductsSection/ProductGridItems/ProductGridItems";
-import {ProductFilterType} from "../../HttpRequests/ProductsRequests";
+import {ProductFilterType} from "../../HttpRequests/ProductRequestManager";
 import {
     FilterOptions,
     ProductBrands,

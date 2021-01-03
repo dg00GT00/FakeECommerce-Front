@@ -1,5 +1,5 @@
 import * as React from "react";
-import {ProductRequestManager} from "../../../HttpRequests/ProductsRequests";
+import {ProductRequestManager} from "../../../HttpRequests/ProductRequestManager";
 
 const productRequest = new ProductRequestManager(12);
 

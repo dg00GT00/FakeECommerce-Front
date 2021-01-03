@@ -28,5 +28,5 @@ export const CartDefault: React.FunctionComponent<CartDefaultProps> = ({colorBad
     if (props.hideWhenZero !== undefined && props.hideWhenZero) {
         cart = cartContext.amount > 0 ? cart : null;
     }
-    return cart
+    return cart;
 }

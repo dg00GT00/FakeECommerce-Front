@@ -1,6 +1,6 @@
 import {api} from "./AxiosInstance";
-import {FullProductType} from "../Utilities/ProductModels/FullProductModel";
-import {productCardMapper} from "../Utilities/Mappers/ProductCardMapper";
+import {FullProductType, ProductInformationType} from "../Utilities/ProductModels/FullProductModel";
+import {productCardMapper, productModalMapper} from "../Utilities/Mappers/ProductCardMapper";
 import {ProductCardProps} from "../Utilities/ProductProps/ProductCardProps";
 
 export type ProductFilterType = {
@@ -42,8 +42,8 @@ export class ProductRequestManager {
     }
 
     public async getProduct(id: number): Promise<ProductCardProps> {
-        const response = await api.get<ProductCardProps>(`/products/${id}`);
-        return response.data;
+        const response = await api.get<ProductInformationType>(`/products/${id}`);
+        return productModalMapper(response.data);
     }
 
     public getProductPageAmount(): number | never {

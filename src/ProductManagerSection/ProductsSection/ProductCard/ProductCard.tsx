@@ -30,13 +30,13 @@ const useStyles = makeStyles({
 type HighlightProductType = {
     outerContainer?: { [i: string]: string, backgroundColor: string },
     innerContainer?: { [i: string]: string, backgroundColor: string },
-}
+};
 
 type CardHighlightType = {
     backgroundColor?: string,
     fill?: string,
     color?: string,
-}
+};
 
 export const ProductCard: React.FunctionComponent<ProductCardProps> = props => {
     const cartContext = React.useContext(CartContext);
@@ -74,11 +74,11 @@ export const ProductCard: React.FunctionComponent<ProductCardProps> = props => {
         if (isProductSelected) {
             setProductHighlight(productHighlightedStyle);
             setCardHighlight(cardHighlightedStyle);
-            cartContext.increaseAmount();
+            cartContext.increaseAmount({quantity: 1, ...props});
         } else {
             setProductHighlight({});
             setCardHighlight({});
-            cartContext.decreaseAmount();
+            cartContext.decreaseAmount({quantity: 1, ...props});
         }
     }
 
@@ -91,6 +91,7 @@ export const ProductCard: React.FunctionComponent<ProductCardProps> = props => {
     }
 
     const seeProductDetail = (event: React.MouseEvent, id: number): void => {
+        console.log(id);
         push({
             pathname: "/products",
             search: new URLSearchParams({id: id.toString()}).toString()
@@ -101,14 +102,15 @@ export const ProductCard: React.FunctionComponent<ProductCardProps> = props => {
         <div style={productHighlighted?.outerContainer}>
             <div style={productHighlighted?.innerContainer}>
                 <Card className={styles.card}>
-                    <CardHeader title={props.name}
+                    <CardHeader title={props.productName}
                                 className={[cardHeaderStyle.root, styles.card_title].join(" ")}
                                 style={cardHighlighted}
                                 action={
                                     <ShareRounded/>
                                 } disableTypography>
                     </CardHeader>
-                    <CardActionArea className={styles.card_action_area} onClick={event => seeProductDetail(event, props.id)}>
+                    <CardActionArea className={styles.card_action_area}
+                                    onClick={event => seeProductDetail(event, props.id)}>
                         <CardMedia className={styles.media} image={props.pictureUrl}/>
                         <CardContent className={styles.card_content}>
                             <p>
