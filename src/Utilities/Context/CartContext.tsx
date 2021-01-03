@@ -1,24 +1,33 @@
 import * as React from "react";
+import {BasketRequestManager} from "../../HttpRequests/BasketRequestManager";
+import {BasketModel} from "../BasketModel/BasketModel";
+
+const basket = new BasketRequestManager();
 
 export const CartContext = React.createContext({
     amount: 0,
-    increaseAmount: () => {
-    },
-    decreaseAmount: () => {
-    }
+    increaseAmount: (product: BasketModel) => {},
+    decreaseAmount: (product: BasketModel) => {}
 });
 
 export const CartContextProvider: React.FunctionComponent = props => {
-    let [productAmount, setProductAmount] = React.useState(0)
+    const [cartAmount, setCartAmount] = React.useState(0);
 
-    const increaseAmount = () => setProductAmount(++productAmount)
-    const decreaseAmount = () => setProductAmount(--productAmount)
+    const increaseAmount = (product: BasketModel) => {
+        basket.addProduct(product);
+        setCartAmount(basket.getProductsAmount());
+    };
+
+    const decreaseAmount = (product: BasketModel) => {
+        basket.removeProduct(product);
+        setCartAmount(basket.getProductsAmount());
+    };
 
     return (
         <CartContext.Provider value={{
-            increaseAmount: increaseAmount,
-            decreaseAmount: decreaseAmount,
-            amount: productAmount >= 0 ? productAmount : 0
+            increaseAmount,
+            decreaseAmount,
+            amount: cartAmount
         }}>
             {props.children}
         </CartContext.Provider>
