@@ -19,14 +19,14 @@ export const CartDefault: React.FunctionComponent<CartDefaultProps> = ({colorBad
     let cart: JSX.Element | null = (
         <IconButton className={props.classNameButton} aria-label={"shopping cart"} color={props.colorButton}
                     style={props.style}>
-            <Badge badgeContent={cartContext.amount} color={colorBadge}>
+            <Badge badgeContent={cartContext.totalAmount} color={colorBadge}>
                 <ShoppingCartRounded className={props.classNameIcon}/>
             </Badge>
         </IconButton>
     );
 
     if (props.hideWhenZero !== undefined && props.hideWhenZero) {
-        cart = cartContext.amount > 0 ? cart : null;
+        cart = cartContext.totalAmount > 0 ? cart : null;
     }
     return cart;
 }

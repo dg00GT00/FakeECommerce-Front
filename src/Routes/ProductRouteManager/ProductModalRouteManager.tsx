@@ -7,7 +7,7 @@ export const ProductModalRouteManager : React.FunctionComponent = () => {
         <Route path={"/products"} render={({location: {search}}) => {
             if (search.includes("id")) {
                 const params = new URLSearchParams(search);
-                return <ProductModal id={+(params.get("id") ?? "0")} key={new Date().getTime()}/>;
+                return <ProductModal id={+(params.get("id") ?? "0")} modalKey={new Date().getTime()}/>;
             }
         }}/>
     );

@@ -5,31 +5,32 @@ import {BasketModel} from "../BasketModel/BasketModel";
 const basket = new BasketRequestManager();
 
 export const CartContext = React.createContext({
-    amount: 0,
+    totalAmount: 0,
+    getAmountById: (id: number) => Number(),
     increaseAmount: (product: BasketModel) => {},
     decreaseAmount: (product: BasketModel) => {}
 });
 
 export const CartContextProvider: React.FunctionComponent = props => {
-    const [cartAmount, setCartAmount] = React.useState(0);
+    const [cartTotalAmount, setCartTotalAmount] = React.useState(0);
 
     const increaseAmount = (product: BasketModel) => {
         basket.addProduct(product);
-        setCartAmount(basket.getProductsAmount());
+        setCartTotalAmount(basket.getProductsAmount());
     };
 
     const decreaseAmount = (product: BasketModel) => {
         basket.removeProduct(product);
-        setCartAmount(basket.getProductsAmount());
+        setCartTotalAmount(basket.getProductsAmount());
     };
 
     return (
         <CartContext.Provider value={{
             increaseAmount,
             decreaseAmount,
-            amount: cartAmount
-        }}>
+            getAmountById:(id) => basket.getProductAmountById(id),
+            totalAmount: cartTotalAmount}}>
             {props.children}
         </CartContext.Provider>
-    )
+    );
 }

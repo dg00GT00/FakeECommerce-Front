@@ -48,9 +48,16 @@
             opacity: 0.6;
         }
 
-        .amount {
+        .amount_control {
             grid-area: amount;
             align-self: center;
+            align-items: center;
+            display: flex;
+
+            .amount {
+                margin: 0 15%;
+                font-size: 1.6rem;
+            }
         }
 
         .buy_now {

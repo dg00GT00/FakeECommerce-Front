@@ -26,20 +26,20 @@ export const ProductsSection: React.FunctionComponent = () => {
             top: document.documentElement.clientHeight / 2
         }
         setCartStyle(prevState => {
-            if (productContext.amount > 0) {
+            if (productContext.totalAmount > 0) {
                 setCartStyle(_ => {
                     floatingCart.current = <FloatingCart style={cartStyle}/>;
                     return cartStyle;
                 });
             }
-            if (productContext.amount === 0) {
+            if (productContext.totalAmount === 0) {
                 setCartStyle(_ => {
                     floatingCart.current = null;
                     return {}
                 });
             }
         })
-    }, [setCartStyle, productContext.amount]);
+    }, [setCartStyle, productContext.totalAmount]);
 
     return (
         <section>
