@@ -78,6 +78,7 @@ export const ProductCard: React.FunctionComponent<ProductCardProps> = props => {
     }
 
     const productSelectionManager = (): void => {
+        if (cartContext.getAmountById(props.id) > 1) return;
         if (isProductSelected) {
             cardProductSelection(productHighlightedStyle, cardHighlightedStyle);
             cartContext.increaseAmount({quantity: 1, ...props});

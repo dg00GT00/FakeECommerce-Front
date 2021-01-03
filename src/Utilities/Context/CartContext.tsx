@@ -29,7 +29,8 @@ export const CartContextProvider: React.FunctionComponent = props => {
             increaseAmount,
             decreaseAmount,
             getAmountById:(id) => basket.getProductAmountById(id),
-            totalAmount: cartTotalAmount}}>
+            totalAmount: cartTotalAmount || basket.getProductsAmount()
+        }}>
             {props.children}
         </CartContext.Provider>
     );

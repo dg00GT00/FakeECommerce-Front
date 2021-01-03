@@ -16,30 +16,21 @@ const useStyles = makeStyles(theme => createStyles({
 export const ProductsSection: React.FunctionComponent = () => {
     const style = useStyles();
     const productContext = React.useContext(CartContext);
-    const setCartStyle = React.useState({})[1];
 
-    const floatingCart = React.useRef<JSX.Element | null>(null);
+    const [floatingCart, setFloatingCart] = React.useState<JSX.Element | null>(null);
 
     React.useEffect(() => {
         const cartStyle = {
             position: "sticky",
             top: document.documentElement.clientHeight / 2
         }
-        setCartStyle(prevState => {
-            if (productContext.totalAmount > 0) {
-                setCartStyle(_ => {
-                    floatingCart.current = <FloatingCart style={cartStyle}/>;
-                    return cartStyle;
-                });
-            }
-            if (productContext.totalAmount === 0) {
-                setCartStyle(_ => {
-                    floatingCart.current = null;
-                    return {}
-                });
-            }
-        })
-    }, [setCartStyle, productContext.totalAmount]);
+        if (productContext.totalAmount > 0) {
+            setFloatingCart(<FloatingCart style={cartStyle}/>);
+        }
+        if (productContext.totalAmount === 0) {
+            setFloatingCart(null);
+        }
+    }, [productContext.totalAmount]);
 
     return (
         <section>
@@ -50,7 +41,7 @@ export const ProductsSection: React.FunctionComponent = () => {
                 <div className={[style.root, styles.grid_background].join(" ")}>
                     <ProductPaginationManager/>
                     <div className={styles.floating_cart}>
-                        {floatingCart.current}
+                        {floatingCart}
                     </div>
                 </div>
             </ProductsContextProvider>
