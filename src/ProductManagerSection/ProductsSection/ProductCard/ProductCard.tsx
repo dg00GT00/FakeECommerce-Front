@@ -40,6 +40,8 @@ type CardHighlightType = {
 
 export const ProductCard: React.FunctionComponent<ProductCardProps> = props => {
     const cartContext = React.useContext(CartContext);
+    const firstRender = React.useRef(true);
+
     let [isProductSelected, selectProduct] = React.useState(false);
     const [productHighlighted, setProductHighlight] = React.useState<HighlightProductType | undefined>();
     const [cardHighlighted, setCardHighlight] = React.useState<CardHighlightType | undefined>();
@@ -70,14 +72,17 @@ export const ProductCard: React.FunctionComponent<ProductCardProps> = props => {
         color: white,
     }
 
+    const cardProductSelection = (productHighlighted: HighlightProductType, cardHighlighted: CardHighlightType): void => {
+        setProductHighlight(productHighlighted);
+        setCardHighlight(cardHighlighted);
+    }
+
     const productSelectionManager = (): void => {
         if (isProductSelected) {
-            setProductHighlight(productHighlightedStyle);
-            setCardHighlight(cardHighlightedStyle);
+            cardProductSelection(productHighlightedStyle, cardHighlightedStyle);
             cartContext.increaseAmount({quantity: 1, ...props});
         } else {
-            setProductHighlight({});
-            setCardHighlight({});
+            cardProductSelection({}, {});
             cartContext.decreaseAmount({quantity: 1, ...props});
         }
     }
@@ -91,12 +96,20 @@ export const ProductCard: React.FunctionComponent<ProductCardProps> = props => {
     }
 
     const seeProductDetail = (event: React.MouseEvent, id: number): void => {
-        console.log(id);
         push({
             pathname: "/products",
             search: new URLSearchParams({id: id.toString()}).toString()
         });
     }
+
+    // Sets the product highlighting state at the first render if any product amount is found
+    React.useEffect(() => {
+        if (cartContext.getAmountById(props.id) && firstRender.current) {
+            firstRender.current = false;
+            selectProduct(true);
+            cardProductSelection(productHighlightedStyle, cardHighlightedStyle);
+        }
+    },[props.id, productHighlightedStyle, cardHighlightedStyle, cartContext]);
 
     return (
         <div style={productHighlighted?.outerContainer}>
