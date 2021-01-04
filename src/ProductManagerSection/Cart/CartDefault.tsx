@@ -9,6 +9,7 @@ type CartDefaultProps = {
     classNameButton?: string,
     hideWhenZero?: boolean,
     style?: { [i: string]: string | number }
+    onClick?: React.MouseEventHandler;
     colorButton?: "inherit" | "primary" | "secondary" | "default" | undefined,
     colorBadge?: "error" | "primary" | "secondary" | "default" | undefined,
 }
@@ -17,7 +18,10 @@ export const CartDefault: React.FunctionComponent<CartDefaultProps> = ({colorBad
     const cartContext = React.useContext(CartContext);
 
     let cart: JSX.Element | null = (
-        <IconButton className={props.classNameButton} aria-label={"shopping cart"} color={props.colorButton}
+        <IconButton className={props.classNameButton}
+                    onClick={props.onClick}
+                    aria-label={"shopping cart"}
+                    color={props.colorButton}
                     style={props.style}>
             <Badge badgeContent={cartContext.totalAmount} color={colorBadge}>
                 <ShoppingCartRounded className={props.classNameIcon}/>

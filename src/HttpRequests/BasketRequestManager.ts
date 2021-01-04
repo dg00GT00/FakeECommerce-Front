@@ -3,6 +3,10 @@ import {BasketModel} from "../Utilities/BasketModel/BasketModel";
 export class BasketRequestManager {
     private _basketProducts: BasketModel[] = [];
 
+    get basketProducts(): BasketModel[] {
+        return this._basketProducts;
+    }
+
     public getProductsAmount(): number {
         let quantity = 0
         for (const product of this._basketProducts) {

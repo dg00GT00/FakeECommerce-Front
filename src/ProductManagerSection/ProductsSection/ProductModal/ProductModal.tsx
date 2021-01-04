@@ -11,6 +11,7 @@ import Button from "@material-ui/core/Button/Button";
 import IconButton from "@material-ui/core/IconButton";
 import {CartDefault} from "../../Cart/CartDefault";
 import {CartContext} from "../../../Utilities/Context/CartContext";
+import {ModalDrawer} from "./ModalDrawer/ModalDrawer";
 
 const dialogStyle = makeStyles({
     paperFullWidth: {
@@ -34,20 +35,21 @@ const initialModalProducts: ProductCardProps = {
     type: ""
 };
 
-// The key property forces this component to rerender
+// The modalKey property forces this component to rerender
 export const ProductModal: React.FunctionComponent<{ id: number, modalKey: number }> = props => {
     const {productReq} = React.useContext(ProductsContext);
     const cartContext = React.useContext(CartContext);
 
     const [productModal, setProductModal] = React.useState<ProductCardProps>(initialModalProducts);
     const [productAmount, setProductAmount] = React.useState(0);
-    const [open, setOpen] = React.useState(true);
+    const [openDialog, setOpenDialog] = React.useState(true);
+    const [openDrawer, setOpenDrawer] = React.useState(false);
 
     const styleDialog = dialogStyle();
     const styleDivider = dividerStyle();
 
-    const handleClose = () => {
-        setOpen(false);
+    const handleCloseDialog = () => {
+        setOpenDialog(false);
     };
 
     const increaseProductAmount: React.MouseEventHandler = event => {
@@ -78,13 +80,13 @@ export const ProductModal: React.FunctionComponent<{ id: number, modalKey: numbe
 
     React.useEffect(() => {
         setProductAmount(cartContext.getAmountById(props.id));
-    },[cartContext, props.id]);
+    }, [cartContext, props.id]);
 
     React.useEffect(() => {
         productReq
             .getProduct(props.id)
             .then(response => {
-                setOpen(true);
+                setOpenDialog(true);
                 setProductModal(response);
             });
     }, [productReq, props.id, props.modalKey]);
@@ -92,12 +94,12 @@ export const ProductModal: React.FunctionComponent<{ id: number, modalKey: numbe
     return (
         <Dialog fullWidth
                 classes={{
-                    paperFullWidth: styleDialog.paperFullWidth
+                    paperFullWidth: styleDialog.paperFullWidth,
                 }}
-                onClose={handleClose}
+                onClose={handleCloseDialog}
                 aria-labelledby={"customized-dialog-title"}
-                open={open}>
-            <div className={styles.dialog}>
+                open={openDialog}>
+            <div className={styles.dialog} id={"productModal"}>
                 <div className={styles.product_image}>
                     <img src={productModal.pictureUrl} alt={productModal.productName}/>
                 </div>
@@ -122,9 +124,10 @@ export const ProductModal: React.FunctionComponent<{ id: number, modalKey: numbe
                             variant={"contained"}
                             onClick={addToCart}>Add to cart</Button>
                     <p className={styles.description}>{productModal.description}</p>
-                    <CartDefault classNameButton={styles.cart} hideWhenZero/>
+                    <CartDefault hideWhenZero classNameButton={styles.cart} onClick={event => setOpenDrawer(!openDrawer)}/>
                 </div>
             </div>
+            <ModalDrawer open={openDrawer}/>
         </Dialog>
     );
 }

@@ -6,6 +6,7 @@ const basket = new BasketRequestManager();
 
 export const CartContext = React.createContext({
     totalAmount: 0,
+    getTotalProducts: () => [{} as BasketModel],
     getAmountById: (id: number) => Number(),
     increaseAmount: (product: BasketModel) => {},
     decreaseAmount: (product: BasketModel) => {}
@@ -29,6 +30,7 @@ export const CartContextProvider: React.FunctionComponent = props => {
             increaseAmount,
             decreaseAmount,
             getAmountById:(id) => basket.getProductAmountById(id),
+            getTotalProducts: () => basket.basketProducts,
             totalAmount: cartTotalAmount || basket.getProductsAmount()
         }}>
             {props.children}
