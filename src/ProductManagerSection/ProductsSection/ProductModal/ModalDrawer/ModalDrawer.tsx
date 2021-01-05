@@ -20,7 +20,8 @@ const drawerStyle = makeStyles((theme: Theme) => ({
 
 type ModalDrawerProps = { open: boolean, containerId: string };
 
-export const ModalDrawer: React.FunctionComponent<ModalDrawerProps> = props => {
+// Needed to use the React.memo in order to this component work properly
+export const ModalDrawer: React.FunctionComponent<ModalDrawerProps> = React.memo(props => {
     const {getTotalProducts, getAmountById, clearItemsById} = React.useContext(CartContext);
     const firstRender = React.useRef(true);
     const [open, setOpen] = React.useState(false);
@@ -31,10 +32,14 @@ export const ModalDrawer: React.FunctionComponent<ModalDrawerProps> = props => {
     const clearBasketItems = (id: number): void => {
         setItems(prevState => {
             const state = prevState && {};
-            return {
+            const newState = {
                 ...state,
                 [id]: clearItemsById(id)
             };
+            if (getTotalProducts().length === 0) {
+                setOpen(false);
+            }
+            return newState;
         });
     }
 
@@ -101,4 +106,4 @@ export const ModalDrawer: React.FunctionComponent<ModalDrawerProps> = props => {
             </div>
         </Modal>
     );
-}
+})
