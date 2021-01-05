@@ -40,7 +40,7 @@ type CardHighlightType = {
 
 export const ProductCard: React.FunctionComponent<ProductCardProps> = props => {
     const cartContext = React.useContext(CartContext);
-    const firstRender = React.useRef(true);
+    const firstRender = React.useRef<{[i: number]: boolean}>({});
 
     let [isProductSelected, selectProduct] = React.useState(false);
     const [productHighlighted, setProductHighlight] = React.useState<HighlightProductType | undefined>();
@@ -103,14 +103,21 @@ export const ProductCard: React.FunctionComponent<ProductCardProps> = props => {
         });
     }
 
+    console.log("Inside useEffect");
     // Sets the product highlighting state at the first render if any product amount is found
     React.useEffect(() => {
-        if (cartContext.getAmountById(props.id) && firstRender.current) {
-            firstRender.current = false;
+        console.log(firstRender.current);
+        if (cartContext.getAmountById(props.id) && firstRender.current[props.id]) {
+            firstRender.current[props.id] = false;
             selectProduct(true);
             cardProductSelection(productHighlightedStyle, cardHighlightedStyle);
         }
-    },[props.id, productHighlightedStyle, cardHighlightedStyle, cartContext]);
+        if (!cartContext.getAmountById(props.id) && !firstRender.current[props.id]) {
+            firstRender.current[props.id] = true;
+            selectProduct(false);
+            cardProductSelection({}, {});
+        }
+    }, [props.id, productHighlightedStyle, cardHighlightedStyle, cartContext]);
 
     return (
         <div style={productHighlighted?.outerContainer}>

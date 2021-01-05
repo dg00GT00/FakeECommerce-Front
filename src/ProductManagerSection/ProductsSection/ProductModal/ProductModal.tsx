@@ -13,7 +13,12 @@ import {CartDefault} from "../../Cart/CartDefault";
 import {CartContext} from "../../../Utilities/Context/CartContext";
 import {ModalDrawer} from "./ModalDrawer/ModalDrawer";
 
+const modalId = "productModal";
+
 const dialogStyle = makeStyles({
+    root: {
+        position: "relative"
+    },
     paperFullWidth: {
         maxWidth: 1700
     }
@@ -94,12 +99,13 @@ export const ProductModal: React.FunctionComponent<{ id: number, modalKey: numbe
     return (
         <Dialog fullWidth
                 classes={{
+                    root: styleDialog.root,
                     paperFullWidth: styleDialog.paperFullWidth,
                 }}
                 onClose={handleCloseDialog}
                 aria-labelledby={"customized-dialog-title"}
                 open={openDialog}>
-            <div className={styles.dialog} id={"productModal"}>
+            <div className={styles.dialog} id={modalId}>
                 <div className={styles.product_image}>
                     <img src={productModal.pictureUrl} alt={productModal.productName}/>
                 </div>
@@ -127,7 +133,7 @@ export const ProductModal: React.FunctionComponent<{ id: number, modalKey: numbe
                     <CartDefault hideWhenZero classNameButton={styles.cart} onClick={event => setOpenDrawer(!openDrawer)}/>
                 </div>
             </div>
-            <ModalDrawer open={openDrawer}/>
+            <ModalDrawer open={openDrawer} containerId={modalId}/>
         </Dialog>
     );
 }

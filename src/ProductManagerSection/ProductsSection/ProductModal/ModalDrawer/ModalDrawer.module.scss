@@ -1,0 +1,22 @@
+.modal_container {
+    padding: 1%;
+    display: flex;
+    flex-direction: column;
+
+    .close_button {
+        width: max-content;
+        align-self: flex-end;
+        margin-bottom: 10px;
+    }
+
+    .divider {
+        height: 4px;
+        width: 60%;
+        align-self: flex-end;
+    }
+
+    .item_grid {
+        display: grid;
+
+    }
+}
