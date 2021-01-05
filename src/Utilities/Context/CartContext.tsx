@@ -27,8 +27,9 @@ export const CartContextProvider: React.FunctionComponent = props => {
     };
 
     const clearItemsById = (id: number): number => {
-        setCartTotalAmount(0);
-        return basket.clearItemsById(id);
+        const cleared = basket.clearItemsById(id);
+        setCartTotalAmount(basket.getProductsAmount());
+        return cleared;
     }
 
     return (

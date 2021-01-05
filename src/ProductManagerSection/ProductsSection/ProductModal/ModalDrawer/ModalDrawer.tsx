@@ -24,13 +24,17 @@ export const ModalDrawer: React.FunctionComponent<ModalDrawerProps> = props => {
     const {getTotalProducts, getAmountById, clearItemsById} = React.useContext(CartContext);
     const firstRender = React.useRef(true);
     const [open, setOpen] = React.useState(false);
-    const setItems = React.useState<number | null>(null)[1];
+    const setItems = React.useState<{ [i: number]: number }>({})[1];
 
     const styleDrawer = drawerStyle();
 
     const clearBasketItems = (id: number): void => {
-        setItems(_ => {
-            return clearItemsById(id);
+        setItems(prevState => {
+            const state = prevState && {};
+            return {
+                ...state,
+                [id]: clearItemsById(id)
+            };
         });
     }
 
