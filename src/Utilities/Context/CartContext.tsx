@@ -8,6 +8,7 @@ export const CartContext = React.createContext({
     totalAmount: 0,
     getTotalProducts: () => [{} as BasketModel],
     getAmountById: (id: number) => Number(),
+    clearItemsById: (id: number) => Number(),
     increaseAmount: (product: BasketModel) => {},
     decreaseAmount: (product: BasketModel) => {}
 });
@@ -25,10 +26,16 @@ export const CartContextProvider: React.FunctionComponent = props => {
         setCartTotalAmount(basket.getProductsAmount());
     };
 
+    const clearItemsById = (id: number): number => {
+        setCartTotalAmount(0);
+        return basket.clearItemsById(id);
+    }
+
     return (
         <CartContext.Provider value={{
             increaseAmount,
             decreaseAmount,
+            clearItemsById,
             getAmountById:(id) => basket.getProductAmountById(id),
             getTotalProducts: () => basket.basketProducts,
             totalAmount: cartTotalAmount || basket.getProductsAmount()

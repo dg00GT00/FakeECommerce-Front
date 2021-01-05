@@ -7,6 +7,17 @@ export class BasketRequestManager {
         return this._basketProducts;
     }
 
+    public clearItemsById(id: number): number {
+        for (const product of this._basketProducts) {
+            if (product.id === id) {
+                product.quantity = 0;
+                this.removeProduct(product);
+                break;
+            }
+        }
+        return 0;
+    }
+
     public getProductsAmount(): number {
         let quantity = 0
         for (const product of this._basketProducts) {
