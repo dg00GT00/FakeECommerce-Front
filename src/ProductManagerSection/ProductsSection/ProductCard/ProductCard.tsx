@@ -9,13 +9,13 @@ import ShareRounded from '@material-ui/icons/ShareRounded';
 import CardHeader from "@material-ui/core/CardHeader";
 import styles from "./ProductCard.module.scss";
 import {ReactComponent as CartArrowDown} from "../../../Assets/cartArrowDown.svg";
-import {ButtonBase, useTheme} from "@material-ui/core";
+import {ButtonBase, Theme} from "@material-ui/core";
 import {CartContext} from "../../../Utilities/Context/CartContext";
 import {ProductCardProps} from '../../../Utilities/ProductProps/ProductCardProps';
 import {useHistory} from "react-router-dom";
 
 
-const useStyles = makeStyles({
+const useStyle = makeStyles({
     root: {
         justifyContent: "space-between",
         "& div:first-child": {
@@ -27,73 +27,77 @@ const useStyles = makeStyles({
     }
 });
 
-type HighlightProductType = {
-    outerContainer?: { [i: string]: string, backgroundColor: string },
-    innerContainer?: { [i: string]: string, backgroundColor: string },
-};
+const useCardHighlightStyle = makeStyles((theme: Theme) => ({
+    outerContainer: {
+        borderRadius: "4px",
+        backgroundColor: theme.palette.secondary.light
+    },
+    innerContainer: {
+        transform: "scale(.988)",
+        borderRadius: "inherit",
+        backgroundColor: "#e0c178"
+    },
+    innerCard: {
+        backgroundColor: theme.palette.primary.main,
+        fill: theme.palette.common.white,
+        color: theme.palette.common.white
+    }
+}));
 
-type CardHighlightType = {
-    backgroundColor?: string,
-    fill?: string,
-    color?: string,
-};
+type CardHighlightState = Partial<ReturnType<typeof useCardHighlightStyle> & {
+    isCardSelected: boolean,
+    firstRender: { [i: number]: boolean }
+}>;
+
+type CardDispatchActions =
+    | { type: "SELECT_CARD", productId: number, selectedState: CardHighlightState }
+    | { type: "UNSELECT_CARD", productId: number }
+    | { type: "PREVIOUS_STATE" }
+
+type CardHighlightReducer = React.Reducer<CardHighlightState, CardDispatchActions>;
+
+const cardReducer = (prevState: CardHighlightState, actions: CardDispatchActions): CardHighlightState => {
+    switch (actions.type) {
+        case "SELECT_CARD":
+            return {
+                ...actions.selectedState,
+                isCardSelected: true,
+                firstRender: {
+                    [actions.productId]: true
+                }
+            };
+        case "UNSELECT_CARD":
+            return {
+                ...prevState,
+                outerContainer: undefined,
+                innerContainer: undefined,
+                innerCard: undefined,
+                isCardSelected: false,
+                firstRender: {
+                    [actions.productId]: false
+                }
+            };
+        default:
+            return prevState;
+    }
+}
 
 export const ProductCard: React.FunctionComponent<ProductCardProps> = props => {
     const cartContext = React.useContext(CartContext);
-    const firstRender = React.useRef<{[i: number]: boolean}>({});
-
-    let [isProductSelected, selectProduct] = React.useState(false);
-    const [productHighlighted, setProductHighlight] = React.useState<HighlightProductType | undefined>();
-    const [cardHighlighted, setCardHighlight] = React.useState<CardHighlightType | undefined>();
-
-    const theme = useTheme();
+    const cardStyle = useCardHighlightStyle();
+    const [cardState, dispatchCardState] = React.useReducer<CardHighlightReducer>(cardReducer, {});
     const {push} = useHistory();
-    const cardHeaderStyle = useStyles();
-
-    const primaryColor = theme.palette.primary.main;
-    const secondaryLight = theme.palette.secondary.light;
-    const white = theme.palette.common.white;
-
-    const productHighlightedStyle: HighlightProductType = {
-        outerContainer: {
-            borderRadius: "4px",
-            backgroundColor: secondaryLight,
-        },
-        innerContainer: {
-            transform: "scale(.988)",
-            borderRadius: "inherit",
-            backgroundColor: "#e0c178",
-        },
-    }
-
-    const cardHighlightedStyle: CardHighlightType = {
-        backgroundColor: primaryColor,
-        fill: white,
-        color: white,
-    }
-
-    const cardProductSelection = (productHighlighted: HighlightProductType, cardHighlighted: CardHighlightType): void => {
-        setProductHighlight(productHighlighted);
-        setCardHighlight(cardHighlighted);
-    }
-
-    const productSelectionManager = (): void => {
-        if (cartContext.getAmountById(props.id) > 1) return;
-        if (isProductSelected) {
-            cardProductSelection(productHighlightedStyle, cardHighlightedStyle);
-            cartContext.increaseAmount({quantity: 1, ...props});
-        } else {
-            cardProductSelection({}, {});
-            cartContext.decreaseAmount({quantity: 1, ...props});
-        }
-    }
+    const cardHeaderStyle = useStyle();
 
     const toggleProductSelection = (): void => {
-        selectProduct(prevState => {
-            isProductSelected = !prevState
-            productSelectionManager();
-            return isProductSelected;
-        });
+        if (cartContext.getAmountById(props.id) > 1) return;
+        if (cardState.isCardSelected) {
+            dispatchCardState({type: "UNSELECT_CARD", productId: props.id});
+            cartContext.decreaseAmount({quantity: 1, ...props});
+        } else {
+            dispatchCardState({type: "SELECT_CARD", productId: props.id, selectedState: cardStyle});
+            cartContext.increaseAmount({quantity: 1, ...props});
+        }
     }
 
     const seeProductDetail = (event: React.MouseEvent, id: number): void => {
@@ -103,29 +107,21 @@ export const ProductCard: React.FunctionComponent<ProductCardProps> = props => {
         });
     }
 
-    console.log("Inside useEffect");
     // Sets the product highlighting state at the first render if any product amount is found
     React.useEffect(() => {
-        console.log(firstRender.current);
-        if (cartContext.getAmountById(props.id) && firstRender.current[props.id]) {
-            firstRender.current[props.id] = false;
-            selectProduct(true);
-            cardProductSelection(productHighlightedStyle, cardHighlightedStyle);
+        if (cartContext.getAmountById(props.id)) {
+            dispatchCardState({type: "SELECT_CARD", productId: props.id, selectedState: cardStyle});
+        } else {
+            dispatchCardState({type: "UNSELECT_CARD", productId: props.id});
         }
-        if (!cartContext.getAmountById(props.id) && !firstRender.current[props.id]) {
-            firstRender.current[props.id] = true;
-            selectProduct(false);
-            cardProductSelection({}, {});
-        }
-    }, [props.id, productHighlightedStyle, cardHighlightedStyle, cartContext]);
+    }, [props.id, cardStyle, cartContext]);
 
     return (
-        <div style={productHighlighted?.outerContainer}>
-            <div style={productHighlighted?.innerContainer}>
+        <div className={cardState.outerContainer}>
+            <div className={cardState.innerContainer}>
                 <Card className={styles.card}>
                     <CardHeader title={props.productName}
-                                className={[cardHeaderStyle.root, styles.card_title].join(" ")}
-                                style={cardHighlighted}
+                                className={[cardState.innerCard, cardHeaderStyle.root, styles.card_title].join(" ")}
                                 action={
                                     <ShareRounded/>
                                 } disableTypography>
@@ -139,10 +135,10 @@ export const ProductCard: React.FunctionComponent<ProductCardProps> = props => {
                             </p>
                         </CardContent>
                     </CardActionArea>
-                    <CardActions className={styles.card_actions} style={cardHighlighted}>
+                    <CardActions className={[cardState.innerCard, styles.card_actions].join(" ")}>
                         <div className={styles.price}>{`$ ${props.price}`}</div>
                         <ButtonBase className={styles.cart_arrow_down_button} onClick={toggleProductSelection}>
-                            <CartArrowDown className={styles.cart_arrow_down} style={cardHighlighted}/>
+                            <CartArrowDown className={[cardState.innerCard, styles.cart_arrow_down].join(" ")}/>
                         </ButtonBase>
                     </CardActions>
                 </Card>
