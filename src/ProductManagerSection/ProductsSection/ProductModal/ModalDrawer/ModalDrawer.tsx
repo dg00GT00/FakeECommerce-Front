@@ -105,6 +105,7 @@ export const ModalDrawer: React.FunctionComponent<ModalDrawerProps> = React.memo
                 <List className={[styleDrawer.listRoot, styles.items].join(" ")}>
                     {productList}
                 </List>
+                <Button variant={"contained"} color={"secondary"} className={styles.checkout}>Checkout</Button>
             </div>
         </Modal>
     );

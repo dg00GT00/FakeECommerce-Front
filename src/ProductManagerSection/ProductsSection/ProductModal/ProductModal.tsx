@@ -17,10 +17,13 @@ const modalId = "productModal";
 
 const dialogStyle = makeStyles({
     root: {
-        position: "relative"
+        position: "relative",
     },
     paperFullWidth: {
         maxWidth: 1700
+    },
+    paperScrollPaper: {
+        maxHeight: "initial"
     }
 });
 
@@ -101,6 +104,7 @@ export const ProductModal: React.FunctionComponent<{ id: number, modalKey: numbe
                 classes={{
                     root: styleDialog.root,
                     paperFullWidth: styleDialog.paperFullWidth,
+                    paperScrollPaper: styleDialog.paperScrollPaper
                 }}
                 onClose={handleCloseDialog}
                 aria-labelledby={"customized-dialog-title"}
