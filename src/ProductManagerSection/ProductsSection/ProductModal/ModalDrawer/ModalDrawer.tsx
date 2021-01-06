@@ -68,12 +68,14 @@ export const ModalDrawer: React.FunctionComponent<ModalDrawerProps> = React.memo
                         {basket.productName}
                     </p>
                     <p className={styles.price}>
-                        {basket.price}
+                        $ {basket.price}
                     </p>
                     <p className={styles.quantity}>
-                        <span>qty: </span>{getAmountById(basket.id)}
+                        <span>qty:  </span>{getAmountById(basket.id)}
                     </p>
-                    <Button variant={"outlined"} onClick={_ => clearBasketItems(basket.id)}>Clear Items</Button>
+                    <Button className={styles.clear}
+                            variant={"outlined"}
+                            onClick={_ => clearBasketItems(basket.id)}>Clear Items</Button>
                 </ListItem>
             );
         })
@@ -100,7 +102,7 @@ export const ModalDrawer: React.FunctionComponent<ModalDrawerProps> = React.memo
                     <CancelRoundedIcon/>
                 </IconButton>
                 <div className={[styles.divider, styleDrawer.dividerRoot].join(" ")}/>
-                <List className={styleDrawer.listRoot}>
+                <List className={[styleDrawer.listRoot, styles.items].join(" ")}>
                     {productList}
                 </List>
             </div>

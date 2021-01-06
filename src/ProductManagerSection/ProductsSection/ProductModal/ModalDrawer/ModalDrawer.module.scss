@@ -1,7 +1,14 @@
 .modal_container {
     padding: 1%;
     display: flex;
+    min-width: 40%;
     flex-direction: column;
+
+    .items {
+        overflow: auto;
+        height: 500px;
+        padding: 0 4%;
+    }
 
     .close_button {
         width: max-content;
@@ -13,10 +20,55 @@
         height: 4px;
         width: 60%;
         align-self: flex-end;
+        margin-bottom: 20px;
     }
 
     .item_grid {
         display: grid;
+        padding: 1.7% 0;
+        justify-content: initial;
+        grid-template-areas: "img name name"
+                             "img price price"
+                             "img qty clear";
+        grid-template-columns: 120px auto 150px;
 
+        .image {
+            grid-area: img;
+            width: 100px;
+            height: 100px;
+            outline: 1px solid #00000029;
+            padding: 10%;
+
+            img {
+                object-fit: contain;
+                width: 100%;
+                height: 100%;
+            }
+        }
+
+        .name {
+            grid-area: name;
+            font-size: 0.8rem;
+            font-weight: bold;
+            padding-bottom: 2%
+        }
+
+        .price {
+            grid-area: price;
+            font-size: 0.7rem;
+            font-weight: bold;
+            opacity: 0.5;
+        }
+
+        .quantity {
+            grid-area: qty;
+            span {
+                font-size: .7rem
+            }
+        }
+
+        .clear {
+            grid-area: clear;
+        }
     }
 }
