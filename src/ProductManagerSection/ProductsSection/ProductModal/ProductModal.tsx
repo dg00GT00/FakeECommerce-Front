@@ -9,9 +9,10 @@ import AddCircleOutlineRoundedIcon from '@material-ui/icons/AddCircleOutlineRoun
 import {makeStyles} from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button/Button";
 import IconButton from "@material-ui/core/IconButton";
-import {CartDefault} from "../../Cart/CartDefault";
 import {CartContext} from "../../../Utilities/Context/CartContext";
 import {ModalDrawer} from "./ModalDrawer/ModalDrawer";
+import {useMediaQuery} from "@material-ui/core";
+import {CartDefault} from '../../Cart/CartDefault';
 
 const modalId = "productModal";
 
@@ -53,6 +54,7 @@ export const ProductModal: React.FunctionComponent<{ id: number, modalKey: numbe
     const [openDialog, setOpenDialog] = React.useState(true);
     const [openDrawer, setOpenDrawer] = React.useState(false);
 
+    const media = useMediaQuery("(max-width: 600px)");
     const styleDialog = dialogStyle();
     const styleDivider = dividerStyle();
 
@@ -134,7 +136,11 @@ export const ProductModal: React.FunctionComponent<{ id: number, modalKey: numbe
                             variant={"contained"}
                             onClick={addToCart}>Add to cart</Button>
                     <p className={styles.description}>{productModal.description}</p>
-                    <CartDefault hideWhenZero classNameButton={styles.cart} onClick={event => setOpenDrawer(!openDrawer)}/>
+                    {!media ?
+                        <CartDefault
+                            hideWhenZero
+                            classNameButton={styles.cart}
+                            onClick={event => setOpenDrawer(!openDrawer)}/> : null}
                 </div>
             </div>
             <ModalDrawer open={openDrawer} containerId={modalId}/>

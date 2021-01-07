@@ -1,5 +1,5 @@
 import * as React from "react";
-import {ListItem, Modal} from "@material-ui/core";
+import {ListItem, Modal, useMediaQuery} from "@material-ui/core";
 import CancelRoundedIcon from '@material-ui/icons/CancelRounded';
 import {CartContext} from "../../../../Utilities/Context/CartContext";
 import {makeStyles, Theme} from "@material-ui/core/styles";
@@ -28,6 +28,7 @@ export const ModalDrawer: React.FunctionComponent<ModalDrawerProps> = React.memo
     const setItems = React.useState<{ [i: number]: number }>({})[1];
 
     const styleDrawer = drawerStyle();
+    const media = useMediaQuery("(max-width: 600px)");
 
     const clearBasketItems = (id: number): void => {
         setItems(prevState => {
@@ -81,7 +82,7 @@ export const ModalDrawer: React.FunctionComponent<ModalDrawerProps> = React.memo
         })
     );
 
-    return (
+    const modal = (
         <Modal open={open}
                disableAutoFocus
                disableBackdropClick
@@ -109,4 +110,6 @@ export const ModalDrawer: React.FunctionComponent<ModalDrawerProps> = React.memo
             </div>
         </Modal>
     );
+
+    return !media ? modal: null;
 })

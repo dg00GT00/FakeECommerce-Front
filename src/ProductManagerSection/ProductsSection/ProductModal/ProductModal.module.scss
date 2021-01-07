@@ -5,10 +5,20 @@
     padding: 1.5em;
     justify-content: space-between;
 
+    @media (max-width: 600px) {
+        flex-direction: column;
+        align-items: center;
+    }
+
     .divider {
         width: .4%;
         height: 200px;
         align-self: center;
+
+        @media (max-width: 600px) {
+            height: 2px;
+            width: 200px;
+        }
     }
 
     .product_image {
@@ -20,6 +30,10 @@
             padding: 10%;
             width: 100%;
             object-fit: contain;
+
+            @media (max-width: 600px) {
+                height: initial;
+            }
         }
     }
 
@@ -43,6 +57,12 @@
                                  "desc desc desc desc"
                                  "buy buy add_cart add_cart"
                                  "cart cart cart cart";
+
+
+            @media (max-width: 600px) {
+                grid-template-rows: repeat(3, auto) 55px;
+                padding: 5% 0 0 0;
+            }
         }
 
         .title {
@@ -55,7 +75,7 @@
         .price {
             grid-area: price;
             align-self: center;
-            font-size: clamp(1rem, 2vw, 1.5rem);
+            font-size: clamp(0.9rem, 2vw, 1.5rem);
             font-weight: 700;
             opacity: 0.6;
         }
@@ -66,13 +86,17 @@
             align-items: center;
             display: flex;
 
+            @media (max-width: 600px) {
+                justify-self: end;
+            }
+
             svg {
                 width: #{"max(1rem, 2vw)"};
             }
 
             .amount {
                 margin: 0 0.4em;
-                font-size: clamp(1rem, 2vw, 1.5rem);
+                font-size: clamp(.9rem, 2vw, 1.5rem);
             }
         }
 
@@ -82,7 +106,7 @@
             align-self: center;
             height: max-content;
             justify-self: center;
-            font-size: clamp(0.6rem, 1vw, 0.9rem);
+            font-size: clamp(0.5rem, 1.4vw, 0.9rem);
 
             @media (max-width: map-get($general-media-queries, "LAPTOP_1024")) {
                 width: max-content;
@@ -93,7 +117,7 @@
             grid-area: add_cart;
             align-self: center;
             height: max-content;
-            font-size: clamp(0.6rem, 1vw, 0.9rem);
+            font-size: clamp(0.5rem, 1.4vw, 0.9rem);
 
             @media (max-width: map-get($general-media-queries, "LAPTOP_1024")) {
                 justify-self: center;
@@ -118,6 +142,7 @@
             span {
                 font-size: clamp(0.5rem, 1.3vw, 0.7rem);
             }
+
             svg {
                 height: auto;
                 width: clamp(1.4rem, 2.5vw, 2.3rem);
