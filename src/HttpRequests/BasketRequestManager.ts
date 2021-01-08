@@ -7,6 +7,14 @@ export class BasketRequestManager {
         return this._basketProducts;
     }
 
+    public getTotalProductCash(): number {
+        let getTotalCash = 0;
+        for (const product of this._basketProducts) {
+            getTotalCash += product.price;
+        }
+        return getTotalCash;
+    }
+
     public clearItemsById(id: number): number {
         for (const product of this._basketProducts) {
             if (product.id === id) {
