@@ -20,8 +20,15 @@ const listStyles = makeStyles((theme: Theme) => ({
     }
 }));
 
-export const CheckoutCart: React.FunctionComponent<{shippingPrice?: number}> = props => {
-    const {getTotalProducts, clearItemsById, getAmountById, getTotalProductCash} = React.useContext(CartContext);
+export const CheckoutCart: React.FunctionComponent<{ shippingPrice?: number }> = props => {
+    const {
+        getTotalProducts,
+        clearItemsById,
+        getAmountById,
+        getTotalProductCash,
+        getTotalProductCashById
+    } = React.useContext(CartContext);
+
     const styleList = listStyles();
     let subTotalPurchaseAmount = getTotalProductCash();
 
@@ -29,7 +36,7 @@ export const CheckoutCart: React.FunctionComponent<{shippingPrice?: number}> = p
         if (props.shippingPrice) {
             subTotalPurchaseAmount += props.shippingPrice;
         }
-        return subTotalPurchaseAmount;
+        return subTotalPurchaseAmount.toFixed(2);
     }
 
     const productList = (
@@ -45,7 +52,7 @@ export const CheckoutCart: React.FunctionComponent<{shippingPrice?: number}> = p
                         {basket.productName}
                     </p>
                     <p className={styles.price}>
-                        $ {basket.price}
+                        $ {getTotalProductCashById(basket.id).toFixed(2)}
                     </p>
                     <Button className={styles.clear}
                             variant={"outlined"}
@@ -63,7 +70,7 @@ export const CheckoutCart: React.FunctionComponent<{shippingPrice?: number}> = p
             <div className={styles.purchase_amount}>
                 <div className={[styles.divider, styleList.divider].join(" ")}/>
                 <p className={styles.subtotal}>Subtotal</p>
-                <p className={styles.subtotal_price}>$ {subTotalPurchaseAmount}</p>
+                <p className={styles.subtotal_price}>$ {subTotalPurchaseAmount.toFixed(2)}</p>
                 <p className={styles.shipping}>Shipping</p>
                 <p className={styles.shipping_price}>{props.shippingPrice ? `$ ${props.shippingPrice}` : "Calculated in the next steps"}</p>
                 <div className={[styles.divider, styleList.divider].join(" ")}/>
