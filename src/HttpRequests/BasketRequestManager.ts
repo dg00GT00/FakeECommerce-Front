@@ -8,11 +8,21 @@ export class BasketRequestManager {
     }
 
     public getTotalProductCash(): number {
-        let getTotalCash = 0;
+        let totalCash = 0;
         for (const product of this._basketProducts) {
-            getTotalCash += product.price;
+            totalCash += product.price;
         }
-        return getTotalCash;
+        return totalCash;
+    }
+
+    public getTotalProductCashById(id: number): number {
+        let totalCash = 0;
+        for (const product of this._basketProducts) {
+            if (product.id === id) {
+                totalCash = product.quantity * product.price;
+            }
+        }
+        return totalCash;
     }
 
     public clearItemsById(id: number): number {
