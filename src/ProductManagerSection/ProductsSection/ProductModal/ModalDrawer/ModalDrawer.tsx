@@ -7,7 +7,7 @@ import List from "@material-ui/core/List/List";
 import IconButton from "@material-ui/core/IconButton";
 import styles from "./ModalDrawer.module.scss";
 import Button from "@material-ui/core/Button/Button";
-
+import {useCheckoutRoute} from "../../../../Utilities/CustomHooks/CheckoutRoute/useCheckoutRoute";
 
 const drawerStyle = makeStyles((theme: Theme) => ({
     listRoot: {
@@ -28,6 +28,7 @@ export const ModalDrawer: React.FunctionComponent<ModalDrawerProps> = React.memo
     const setItems = React.useState<{ [i: number]: number }>({})[1];
 
     const styleDrawer = drawerStyle();
+    const goToCheckout = useCheckoutRoute();
     const media = useMediaQuery("(max-width: 600px)");
 
     const clearBasketItems = (id: number): void => {
@@ -87,6 +88,7 @@ export const ModalDrawer: React.FunctionComponent<ModalDrawerProps> = React.memo
                disableAutoFocus
                disableBackdropClick
                onClose={handleClose}
+               container={document.getElementById(props.containerId)}
                BackdropProps={{
                    style: {
                        position: "initial",
@@ -96,8 +98,7 @@ export const ModalDrawer: React.FunctionComponent<ModalDrawerProps> = React.memo
                style={{
                    position: "absolute",
                    display: "flex"
-               }}
-               container={document.getElementById(props.containerId)}>
+               }}>
             <div className={[styleDrawer.listRoot, styles.modal_container].join(" ")}>
                 <IconButton onClick={handleClose} className={styles.close_button}>
                     <CancelRoundedIcon/>
@@ -106,7 +107,10 @@ export const ModalDrawer: React.FunctionComponent<ModalDrawerProps> = React.memo
                 <List className={[styleDrawer.listRoot, styles.items].join(" ")}>
                     {productList}
                 </List>
-                <Button variant={"contained"} color={"secondary"} className={styles.checkout}>Checkout</Button>
+                <Button variant={"contained"}
+                        color={"secondary"}
+                        onClick={goToCheckout}
+                        className={styles.checkout}>Checkout</Button>
             </div>
         </Modal>
     );

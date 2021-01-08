@@ -16,12 +16,12 @@ export const CartContext = React.createContext({
 export const CartContextProvider: React.FunctionComponent = props => {
     const [cartTotalAmount, setCartTotalAmount] = React.useState(0);
 
-    const increaseAmount = (product: BasketModel) => {
+    const increaseAmount = (product: BasketModel): void => {
         basket.addProduct(product);
         setCartTotalAmount(basket.getProductsAmount());
     };
 
-    const decreaseAmount = (product: BasketModel) => {
+    const decreaseAmount = (product: BasketModel): void => {
         basket.removeProduct(product);
         setCartTotalAmount(basket.getProductsAmount());
     };

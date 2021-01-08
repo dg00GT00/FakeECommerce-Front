@@ -8,7 +8,7 @@ import {UserStreet} from "./UserAddressFields/UserStreet";
 import {UserAddressComplement} from "./UserAddressFields/UserAddressComplement";
 import {UserInputTypes} from "../../Utilities/ProductModels/UserInputTypes";
 import {UserActionButton} from "../UserActions/UserActionButton";
-import {useAddressFormValidation} from "../../Utilities/CustomHooks/formValidation/useAddressFormValidation";
+import {useAddressFormValidation} from "../../Utilities/CustomHooks/FormValidation/useAddressFormValidation";
 import {UserFirstName} from "./UserAddressFields/UserFirstName";
 import {UserLastName} from "./UserAddressFields/UserLastName";
 import {AuthContext} from "../../Utilities/Context/AuthContext";

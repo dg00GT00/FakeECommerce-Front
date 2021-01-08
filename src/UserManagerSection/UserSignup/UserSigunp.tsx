@@ -3,7 +3,7 @@ import {TextField} from "@material-ui/core";
 import {UserInputTypes} from "../../Utilities/ProductModels/UserInputTypes";
 import {UserActionButton} from "../UserActions/UserActionButton";
 import Tooltip from "@material-ui/core/Tooltip/Tooltip";
-import {useUserAccountFormValidation} from "../../Utilities/CustomHooks/formValidation/useUserAccountFormValidation";
+import {useUserAccountFormValidation} from "../../Utilities/CustomHooks/FormValidation/useUserAccountFormValidation";
 
 export const UserSignup: React.FunctionComponent<UserInputTypes> = props => {
 

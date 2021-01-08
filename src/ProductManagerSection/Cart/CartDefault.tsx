@@ -3,6 +3,7 @@ import ShoppingCartRounded from "@material-ui/icons/ShoppingCartRounded";
 import IconButton from "@material-ui/core/IconButton";
 import Badge from "@material-ui/core/Badge/Badge";
 import {CartContext} from "../../Utilities/Context/CartContext";
+import {useCheckoutRoute} from "../../Utilities/CustomHooks/CheckoutRoute/useCheckoutRoute";
 
 type CartDefaultProps = {
     classNameIcon?: string,
@@ -16,10 +17,15 @@ type CartDefaultProps = {
 
 export const CartDefault: React.FunctionComponent<CartDefaultProps> = ({colorBadge = "secondary", ...props}) => {
     const cartContext = React.useContext(CartContext);
+    let handleClick = useCheckoutRoute();
+
+    if (props.onClick) {
+        handleClick = props.onClick;
+    }
 
     let cart: JSX.Element | null = (
         <IconButton className={props.classNameButton}
-                    onClick={props.onClick}
+                    onClick={handleClick}
                     aria-label={"shopping cart"}
                     color={props.colorButton}
                     style={props.style}>

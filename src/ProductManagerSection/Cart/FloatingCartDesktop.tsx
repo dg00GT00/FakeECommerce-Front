@@ -16,10 +16,14 @@ const cartStyle = makeStyles((theme: Theme) => {
             }
         }
     })
-})
+});
 
-export const FloatingCartDesktop: React.FunctionComponent<{style: {[i: string]: string | number}}> = props => {
+export const FloatingCartDesktop: React.FunctionComponent<{ style: { [i: string]: string | number } }> = props => {
     const style = cartStyle();
 
-    return <CartDefault classNameButton={style.root} style={props.style} colorButton={"primary"} hideWhenZero/>
+    return <CartDefault
+        classNameButton={style.root}
+        style={props.style}
+        colorButton={"primary"}
+        hideWhenZero/>
 }

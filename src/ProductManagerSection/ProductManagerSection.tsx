@@ -1,5 +1,4 @@
 import * as React from "react";
-import {CartContextProvider} from "../Utilities/Context/CartContext";
 import {Header} from "../StructureSection/Header/Header";
 import {MainLanding} from "../StructureSection/HeroSection/MainTextHero/MainLanding";
 import {ProductsSection} from "./ProductsSection/ProductsSection";
@@ -10,12 +9,10 @@ import {ProductModalRouteManager} from "../Routes/ProductRouteManager/ProductMod
 export const ProductManagerSection: React.FunctionComponent = () => {
     return (
         <>
-            <CartContextProvider>
-                <Header/>
-                <MainLanding/>
-                <ProductModalRouteManager/>
-                <ProductsSection/>
-            </CartContextProvider>
+            <Header/>
+            <MainLanding/>
+            <ProductModalRouteManager/>
+            <ProductsSection/>
             <Testimonials/>
             <Footer/>
         </>
