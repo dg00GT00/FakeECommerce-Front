@@ -7,7 +7,7 @@ import {ReactComponent as Paypal} from "../../Assets/Checkout/paypal-seeklogo.co
 import {makeStyles} from "@material-ui/core/styles";
 import {Theme} from "@material-ui/core/styles/createMuiTheme";
 import {CheckoutCart} from "../CheckoutCart/CheckoutCart";
-import styles from "./Checkout.module.scss";
+import styles from "./CheckoutRoot.module.scss";
 
 const fakeCardStyle = makeStyles((theme: Theme) => ({
     fakeCard: {
@@ -24,13 +24,13 @@ const fakeCardStyle = makeStyles((theme: Theme) => ({
     }
 }));
 
-export const Checkout: React.FunctionComponent = () => {
+export const CheckoutRoot: React.FunctionComponent = () => {
     const styleFakeCard = fakeCardStyle();
 
     return (
         <section className={styles.container}>
             <div className={styles.inner_container}>
-                <div className={styles.checkout_forms}>
+                <div className={styles.checkout_header}>
                     <Logo className={styles.logo}/>
                     <div className={styles.express_checkout}>
                         <div className={styles.tags}>
@@ -46,6 +46,9 @@ export const Checkout: React.FunctionComponent = () => {
                             </Paper>
                         </div>
                     </div>
+                </div>
+                <div className={styles.checkout_forms}>
+
                 </div>
             </div>
             <div className={styles.divider_group}>
