@@ -27,7 +27,7 @@ const clearButtonStyles = makeStyles((theme: Theme) => {
             color: theme.palette.common.white
         }
     })
-})
+});
 
 export const ProductFiltersMobile: React.FunctionComponent = () => {
 
@@ -130,5 +130,5 @@ export const ProductFiltersMobile: React.FunctionComponent = () => {
                 dialogTitle={DialogTypesEnum.ProductBrands}
                 dialogItems={["Men Styled Clothing", "New Jewelry", "Super Electronic", "Women Styled Clothing", "Women Loving", "Samsung"]}/>
         </div>
-    )
+    );
 }

@@ -15,7 +15,7 @@ const seeMoreStyle = makeStyles((theme: Theme) => {
             paddingLeft: "5%"
         }
     })
-})
+});
 
 const FilterIcon: React.FunctionComponent<{ className: string }> = props => {
 

@@ -3,7 +3,7 @@ import {Route, Switch} from "react-router-dom";
 import {ProductManagerSection} from "../ProductManagerSection/ProductManagerSection";
 import {UserManagerSection} from "../UserManagerSection/UserManagerSection";
 import {AuthContextProvider} from "../Utilities/Context/AuthContext";
-import {Checkout} from "../CheckoutManagerSection/Checkout/Checkout";
+import {CheckoutRoot} from "../CheckoutManagerSection/Checkout/CheckoutRoot";
 import {CartContextProvider} from "../Utilities/Context/CartContext";
 
 
@@ -16,7 +16,7 @@ export const GlobalRouteManager: React.FunctionComponent = () => {
                         <ProductManagerSection/>
                     </Route>
                     <Route path={"/checkout"}>
-                        <Checkout/>
+                        <CheckoutRoot/>
                     </Route>
                 </CartContextProvider>
                 <Route path={"/user"}>
