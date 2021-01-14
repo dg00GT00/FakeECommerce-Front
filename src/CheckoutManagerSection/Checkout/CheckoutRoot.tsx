@@ -8,62 +8,63 @@ import {makeStyles} from "@material-ui/core/styles";
 import {Theme} from "@material-ui/core/styles/createMuiTheme";
 import {CheckoutCart} from "../CheckoutCart/CheckoutCart";
 import styles from "./CheckoutRoot.module.scss";
+import {ShippingOptions} from "../ShippingOptions/ShippingOptions";
 
 const fakeCardStyle = makeStyles((theme: Theme) => ({
-    fakeCard: {
-        backgroundColor: theme.palette.primary.dark
-    },
-    payPal:{
-        backgroundColor: theme.palette.secondary.main
-    },
-    divider: {
-      backgroundColor: theme.palette.primary.main
-    },
-    badge: {
-        color: "white"
-    }
+	fakeCard: {
+		backgroundColor: theme.palette.primary.dark,
+	},
+	payPal: {
+		backgroundColor: theme.palette.secondary.main,
+	},
+	divider: {
+		backgroundColor: theme.palette.primary.main,
+	},
+	badge: {
+		color: "white"
+	},
 }));
 
 export const CheckoutRoot: React.FunctionComponent = () => {
-    const styleFakeCard = fakeCardStyle();
+	const styleFakeCard = fakeCardStyle();
 
-    return (
-        <section className={styles.container}>
-            <div className={styles.inner_container}>
-                <div className={styles.checkout_header}>
-                    <Logo className={styles.logo}/>
-                    <div className={styles.express_checkout}>
-                        <div className={styles.tags}>
-                            <Paper>
-                                <GPlay className={styles.gplay}/>
-                            </Paper>
-                            <Paper className={styleFakeCard.payPal}>
-                                <Paypal className={styles.paypal}/>
-                            </Paper>
-                            <Paper className={styleFakeCard.fakeCard}>
-                                <FakeCreditCard className={styles.fakeCard}/>
-                                <p className={styleFakeCard.badge}>FakeCard</p>
-                            </Paper>
-                        </div>
-                    </div>
-                </div>
-                <div className={styles.checkout_forms}>
-
-                </div>
-            </div>
-            <div className={styles.divider_group}>
-                <div className={styles.divider_superior}>
-                    <div/>
-                    <div className={styleFakeCard.divider}/>
-                </div>
-                <div className={styles.divider_inferior}>
-                    <div className={styleFakeCard.divider}/>
-                    <div/>
-                </div>
-            </div>
-            <div className={styles.cart}>
-                <CheckoutCart/>
-            </div>
-        </section>
-    );
-}
+	return (
+		<section className={styles.container}>
+			<div className={styles.inner_container}>
+				<div className={styles.checkout_header}>
+					<Logo className={styles.logo} />
+					<div className={styles.express_checkout}>
+						<div className={styles.tags}>
+							<Paper>
+								<GPlay className={styles.gplay} />
+							</Paper>
+							<Paper className={styleFakeCard.payPal}>
+								<Paypal className={styles.paypal} />
+							</Paper>
+							<Paper className={styleFakeCard.fakeCard}>
+								<FakeCreditCard className={styles.fakeCard} />
+								<p className={styleFakeCard.badge}>FakeCard</p>
+							</Paper>
+						</div>
+					</div>
+					<div className={styles.checkout_forms}>
+						<ShippingOptions />
+					</div>
+				</div>
+			</div>
+			<div className={styles.divider_group}>
+				<div className={styles.divider_superior}>
+					<div />
+					<div className={styleFakeCard.divider} />
+				</div>
+				<div className={styles.divider_inferior}>
+					<div className={styleFakeCard.divider} />
+					<div />
+				</div>
+			</div>
+			<div className={styles.cart}>
+				<CheckoutCart />
+			</div>
+		</section>
+	);
+};

@@ -1,85 +1,94 @@
-import * as React from 'react';
-import {withStyles} from '@material-ui/core/styles';
-import {green} from '@material-ui/core/colors';
-import FormGroup from '@material-ui/core/FormGroup';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox, {CheckboxProps} from '@material-ui/core/Checkbox';
-import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
-import CheckBoxIcon from '@material-ui/icons/CheckBox';
-import Favorite from '@material-ui/icons/Favorite';
-import FavoriteBorder from '@material-ui/icons/FavoriteBorder';
+import * as React from "react";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import Checkbox from "@material-ui/core/Checkbox";
+import FormControl from "@material-ui/core/FormControl";
+import styles from "./ShippingOptions.module.scss";
 
-const GreenCheckbox = withStyles({
-    root: {
-        color: green[400],
-        '&$checked': {
-            color: green[600],
-        },
-    },
-    checked: {},
-})((props: CheckboxProps) => <Checkbox color="default" {...props}/>);
+
+const initialCheckState = {
+    UPS1: false,
+    UPS2: false,
+    UPS3: false,
+    UPS4: false,
+};
 
 export const ShippingOptions: React.FunctionComponent = () => {
-    const [state, setState] = React.useState({
-        checkedA: true,
-        checkedB: true,
-        checkedF: true,
-        checkedG: true,
-    });
+    const [check, setCheckValue] = React.useState(initialCheckState);
 
-    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setState({ ...state, [event.target.name]: event.target.checked });
+    const handleChange: React.ChangeEventHandler<HTMLInputElement> = (event) => {
+        setCheckValue((_) => {
+            return {
+                ...initialCheckState,
+                [event.target.name]: event.target.checked,
+            };
+        });
     };
 
     return (
-        <FormGroup row>
-            <FormControlLabel
-                control={<Checkbox checked={state.checkedA} onChange={handleChange} name="checkedA" />}
-                label="Secondary"
-            />
-            <FormControlLabel
+        <FormControl className={styles.form_control} required>
+            <div className={styles.shipping_option}><FormControlLabel
                 control={
                     <Checkbox
-                        checked={state.checkedB}
+                        color={"primary"}
+                        checked={check.UPS1}
                         onChange={handleChange}
-                        name="checkedB"
-                        color="primary"
+                        name={"UPS1"}
                     />
                 }
-                label="Primary"
+                label="UPS1"
             />
-            <FormControlLabel control={<Checkbox name="checkedC" />} label="Uncontrolled" />
-            <FormControlLabel disabled control={<Checkbox name="checkedD" />} label="Disabled" />
-            <FormControlLabel disabled control={<Checkbox checked name="checkedE" />} label="Disabled" />
-            <FormControlLabel
-                control={
-                    <Checkbox
-                        checked={state.checkedF}
-                        onChange={handleChange}
-                        name="checkedF"
-                        indeterminate
-                    />
-                }
-                label="Indeterminate"
-            />
-            <FormControlLabel
-                control={<GreenCheckbox checked={state.checkedG} onChange={handleChange} name="checkedG" />}
-                label="Custom color"
-            />
-            <FormControlLabel
-                control={<Checkbox icon={<FavoriteBorder />} checkedIcon={<Favorite />} name="checkedH" />}
-                label="Custom icon"
-            />
-            <FormControlLabel
-                control={
-                    <Checkbox
-                        icon={<CheckBoxOutlineBlankIcon fontSize="small" />}
-                        checkedIcon={<CheckBoxIcon fontSize="small" />}
-                        name="checkedI"
-                    />
-                }
-                label="Custom size"
-            />
-        </FormGroup>
+                <p>Fastest Delivery Time</p>
+                <p>1 - 2 Days</p>
+                <h3>$ 10.00</h3>
+            </div>
+            <div className={styles.shipping_option}>
+                <FormControlLabel
+                    control={
+                        <Checkbox
+                            color={"primary"}
+                            checked={check.UPS2}
+                            onChange={handleChange}
+                            name={"UPS2"}
+                        />
+                    }
+                    label="UPS2"
+                />
+                <p>Get it within 5 days</p>
+                <p>2 - 5 days</p>
+                <h3>$ 10.00</h3>
+            </div>
+            <div className={styles.shipping_option}>
+                <FormControlLabel
+                    control={
+                        <Checkbox
+                            color={"primary"}
+                            checked={check.UPS3}
+                            onChange={handleChange}
+                            name={"UPS3"}
+                        />
+                    }
+                    label="UPS3"
+                />
+                <p>Slower but cheap</p>
+                <p>5 - 10 days</p>
+                <h3>$ 10.00</h3>
+            </div>
+            <div className={styles.shipping_option}>
+                <FormControlLabel
+                    control={
+                        <Checkbox
+                            color={"primary"}
+                            checked={check.UPS4}
+                            onChange={handleChange}
+                            name={"UPS4"}
+                        />
+                    }
+                    label="UPS4"
+                />
+                <p>You get what you pay for</p>
+                <p>1 - 2 Years</p>
+                <h3>FREE</h3>
+            </div>
+        </FormControl>
     );
-}
+};
