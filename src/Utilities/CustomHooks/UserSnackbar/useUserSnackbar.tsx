@@ -4,7 +4,6 @@ import Snackbar from "@material-ui/core/Snackbar/Snackbar";
 import { MessageStateProps } from "../../../UserManagerSection/UserActions/UserActionTypes";
 import { createStyles, makeStyles } from "@material-ui/core/styles";
 import { Theme } from "@material-ui/core";
-import PalleteColor  from "@material-ui/core/styles/createMuiTheme";
 
 const snackbarStyle = makeStyles<
 	Theme,
@@ -12,7 +11,8 @@ const snackbarStyle = makeStyles<
 >((theme) => {
 	return createStyles({
 		overrideColor: {
-			background: (props) => props.color ?? theme.palette[props.severity ?? "info"].main,
+			background: (props) =>
+				props.color ?? theme.palette[props.severity ?? "info"].main,
 		},
 	});
 });
@@ -25,8 +25,8 @@ type SnackbarMessageProps = MessageStateProps & {
 const initialMessageState: SnackbarMessageProps = {
 	key: 0,
 	message: "",
-    snackOpen: false,
-    severity: "info"
+	snackOpen: false,
+	severity: "info",
 };
 
 type MessageAction =
@@ -67,7 +67,10 @@ export const useUserSnackbar = (): [
 		messageReducer,
 		initialMessageState
 	);
-	const style = snackbarStyle({ color: snackMessage?.color, severity: snackMessage?.severity });
+	const style = snackbarStyle({
+		color: snackMessage?.color,
+		severity: snackMessage?.severity,
+	});
 
 	const handleClose = (event?: React.SyntheticEvent, reason?: string): void => {
 		dispatchSnackMessage({ type: "CLOSE_SNACK" });
