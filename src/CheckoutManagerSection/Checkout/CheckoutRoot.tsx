@@ -1,14 +1,16 @@
 import * as React from "react";
-import {Paper} from "@material-ui/core";
-import {ReactComponent as Logo} from "../../Assets/eCommerceBaseLogo.svg";
-import {ReactComponent as FakeCreditCard} from "../../Assets/Checkout/fakeCredictCard.svg";
-import {ReactComponent as GPlay} from "../../Assets/Checkout/google-pay-primary-logo.svg";
-import {ReactComponent as Paypal} from "../../Assets/Checkout/paypal-seeklogo.com.svg";
-import {makeStyles} from "@material-ui/core/styles";
-import {Theme} from "@material-ui/core/styles/createMuiTheme";
-import {CheckoutCart} from "../CheckoutCart/CheckoutCart";
+import { Paper } from "@material-ui/core";
+import { ReactComponent as Logo } from "../../Assets/eCommerceBaseLogo.svg";
+import { ReactComponent as FakeCreditCard } from "../../Assets/Checkout/fakeCredictCard.svg";
+import { ReactComponent as GPlay } from "../../Assets/Checkout/google-pay-primary-logo.svg";
+import { ReactComponent as Paypal } from "../../Assets/Checkout/paypal-seeklogo.com.svg";
+import { makeStyles } from "@material-ui/core/styles";
+import { Theme } from "@material-ui/core/styles/createMuiTheme";
+import { CheckoutCart } from "../CheckoutCart/CheckoutCart";
 import styles from "./CheckoutRoot.module.scss";
-import {ShippingOptions} from "../ShippingOptions/ShippingOptions";
+import { ShippingOptions } from "../ShippingOptions/ShippingOptions";
+import { Route, Switch, useRouteMatch } from "react-router-dom";
+import { NotFound } from "../../Utilities/RouterValidation/NotFound";
 
 const fakeCardStyle = makeStyles((theme: Theme) => ({
 	fakeCard: {
@@ -21,12 +23,13 @@ const fakeCardStyle = makeStyles((theme: Theme) => ({
 		backgroundColor: theme.palette.primary.main,
 	},
 	badge: {
-		color: "white"
+		color: "white",
 	},
 }));
 
 export const CheckoutRoot: React.FunctionComponent = () => {
 	const styleFakeCard = fakeCardStyle();
+	const { path } = useRouteMatch();
 
 	return (
 		<section className={styles.container}>
@@ -48,7 +51,14 @@ export const CheckoutRoot: React.FunctionComponent = () => {
 						</div>
 					</div>
 					<div className={styles.checkout_forms}>
-						<ShippingOptions />
+						<Switch>
+							<Route exact path={`${path}/shipping`}>
+								<ShippingOptions />
+							</Route>
+                            <Route>
+                                <NotFound color={"black"}/>
+                            </Route>
+						</Switch>
 					</div>
 				</div>
 			</div>
