@@ -11,19 +11,21 @@ export const GlobalRouteManager: React.FunctionComponent = () => {
 	return (
 		<AuthContextProvider>
 			<CartContextProvider>
-				<Route exact path={["/", "/products"]}>
-					<ProductManagerSection />
-				</Route>
-				<Route path={"/checkout"}>
-					<CheckoutManagerSection />
-				</Route>
+				<Switch>
+					<Route exact path={["/", "/products"]}>
+						<ProductManagerSection />
+					</Route>
+					<Route path={"/checkout"}>
+						<CheckoutManagerSection />
+					</Route>
+					<Route path={"/user"}>
+						<UserManagerSection />
+					</Route>
+					<Route>
+						<NotFound />
+					</Route>
+				</Switch>
 			</CartContextProvider>
-			<Route path={"/user"}>
-				<UserManagerSection />
-			</Route>
-            <Route>
-                <NotFound/>
-            </Route>
 		</AuthContextProvider>
 	);
 };
