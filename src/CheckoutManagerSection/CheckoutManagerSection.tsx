@@ -2,7 +2,7 @@ import * as React from "react";
 import { Redirect } from "react-router-dom";
 import { AuthContext } from "../Utilities/Context/AuthContext";
 import { CheckoutRoute } from "../Utilities/CustomHooks/CheckoutRoute/CheckoutRoute";
-import { CheckoutRoot } from "./Checkout/CheckoutRoot";
+import { CheckoutForms } from "./CheckoutForms/CheckoutForms";
 
 export const CheckoutManagerSection: React.FunctionComponent = () => {
 	const { getJwt } = React.useContext(AuthContext);
@@ -10,7 +10,7 @@ export const CheckoutManagerSection: React.FunctionComponent = () => {
 	return (
 		<>
 			{getJwt() ? (
-				<CheckoutRoot />
+				<CheckoutForms />
 			) : (
 				<Redirect
 					to={{
