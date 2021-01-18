@@ -3,8 +3,8 @@ import { Route, Switch } from "react-router-dom";
 import { ProductManagerSection } from "../ProductManagerSection/ProductManagerSection";
 import { UserManagerSection } from "../UserManagerSection/UserManagerSection";
 import { AuthContextProvider } from "../Utilities/Context/AuthContext";
-import { CheckoutRoot } from "../CheckoutManagerSection/Checkout/CheckoutRoot";
 import { CartContextProvider } from "../Utilities/Context/CartContext";
+import { CheckoutManagerSection } from "../CheckoutManagerSection/CheckoutManagerSection";
 import { NotFound } from "../Utilities/RouterValidation/NotFound";
 
 export const GlobalRouteManager: React.FunctionComponent = () => {
@@ -14,18 +14,16 @@ export const GlobalRouteManager: React.FunctionComponent = () => {
 				<Route exact path={["/", "/products"]}>
 					<ProductManagerSection />
 				</Route>
-				<Switch>
-					<Route path={"/checkout"}>
-						<CheckoutRoot />
-					</Route>
-					<Route>
-						<NotFound />
-					</Route>
-				</Switch>
+				<Route path={"/checkout"}>
+					<CheckoutManagerSection />
+				</Route>
 			</CartContextProvider>
 			<Route path={"/user"}>
 				<UserManagerSection />
 			</Route>
+            <Route>
+                <NotFound/>
+            </Route>
 		</AuthContextProvider>
 	);
 };
