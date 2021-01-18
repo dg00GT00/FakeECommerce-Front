@@ -11,6 +11,7 @@ import styles from "./CheckoutForms.module.scss";
 import { ShippingOptions } from "../ShippingOptions/ShippingOptions";
 import { Route, Switch, useRouteMatch } from "react-router-dom";
 import { NotFound } from "../../Utilities/RouterValidation/NotFound";
+import { CheckoutFormHeader } from "./CheckoutFormHeader";
 
 const fakeCardStyle = makeStyles((theme: Theme) => ({
 	fakeCard: {
@@ -53,11 +54,13 @@ export const CheckoutForms: React.FunctionComponent = () => {
 					<div className={styles.checkout_forms}>
 						<Switch>
 							<Route exact path={`${path}/shipping`}>
-								<ShippingOptions />
+								<CheckoutFormHeader title={"Shipping Options"}>
+									<ShippingOptions />
+								</CheckoutFormHeader>
 							</Route>
-                            <Route>
-                                <NotFound color={"black"}/>
-                            </Route>
+							<Route>
+								<NotFound color={"black"} />
+							</Route>
 						</Switch>
 					</div>
 				</div>
