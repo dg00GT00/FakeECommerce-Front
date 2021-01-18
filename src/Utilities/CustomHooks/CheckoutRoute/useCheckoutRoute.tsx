@@ -18,7 +18,7 @@ export const useCheckoutRoute = () => {
         }
 
         push({
-            pathname: "/checkout"
+            pathname: "/checkout/shipping"
         });
     }
 }
