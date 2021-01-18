@@ -70,12 +70,12 @@
             grid-area: name;
             font-weight: bold;
             padding-bottom: 2%;
-            font-size: clamp(0.7rem, 1vw, 0.8rem);
+            font-size: clamp(0.7rem, 1vw, 1rem);
         }
 
         .price {
             grid-area: price;
-            font-size: 0.7rem;
+            font-size: 1.1rem;
             font-weight: bold;
             opacity: 0.5;
         }
@@ -84,8 +84,8 @@
             grid-area: qty;
 
             span {
-                font-size: .7rem;
-                margin: 0 20% 0 0;
+                font-size: 1rem;
+                margin: 0 10% 0 0;
             }
         }
 

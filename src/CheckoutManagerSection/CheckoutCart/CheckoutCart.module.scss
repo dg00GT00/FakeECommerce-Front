@@ -38,10 +38,11 @@
             .name {
                 grid-area: name;
                 font-weight: bold;
-                font-size: clamp(0.8rem, 1vw, 1rem);
+                font-size: clamp(0.8rem, 1vw, 1.1rem);
             }
 
             .price {
+                font-size: 1.2rem;
                 justify-self: end;
                 opacity: 0.4;
                 font-weight: bold;

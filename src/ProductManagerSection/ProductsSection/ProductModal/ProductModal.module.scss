@@ -130,8 +130,8 @@
             padding-right: 1em;
             grid-area: desc;
             overflow-y: auto;
-            font-size: clamp(0.7rem, 1.7vw, 1rem);
-            line-height: clamp(1.1rem, 2.5vw, 1.5rem);
+            font-size: clamp(0.7rem, 1.7vw, 1.1rem);
+            line-height: clamp(1.1rem, 2.5vw, 2rem);
         }
 
         .cart {
