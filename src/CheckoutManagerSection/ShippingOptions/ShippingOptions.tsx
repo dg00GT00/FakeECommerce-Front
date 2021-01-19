@@ -17,8 +17,8 @@ import Button from "@material-ui/core/Button/Button";
 const formGridStyle = makeStyles({
 	root: {
 		display: "grid",
-        gridTemplateColumns: "1fr 50% 1fr auto",
-        gridAutoRows: 60,
+		gridTemplateColumns: "1fr 50% 1fr auto",
+		gridAutoRows: 60,
 		alignItems: "center",
 		margin: "40px 0",
 	},
@@ -75,11 +75,15 @@ export const ShippingOptions: React.FunctionComponent = () => {
 				for (const option of shippingOptions) {
 					if (option.shortName === key) {
 						setShippingValue(option.price);
-						return;
+						break;
 					}
 				}
 			}
 		}
+		push({
+            pathname: "/user/address/update",
+            state: CheckoutRoute.TO_ADDRESS_UPDATE
+		});
 	};
 
 	const goBack: React.MouseEventHandler = (event) => {

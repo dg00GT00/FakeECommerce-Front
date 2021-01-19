@@ -3,6 +3,10 @@
 }
 
 .nav_buttons {
-    display: flex;
+	display: flex;
     justify-content: space-between;
+    
+	button {
+		width: 25%;
+	}
 }

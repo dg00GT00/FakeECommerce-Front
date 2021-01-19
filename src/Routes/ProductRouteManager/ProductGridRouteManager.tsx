@@ -128,8 +128,6 @@ export const ProductGridRouteManager: React.FunctionComponent<ProductFilterType>
 				render={({ location: { state, search } }) => {
 					if (search) {
 						const params = parseSearchParams(state as FilterState, search);
-						console.log(params);
-
 						if (params.pageNumber !== Infinity) {
 							return (
 								<ProductGridItems

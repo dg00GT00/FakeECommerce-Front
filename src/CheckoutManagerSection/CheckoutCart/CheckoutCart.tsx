@@ -7,6 +7,7 @@ import styles from "./CheckoutCart.module.scss";
 import { makeStyles } from "@material-ui/core/styles";
 import Badge from "@material-ui/core/Badge/Badge";
 import { Theme } from "@material-ui/core/styles/createMuiTheme";
+import { EmptyCheckoutCart } from "../EmptyCheckoutCart/EmptyCheckoutCart";
 
 const listStyles = makeStyles((theme: Theme) => ({
 	listItem: {
@@ -20,15 +21,19 @@ const listStyles = makeStyles((theme: Theme) => ({
 	},
 }));
 
-export const CheckoutCart: React.FunctionComponent = (props) => {
+export const CheckoutCart: React.FunctionComponent = () => {
 	const {
-        shippingValue,
+		shippingValue,
 		getTotalProducts,
 		clearItemsById,
 		getAmountById,
 		getTotalProductCash,
 		getTotalProductCashById,
 	} = React.useContext(CartContext);
+
+	const [checkoutComponent, setCheckoutComponent] = React.useState<
+		JSX.Element | JSX.Element[] | null
+	>(null);
 
 	const styleList = listStyles();
 	let subTotalPurchaseAmount = getTotalProductCash();
@@ -40,40 +45,47 @@ export const CheckoutCart: React.FunctionComponent = (props) => {
 		return subTotalPurchaseAmount.toFixed(2);
 	};
 
-	const productList = getTotalProducts().map((basket) => {
-		return (
-			<ListItem
-				key={basket.id}
-				className={[styleList.listItem, styles.item_grid].join(" ")}
-			>
-				<div className={styles.image}>
-					<Badge
-						color={"secondary"}
-						badgeContent={getAmountById(basket.id)}
-						className={styles.badge}
+	React.useEffect(() => {
+		if (getTotalProducts().length) {
+			const productList = getTotalProducts().map((basket) => {
+				return (
+					<ListItem
+						key={basket.id}
+						className={[styleList.listItem, styles.item_grid].join(" ")}
 					>
-						<img src={basket.pictureUrl} alt={basket.productName} />
-					</Badge>
-				</div>
-				<p className={styles.name}>{basket.productName}</p>
-				<p className={styles.price}>
-					$ {getTotalProductCashById(basket.id).toFixed(2)}
-				</p>
-				<Button
-					className={styles.clear}
-					variant={"outlined"}
-					onClick={(_) => clearItemsById(basket.id)}
-				>
-					Remove
-				</Button>
-			</ListItem>
-		);
-	});
+						<div className={styles.image}>
+							<Badge
+								color={"secondary"}
+								badgeContent={getAmountById(basket.id)}
+								className={styles.badge}
+							>
+								<img src={basket.pictureUrl} alt={basket.productName} />
+							</Badge>
+						</div>
+						<p className={styles.name}>{basket.productName}</p>
+						<p className={styles.price}>
+							$ {getTotalProductCashById(basket.id).toFixed(2)}
+						</p>
+						<Button
+							className={styles.clear}
+							variant={"outlined"}
+							onClick={(_) => clearItemsById(basket.id)}
+						>
+							Remove
+						</Button>
+					</ListItem>
+				);
+			});
+			setCheckoutComponent(productList);
+		} else {
+			setCheckoutComponent(<EmptyCheckoutCart />);
+		}
+	}, [getTotalProducts, getAmountById, getTotalProductCashById, clearItemsById, styleList.listItem]);
 
 	return (
 		<div className={styles.container}>
 			<List className={[styleList.listRoot, styles.items].join(" ")}>
-				{productList}
+				{checkoutComponent}
 			</List>
 			<div className={styles.purchase_amount}>
 				<div className={[styles.divider, styleList.divider].join(" ")} />
@@ -88,8 +100,8 @@ export const CheckoutCart: React.FunctionComponent = (props) => {
 						: "Calculated in the current step"}
 				</p>
 				<div className={[styles.divider, styleList.divider].join(" ")} />
-				<h3>Total</h3>
-				<h3 className={styles.total_price}>$ {getTotalPurchaseAmount()}</h3>
+				<h2>Total</h2>
+				<h2 className={styles.total_price}>$ {getTotalPurchaseAmount()}</h2>
 			</div>
 		</div>
 	);

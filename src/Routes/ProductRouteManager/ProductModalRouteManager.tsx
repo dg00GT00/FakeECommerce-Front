@@ -2,6 +2,8 @@ import * as React from "react";
 import {Route} from "react-router-dom";
 import {ProductModal} from "../../ProductManagerSection/ProductsSection/ProductModal/ProductModal";
 
+// TODO: Make this route keep the product grid route information when the user
+// TODO: access it by url 
 export const ProductModalRouteManager: React.FunctionComponent = () => {
 	return (
 		<Route

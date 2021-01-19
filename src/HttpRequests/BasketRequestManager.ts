@@ -1,4 +1,4 @@
-import {BasketModel} from "../Utilities/BasketModel/BasketModel";
+import { BasketModel } from "../Utilities/BasketModel/BasketModel";
 
 export class BasketRequestManager {
     private _basketProducts: BasketModel[] = [];
@@ -37,7 +37,7 @@ export class BasketRequestManager {
     }
 
     public getProductsAmount(): number {
-        let quantity = 0
+        let quantity = 0;
         for (const product of this._basketProducts) {
             quantity += product.quantity;
         }
@@ -67,7 +67,7 @@ export class BasketRequestManager {
 
     public removeProduct(product: BasketModel): void {
         for (let i = 0; i < this._basketProducts.length; i++) {
-            let p = this._basketProducts[i];
+            let p = this._basketProducts[ i ];
             if (p.id === product.id) {
                 if (p.quantity > 1) {
                     p.quantity -= product.quantity;
