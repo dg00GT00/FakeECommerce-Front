@@ -78,6 +78,7 @@ $media_card_content_height: 200px;
         @media (max-width: 1530px) {
             padding: 0 20px 0 120px;
             height: $media_card_content_height;
+            width: 100%;
 
             @media (max-width: map-get($general-media-queries, "LAPTOP_1024")) {
                 padding: 60px 35px 15px;

@@ -1,0 +1,18 @@
+.container {
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+
+  p {
+    height: 20%;
+    font-size: 1.6rem;
+  }
+
+  svg {
+    height: auto;
+    width: 50%;
+    fill: #e0e0e0;
+  }
+}
