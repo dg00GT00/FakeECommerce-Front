@@ -7,23 +7,37 @@ import { CartContextProvider } from "../Utilities/Context/CartContext";
 import { CheckoutManagerSection } from "../CheckoutManagerSection/CheckoutManagerSection";
 import { NotFound } from "../Utilities/RouterValidation/NotFound";
 
+/* 
+* The "Not Found" should be rendered separately for each application section manager
+* A global "Not Found" fallback page must filter the top-level path names routes in order to
+* prevent its render in each route request
+*
+* Hope that better solution came up with "React Route V6" release
+ */
 export const GlobalRouteManager: React.FunctionComponent = () => {
 	return (
 		<AuthContextProvider>
 			<CartContextProvider>
+				<Route exact path={["/", "/products"]}>
+					<ProductManagerSection />
+				</Route>
 				<Switch>
-					<Route exact path={["/", "/products"]}>
-						<ProductManagerSection />
-					</Route>
 					<Route path={"/checkout"}>
 						<CheckoutManagerSection />
 					</Route>
 					<Route path={"/user"}>
 						<UserManagerSection />
 					</Route>
-					<Route>
-						<NotFound />
-					</Route>
+					<Route
+						render={({ location: { pathname } }) => {
+							for (const path of ["/", "/products", "/checkout", "/user"]) {
+								if (pathname === path) {
+									return null;
+								}
+							}
+							return <NotFound />;
+						}}
+					/>
 				</Switch>
 			</CartContextProvider>
 		</AuthContextProvider>

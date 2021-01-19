@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Route, Switch } from "react-router-dom";
+import { Route } from "react-router-dom";
 import { ProductGridItems } from "../../ProductManagerSection/ProductsSection/ProductGridItems/ProductGridItems";
 import { ProductFilterType } from "../../HttpRequests/ProductRequestManager";
 import {
@@ -10,6 +10,7 @@ import {
 	ProductTypes,
 } from "../../Utilities/ProductModels/ProductFiltersEnum";
 import { productFilterEnumToUrl } from "../../Utilities/Mappers/ProductFilterMapper";
+import { NotFound } from "../../Utilities/RouterValidation/NotFound";
 
 type FilterState = {
 	filter: ProductFilterState[];
@@ -19,7 +20,7 @@ type SearchParams = Omit<ProductFilterType, "pageNumber"> & {
 	pageNumber?: number;
 };
 
-// Case any of the searchParams case did not match, setting the pageNumber to "Infinity" throw an error
+// Case "searchParams" did not match, setting the pageNumber to "Infinity" fallback to the "NotFound" page
 let filterParams: SearchParams = { pageNumber: Infinity };
 
 const newLocationState: FilterState = { filter: [] };
@@ -105,9 +106,10 @@ function parseSearchParams(
 			};
 		}
 		if (filter === ProductFilterState.Clear) {
-			filterParams = filterParams.pageNumber
-				? { pageNumber: filterParams.pageNumber }
-				: {};
+			filterParams =
+				filterParams.pageNumber !== Infinity
+					? { pageNumber: filterParams.pageNumber }
+					: {};
 		}
 	});
 	return filterParams;
@@ -117,19 +119,29 @@ export const ProductGridRouteManager: React.FunctionComponent<ProductFilterType>
 	props
 ) => {
 	return (
-		<Switch>
+		<>
 			<Route exact path={"/"}>
 				<ProductGridItems pageNumber={props.pageNumber} />
 			</Route>
 			<Route
 				path={"/products"}
 				render={({ location: { state, search } }) => {
-					const params = parseSearchParams(state as FilterState, search);
-					return (
-						<ProductGridItems {...params} pageNumber={params.pageNumber || 1} />
-					);
+					if (search) {
+						const params = parseSearchParams(state as FilterState, search);
+						console.log(params);
+
+						if (params.pageNumber !== Infinity) {
+							return (
+								<ProductGridItems
+									{...params}
+									pageNumber={params.pageNumber || 1}
+								/>
+							);
+						}
+					}
+					return <NotFound />;
 				}}
 			/>
-		</Switch>
+		</>
 	);
 };
