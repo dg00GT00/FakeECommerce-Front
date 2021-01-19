@@ -1,3 +1,4 @@
+import * as React from "react";
 import { MessageStateProps } from "../../../UserManagerSection/UserActions/UserActionTypes";
 import { useUserSnackbar } from "./useUserSnackbar";
 
@@ -6,12 +7,12 @@ export const useSnackMessageInfo = (): [JSX.Element | null, (message: string) =>
 
 	return [
 		snack,
-		(message: string): void => {
+		React.useCallback((message: string): void => {
 			const messageProps: MessageStateProps = {
 				message,
 				severity: "warning",
 			};
 			setSnackMessage(messageProps);
-		},
+		}, [setSnackMessage]),
 	];
 };

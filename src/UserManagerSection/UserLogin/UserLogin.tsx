@@ -26,7 +26,7 @@ export const UserLogin: React.FunctionComponent<UserInputTypes> = (props) => {
 		if (state === CheckoutRoute.TO_LOGIN) {
 			setSnackMessage("Effect login to continue to checkout");
 		}
-	}, [state]);
+	}, [state, setSnackMessage]);
 
 	return (
 		<>
