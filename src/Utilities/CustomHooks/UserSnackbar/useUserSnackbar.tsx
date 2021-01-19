@@ -1,9 +1,9 @@
 import * as React from "react";
 import Alert from "@material-ui/lab/Alert/Alert";
 import Snackbar from "@material-ui/core/Snackbar/Snackbar";
-import { MessageStateProps } from "../../../UserManagerSection/UserActions/UserActionTypes";
-import { createStyles, makeStyles } from "@material-ui/core/styles";
-import { Theme } from "@material-ui/core";
+import {MessageStateProps} from "../../../UserManagerSection/UserActions/UserActionTypes";
+import {createStyles, makeStyles} from "@material-ui/core/styles";
+import {Theme} from "@material-ui/core";
 
 const snackbarStyle = makeStyles<
 	Theme,
@@ -17,21 +17,18 @@ const snackbarStyle = makeStyles<
 	});
 });
 
+const generateRandomKey = () => {
+	return Date.parse(Date()) * Math.random();
+}
+
 type SnackbarMessageProps = MessageStateProps & {
 	key: number;
 	snackOpen: boolean;
 };
 
-const initialMessageState: SnackbarMessageProps = {
-	key: 0,
-	message: "",
-	snackOpen: false,
-	severity: "info",
-};
-
 type MessageAction =
 	| { type: "SET_MESSAGE"; messageProps: MessageStateProps }
-	| { type: "CLOSE_SNACK" }
+	| { type: "CLOSE_SNACK"; closedMessageState: SnackbarMessageProps }
 	| { type: "SET_UNDEFINED" };
 
 const messageReducer = (
@@ -44,10 +41,10 @@ const messageReducer = (
 				...prevState,
 				...action.messageProps,
 				snackOpen: true,
-				key: new Date().getTime(),
+				key: generateRandomKey(),
 			};
 		case "CLOSE_SNACK":
-			return initialMessageState;
+			return action.closedMessageState;
 		case "SET_UNDEFINED":
 			return undefined;
 		default:
@@ -63,6 +60,13 @@ export const useUserSnackbar = (): [
 	JSX.Element | null,
 	(messageProps: MessageStateProps) => void
 ] => {
+	const initialMessageState: SnackbarMessageProps = {
+		key: generateRandomKey(),
+		message: "",
+		snackOpen: false,
+		severity: "info",
+	};
+
 	const [snackMessage, dispatchSnackMessage] = React.useReducer(
 		messageReducer,
 		initialMessageState
@@ -73,7 +77,7 @@ export const useUserSnackbar = (): [
 	});
 
 	const handleClose = (event?: React.SyntheticEvent, reason?: string): void => {
-		dispatchSnackMessage({ type: "CLOSE_SNACK" });
+		dispatchSnackMessage({ type: "CLOSE_SNACK" , closedMessageState: initialMessageState});
 	};
 
 	const handleExited = (): void => {
