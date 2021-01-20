@@ -1,12 +1,12 @@
 import * as React from "react";
-import { TextField } from "@material-ui/core";
-import { UserInputTypes } from "../../Utilities/ProductModels/UserInputTypes";
-import { NavLink, useLocation } from "react-router-dom";
-import { UserActionButton } from "../UserActions/UserActionButton";
-import { useUserAccountFormValidation } from "../../Utilities/CustomHooks/FormValidation/useUserAccountFormValidation";
+import {TextField} from "@material-ui/core";
+import {UserInputTypes} from "../../Utilities/ProductModels/UserInputTypes";
+import {NavLink, useLocation} from "react-router-dom";
+import {UserActionButton} from "../UserActions/UserActionButton";
+import {useUserAccountFormValidation} from "../../Utilities/CustomHooks/FormValidation/useUserAccountFormValidation";
+import {useSnackMessageInfo} from "../../Utilities/CustomHooks/UserSnackbar/useSnackMessageInfo";
+import {CheckoutRoute} from "../../Utilities/CustomHooks/CheckoutRoute/CheckoutRoute";
 import styles from "./UserLogin.module.scss";
-import { useSnackMessageInfo } from "../../Utilities/CustomHooks/UserSnackbar/useSnackMessageInfo";
-import { CheckoutRoute } from "../../Utilities/CustomHooks/CheckoutRoute/CheckoutRoute";
 
 export const UserLogin: React.FunctionComponent<UserInputTypes> = (props) => {
 	const { state } = useLocation();

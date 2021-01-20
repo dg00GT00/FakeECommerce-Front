@@ -1,17 +1,18 @@
 import * as React from "react";
-import { Paper } from "@material-ui/core";
-import { ReactComponent as Logo } from "../../Assets/eCommerceBaseLogo.svg";
-import { ReactComponent as FakeCreditCard } from "../../Assets/Checkout/fakeCredictCard.svg";
-import { ReactComponent as GPlay } from "../../Assets/Checkout/google-pay-primary-logo.svg";
-import { ReactComponent as Paypal } from "../../Assets/Checkout/paypal-seeklogo.com.svg";
-import { makeStyles } from "@material-ui/core/styles";
-import { Theme } from "@material-ui/core/styles/createMuiTheme";
-import { CheckoutCart } from "../CheckoutCart/CheckoutCart";
+import {Paper} from "@material-ui/core";
+import {ReactComponent as Logo} from "../../Assets/eCommerceBaseLogo.svg";
+import {ReactComponent as FakeCreditCard} from "../../Assets/Checkout/fakeCredictCard.svg";
+import {ReactComponent as GPlay} from "../../Assets/Checkout/google-pay-primary-logo.svg";
+import {ReactComponent as Paypal} from "../../Assets/Checkout/paypal-seeklogo.com.svg";
+import {makeStyles} from "@material-ui/core/styles";
+import {Theme} from "@material-ui/core/styles/createMuiTheme";
+import {CheckoutCart} from "../CheckoutCart/CheckoutCart";
 import styles from "./CheckoutForms.module.scss";
-import { ShippingOptions } from "../ShippingOptions/ShippingOptions";
-import { Route, Switch, useRouteMatch } from "react-router-dom";
-import { NotFound } from "../../Utilities/RouterValidation/NotFound";
-import { CheckoutFormHeader } from "./CheckoutFormHeader";
+import {ShippingOptions} from "../ShippingOptions/ShippingOptions";
+import {Route, Switch, useRouteMatch} from "react-router-dom";
+import {NotFound} from "../../Utilities/RouterValidation/NotFound";
+import {CheckoutFormHeader} from "./CheckoutFormHeader";
+import {CreditCardForms} from "../CreditCardForms/CreditCardForms";
 
 const fakeCardStyle = makeStyles((theme: Theme) => ({
 	fakeCard: {
@@ -56,6 +57,11 @@ export const CheckoutForms: React.FunctionComponent = () => {
 							<Route exact path={`${path}/shipping`}>
 								<CheckoutFormHeader title={"Shipping Options"}>
 									<ShippingOptions />
+								</CheckoutFormHeader>
+							</Route>
+							<Route exact path={`${path}/creditcard`}>
+								<CheckoutFormHeader title={"Credit Card Information"}>
+									<CreditCardForms/>
 								</CheckoutFormHeader>
 							</Route>
 							<Route>

@@ -1,7 +1,7 @@
 import * as React from "react";
 import {AddressFieldId, FormState} from "../../UserManagerSection/UserFormsTypes/UserFormsTypes";
 
-export const setFieldFocused = (inputRef: React.RefObject<HTMLDivElement>) => {
+export const setFieldFocused = (inputRef: React.RefObject<HTMLDivElement>): void => {
     const label = inputRef.current?.querySelector("label");
     if (label) {
         label.setAttribute("data-shrink", "true");

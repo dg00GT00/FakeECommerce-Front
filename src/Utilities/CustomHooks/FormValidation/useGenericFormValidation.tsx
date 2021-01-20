@@ -8,7 +8,7 @@ type GenericFormValidation<T extends string> = {
 }
 
 /**
- * Creates the base of form validation built upon a initial form state and a error state in which will be used
+ * Creates the base of form validation built upon a initial form state and an error state in which will be used
  * to control the valid of submit button
  * @param genericFormDispatch a dispatch function came from a specific form validation hook
  * @return an object which contains the already validated form state, the error state and dispatch function and the
