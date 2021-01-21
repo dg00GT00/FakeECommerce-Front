@@ -33,9 +33,7 @@ export const UserAddress: React.FunctionComponent<UserInputTypes> = (props) => {
 
     const firstRender = React.useRef(true);
     const {getUserAddress} = React.useContext(AuthContext);
-    const {
-        location: {pathname, state},
-    } = useHistory();
+    const {location: {pathname, state}} = useHistory();
 
     React.useEffect(() => {
         if (firstRender.current) {

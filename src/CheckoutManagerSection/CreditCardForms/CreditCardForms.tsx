@@ -1,11 +1,12 @@
 import * as React from "react";
-import {TextField} from "@material-ui/core";
+import {Button, TextField} from "@material-ui/core";
 import {useCreditCardFormValidation} from "../../Utilities/CustomHooks/FormValidation/useCreditCardFormValidation";
+import styles from "./CreditCardForms.module.scss";
+import {useHistory} from "react-router-dom";
 
 export const CreditCardForms: React.FunctionComponent = () => {
-
     const {
-        validationState: {formState},
+        validationState: {formState, errorState},
         validationFunctions: {
             blankFieldValidation,
             genericFieldValidation,
@@ -14,6 +15,8 @@ export const CreditCardForms: React.FunctionComponent = () => {
             creditCardValidityValidation
         }
     } = useCreditCardFormValidation();
+
+    const {push, goBack} = useHistory();
 
     const isFirstRender = React.useRef(true);
     const cardNumberRef = React.useRef<HTMLInputElement | null>(null);
@@ -29,9 +32,10 @@ export const CreditCardForms: React.FunctionComponent = () => {
     }, [creditCardNumberValidation, creditCardValidityValidation, creditCardCVVValidation]);
 
     return (
-        <>
+        <div className={styles.container}>
             <TextField
                 required
+                className={styles.username}
                 label={"Card Username"}
                 onChange={event => genericFieldValidation(event, "username")}
                 onBlur={event => blankFieldValidation(event, "username")}
@@ -42,6 +46,7 @@ export const CreditCardForms: React.FunctionComponent = () => {
                 color={"primary"}/>
             <TextField
                 required
+                className={styles.cardnumber}
                 id={"card_number"}
                 inputRef={cardNumberRef}
                 onBlur={event => blankFieldValidation(event, "cardnumber")}
@@ -68,6 +73,19 @@ export const CreditCardForms: React.FunctionComponent = () => {
                 placeholder={"CVV"}
                 variant={"outlined"}
                 color={"primary"}/>
-        </>
+            <div className={styles.nav_buttons}>
+                <Button
+                    variant={"contained"}
+                    onClick={_ => goBack()}>
+                    Back
+                </Button>
+                <Button
+                    disabled={errorState}
+                    variant={"contained"}
+                    color={"primary"}>
+                    Confirm
+                </Button>
+            </div>
+        </div>
     );
 }
