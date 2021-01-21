@@ -1,69 +1,105 @@
 import * as React from "react";
 import {RefObject} from "react";
-import {useGenericFormValidation} from "./useGenericFormValidation";
-import {GenericFormActions, genericFormReducer} from "./genericFormReducer";
 import {FormState} from "../../../UserManagerSection/UserFormsTypes/UserFormsTypes";
 import {errorStateTrigger} from "./FormStateManager";
+import {useGenericFormValidation} from "./useGenericFormValidation";
+import {GenericFormActions, genericFormReducer} from "./genericFormReducer";
 import Cleave from "cleave.js";
 
 const formatCVV = (value: string): string => {
-    return value.replace(/\D+/g, "").slice(0, 4);
+    return value.replace(/\D+/g, "").slice(0, 3);
 }
 
-type CreditCardFormTypes = "username" | "cardnumber" | "cardvalidity" | "cvv"
+type CreditCardFormId = "username" | "cardnumber" | "cardvalidity" | "cvv";
 
-type CreditCardFormState = FormState<CreditCardFormTypes>;
+type CreditCardFormState = FormState<CreditCardFormId>;
 
 enum CreditCardActionTypes {
+    BLANK_FIELD,
     CREDITCARD_NUMBER,
     CREDITCARD_VALIDITY,
     CVV
 }
 
-type FormActions = GenericFormActions<CreditCardFormTypes>
-    | { type: CreditCardActionTypes.CREDITCARD_NUMBER, selector: string }
-    | { type: CreditCardActionTypes.CREDITCARD_VALIDITY, selector: string }
+type FormActions = GenericFormActions<CreditCardFormId>
+    | { type: CreditCardActionTypes.BLANK_FIELD, fieldId: CreditCardFormId }
+    | { type: CreditCardActionTypes.CREDITCARD_NUMBER, value: string }
+    | { type: CreditCardActionTypes.CREDITCARD_VALIDITY, value: string }
     | { type: CreditCardActionTypes.CVV, inputRef: RefObject<HTMLInputElement> }
 
-const formReducer = (prevState: CreditCardFormState, action: FormActions) => {
-    prevState = genericFormReducer(prevState, action as GenericFormActions<CreditCardFormTypes>);
+const formReducer = (prevState: CreditCardFormState, action: FormActions): CreditCardFormState => {
+    prevState = genericFormReducer(prevState, action as GenericFormActions<CreditCardFormId>);
     switch (action.type) {
+        case CreditCardActionTypes.BLANK_FIELD:
+            if (prevState[action.fieldId].fieldValue) {
+                return {
+                    ...prevState,
+                    [action.fieldId]: {
+                        ...prevState[action.fieldId],
+                        requiredValidity: false,
+                        submitButtonDisable: true
+                    }
+                };
+            } else {
+                return {
+                    ...prevState,
+                    [action.fieldId]: {
+                        ...prevState[action.fieldId],
+                        fieldValue: "",
+                        requiredValidity: true,
+                        submitButtonDisable: false
+                    }
+                };
+            }
         case CreditCardActionTypes.CREDITCARD_NUMBER:
-            const number = new Cleave(action.selector, {
-                creditCard: true
-            });
             return {
                 ...prevState,
                 cardnumber: {
                     ...prevState.cardnumber,
-                    fieldValue: number.getRawValue()
+                    fieldValue: action.value
                 }
             };
         case CreditCardActionTypes.CREDITCARD_VALIDITY:
-            const validity = new Cleave(action.selector, {
-                date: true,
-                datePattern: ["m", "y"]
-            });
+            if (new RegExp(/^\d{2}\/\d{2}$/).test(action.value)) {
+                return {
+                    ...prevState,
+                    cardvalidity: {
+                        ...prevState.cardvalidity,
+                        requiredValidity: false,
+                        submitButtonDisable: true,
+                        fieldValue: action.value
+                    }
+                };
+            }
             return {
                 ...prevState,
                 cardvalidity: {
                     ...prevState.cardvalidity,
-                    fieldValue: validity.getRawValue()
+                    requiredValidity: true,
+                    submitButtonDisable: false,
+                    fieldValue: ""
                 }
             };
         case CreditCardActionTypes.CVV:
             if (action.inputRef.current) {
-                if (new RegExp(/\d{1,4}/).test(action.inputRef.current.value)) {
+                if (new RegExp(/\d{1,3}/).test(action.inputRef.current.value)) {
                     const cVVValue = formatCVV(action.inputRef.current.value);
                     action.inputRef.current.value = cVVValue;
-                    return {
+                    const newState = {
                         ...prevState,
                         cvv: {
                             ...prevState.cvv,
+                            fieldValue: cVVValue,
                             requiredValidity: false,
-                            fieldValue: cVVValue
+                            submitButtonDisable: true,
                         }
                     };
+                    if (cVVValue.length !== 3) {
+                        newState.cvv.requiredValidity = true;
+                        newState.cvv.submitButtonDisable = false;
+                        newState.cvv.fieldValue = "";
+                    }
+                    return newState;
                 }
             }
             // Only display the form input if the user enter only numbers
@@ -76,7 +112,9 @@ const formReducer = (prevState: CreditCardFormState, action: FormActions) => {
                 ...prevState,
                 cvv: {
                     ...prevState.cvv,
-                    requiredValidity: true
+                    fieldValue: "",
+                    requiredValidity: true,
+                    submitButtonDisable: false
                 }
             };
         default:
@@ -97,7 +135,8 @@ type SimpleFormValidation = {
         errorState: boolean
     },
     validationFunctions: {
-        genericFieldValidation: (event: any, fieldId: any) => void,
+        blankFieldValidation: (event: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>, fieldId: CreditCardFormId) => void
+        genericFieldValidation: (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, fieldId: CreditCardFormId) => void
         creditCardNumberValidation: (selector: string) => void,
         creditCardValidityValidation: (selector: string) => void,
         creditCardCVVValidation: (inputRef: RefObject<HTMLInputElement>) => void
@@ -116,16 +155,31 @@ export const useCreditCardFormValidation = (): SimpleFormValidation => {
         setErrorState(_ => errorStateTrigger(formState));
     }, [formState]);
 
-    const creditCardNumberValidation = (selector: string): void => {
-        formDispatch({type: CreditCardActionTypes.CREDITCARD_NUMBER, selector});
-    }
-
-    const creditCardValidityValidation = (selector: string): void => {
-        formDispatch({type: CreditCardActionTypes.CREDITCARD_VALIDITY, selector});
+    const blankFieldValidation = (event: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>, fieldId: CreditCardFormId): void => {
+        formDispatch({type: CreditCardActionTypes.BLANK_FIELD, fieldId});
     }
 
     const creditCardCVVValidation = (inputRef: RefObject<HTMLInputElement>): void => {
         formDispatch({type: CreditCardActionTypes.CVV, inputRef});
+    }
+
+    const creditCardNumberValidation = (selector: string): void => {
+        new Cleave(selector, {
+            creditCard: true,
+            onValueChanged(event: { target: { name: string, value: string, rawValue: string } }): void {
+                formDispatch({type: CreditCardActionTypes.CREDITCARD_NUMBER, value: event.target.value});
+            }
+        });
+    }
+
+    const creditCardValidityValidation = (selector: string): void => {
+        new Cleave(selector, {
+            date: true,
+            datePattern: ["m", "y"],
+            onValueChanged(event: { target: { name: string, value: string, rawValue: string } }): void {
+                formDispatch({type: CreditCardActionTypes.CREDITCARD_VALIDITY, value: event.target.value});
+            }
+        });
     }
 
     return {
@@ -135,6 +189,7 @@ export const useCreditCardFormValidation = (): SimpleFormValidation => {
         },
         validationFunctions: {
             genericFieldValidation,
+            blankFieldValidation,
             creditCardNumberValidation,
             creditCardValidityValidation,
             creditCardCVVValidation

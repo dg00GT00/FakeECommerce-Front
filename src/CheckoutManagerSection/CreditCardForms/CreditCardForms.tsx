@@ -3,9 +3,11 @@ import {TextField} from "@material-ui/core";
 import {useCreditCardFormValidation} from "../../Utilities/CustomHooks/FormValidation/useCreditCardFormValidation";
 
 export const CreditCardForms: React.FunctionComponent = () => {
+
     const {
         validationState: {formState},
         validationFunctions: {
+            blankFieldValidation,
             genericFieldValidation,
             creditCardCVVValidation,
             creditCardNumberValidation,
@@ -21,21 +23,18 @@ export const CreditCardForms: React.FunctionComponent = () => {
     React.useEffect(() => {
         if (isFirstRender.current && cardNumberRef.current && cardValidityRef.current) {
             creditCardNumberValidation(`#${cardNumberRef.current?.id}`);
-            creditCardValidityValidation(`#${cardValidityRef.current?.id}`);
+            creditCardValidityValidation(`#${cardValidityRef.current?.id}`)
             isFirstRender.current = false;
         }
     }, [creditCardNumberValidation, creditCardValidityValidation, creditCardCVVValidation]);
-
-    const handleCVV = () => {
-        creditCardCVVValidation(cvvRef);
-    }
 
     return (
         <>
             <TextField
                 required
                 label={"Card Username"}
-                onBlur={event => genericFieldValidation(event, "username")}
+                onChange={event => genericFieldValidation(event, "username")}
+                onBlur={event => blankFieldValidation(event, "username")}
                 error={formState.username.requiredValidity}
                 placeholder={"Credit Card Username"}
                 id={"card_name"}
@@ -45,7 +44,7 @@ export const CreditCardForms: React.FunctionComponent = () => {
                 required
                 id={"card_number"}
                 inputRef={cardNumberRef}
-                onBlur={event => genericFieldValidation(event, "cardnumber")}
+                onBlur={event => blankFieldValidation(event, "cardnumber")}
                 error={formState.cardnumber.requiredValidity}
                 placeholder={"XXXX XXXX XXXX XXXX"}
                 variant={"outlined"}
@@ -54,7 +53,7 @@ export const CreditCardForms: React.FunctionComponent = () => {
                 required
                 id={"card_validity"}
                 inputRef={cardValidityRef}
-                onBlur={event => genericFieldValidation(event, "cardvalidity")}
+                onBlur={event => blankFieldValidation(event, "cardvalidity")}
                 error={formState.cardvalidity.requiredValidity}
                 placeholder={"MM/YY"}
                 variant={"outlined"}
@@ -63,8 +62,8 @@ export const CreditCardForms: React.FunctionComponent = () => {
                 required
                 id={"cvv"}
                 inputRef={cvvRef}
-                onChange={_ => handleCVV()}
-                onBlur={event => genericFieldValidation(event, "cvv")}
+                onChange={_ => creditCardCVVValidation(cvvRef)}
+                onBlur={event => blankFieldValidation(event, "cvv")}
                 error={formState.cvv.requiredValidity}
                 placeholder={"CVV"}
                 variant={"outlined"}
