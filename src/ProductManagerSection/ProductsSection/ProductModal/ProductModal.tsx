@@ -1,18 +1,18 @@
 import React from "react";
 import Dialog from "@material-ui/core/Dialog";
-import { ProductsContext } from "../ProductContext/ProductsContext";
-import { ProductCardProps } from "../../../Utilities/ProductProps/ProductCardProps";
+import {ProductsContext} from "../ProductContext/ProductsContext";
+import {ProductCardProps} from "../../../Utilities/ProductProps/ProductCardProps";
 import styles from "./ProductModal.module.scss";
 import DialogTitle from "@material-ui/core/DialogTitle/DialogTitle";
 import RemoveCircleOutlineRoundedIcon from "@material-ui/icons/RemoveCircleOutlineRounded";
 import AddCircleOutlineRoundedIcon from "@material-ui/icons/AddCircleOutlineRounded";
-import { makeStyles } from "@material-ui/core/styles";
+import {makeStyles} from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button/Button";
 import IconButton from "@material-ui/core/IconButton";
-import { CartContext } from "../../../Utilities/Context/CartContext";
-import { ModalDrawer } from "./ModalDrawer/ModalDrawer";
-import { useMediaQuery } from "@material-ui/core";
-import { CartDefault } from "../../Cart/CartDefault";
+import {CartContext} from "../../../Utilities/Context/CartContext";
+import {ModalDrawer} from "./ModalDrawer/ModalDrawer";
+import {useMediaQuery} from "@material-ui/core";
+import {CartDefault} from "../../Cart/CartDefault";
 
 const modalId = "productModal";
 
@@ -139,13 +139,6 @@ export const ProductModal: React.FunctionComponent<{
 							<AddCircleOutlineRoundedIcon />
 						</IconButton>
 					</div>
-					<Button
-						className={styles.buy_now}
-						color={"secondary"}
-						variant={"contained"}
-					>
-						Buy Now
-					</Button>
 					<Button
 						className={styles.add_cart}
 						color={"primary"}

@@ -1,10 +1,22 @@
-import { BasketModel } from "../Utilities/BasketModel/BasketModel";
+import {IBasketRequest} from "../Interfaces/IBasketRequest";
+import {BasketModel} from "../../../Utilities/BasketModel/BasketModel";
+import {IBasketMediator} from "../Interfaces/IBasketMediator";
+import {BasketEvents} from "../BasketEvents";
 
-export class BasketRequestManager {
+export class BasketMemoryRequest implements IBasketRequest {
     private _basketProducts: BasketModel[] = [];
+    public basketMediator?: IBasketMediator;
+
+    public setBasketMediator(mediator: IBasketMediator): void {
+        this.basketMediator = mediator;
+    }
 
     get basketProducts(): BasketModel[] {
         return this._basketProducts;
+    }
+
+    set basketProducts(value: BasketModel[]) {
+        this._basketProducts = value;
     }
 
     public getTotalProductCash(): number {
@@ -32,6 +44,9 @@ export class BasketRequestManager {
                 this.removeProduct(product);
                 break;
             }
+        }
+        if (!this._basketProducts.length) {
+            this.basketMediator?.triggerBasketActions(BasketEvents.EMPTY_BASKET);
         }
         return 0;
     }
@@ -67,7 +82,7 @@ export class BasketRequestManager {
 
     public removeProduct(product: BasketModel): void {
         for (let i = 0; i < this._basketProducts.length; i++) {
-            let p = this._basketProducts[ i ];
+            let p = this._basketProducts[i];
             if (p.id === product.id) {
                 if (p.quantity > 1) {
                     p.quantity -= product.quantity;

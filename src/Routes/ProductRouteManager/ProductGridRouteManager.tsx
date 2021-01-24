@@ -125,9 +125,7 @@ function parseSearchParams(locationState: FilterState, searchParams: string): Se
     return filterParams;
 }
 
-export const ProductGridRouteManager: React.FunctionComponent<ProductFilterType> = (
-    props
-) => {
+export const ProductGridRouteManager: React.FunctionComponent<ProductFilterType> = props => {
     return (
         <Switch>
             <Route exact path={"/"}>
@@ -138,7 +136,6 @@ export const ProductGridRouteManager: React.FunctionComponent<ProductFilterType>
                 render={({location: {state, search}}) => {
                     if (search) {
                         const params = parseSearchParams(state as FilterState, search);
-                        console.log("Params: ", params);
                         if (params.pageNumber !== Infinity) {
                             return (
                                 <ProductGridItems

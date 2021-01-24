@@ -28,6 +28,7 @@ export enum ProductFilterState {
     FilterBrand,
     FilterPageNumber,
     Clear,
+    Id
 }
 
 export enum FilterOptions {
@@ -37,4 +38,5 @@ export enum FilterOptions {
     Brand = "brand",
     Page = "page",
     Clear = "clear",
+    Id = "id"
 }

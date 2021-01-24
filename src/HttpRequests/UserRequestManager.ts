@@ -1,33 +1,13 @@
 import {AxiosError} from "axios";
-import jwtDecode from "jwt-decode";
 import {api} from "./AxiosInstance";
 import {FullUserModel, UserModel} from "../Utilities/UserModels/FullUserModel";
 import {ErrorModel} from "../Utilities/UserModels/ErrorModel";
 import {AddressFieldId, FormState} from "../UserManagerSection/UserFormsTypes/UserFormsTypes";
 import {UserAddressModel} from "../Utilities/UserModels/UserAddressModel";
 import {addressToFormMapper, formToAddressMapper} from "../Utilities/Mappers/AddressFormMapper";
+import {JwtManager} from "./JwtManager";
 
-export class UserRequestManager {
-    private jwt_key = "jwt";
-
-    set jwt(token: string | null) {
-        if (token) {
-            sessionStorage.setItem(this.jwt_key, token);
-        } else {
-            throw new Error("The jwt must have a value");
-        }
-    }
-
-    get jwt(): string | null {
-        return sessionStorage.getItem(this.jwt_key);
-    }
-
-    public getDisplayNameFromJwt(): string | null {
-        if (this.jwt) {
-            return jwtDecode<{ given_name: string }>(this.jwt).given_name;
-        }
-        return null;
-    }
+export class UserRequestManager extends JwtManager {
 
     public async registerUser(userName: string, email: string, password: string): Promise<UserModel> {
         try {

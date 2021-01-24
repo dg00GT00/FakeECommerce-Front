@@ -1,58 +1,78 @@
 import * as React from "react";
-import { BasketRequestManager } from "../../HttpRequests/BasketRequestManager";
-import { BasketModel } from "../BasketModel/BasketModel";
+import {BasketActions} from "../../HttpRequests/BasketRequests/BasketActions";
+import {BasketModel} from "../BasketModel/BasketModel";
+import {BasketRequestActions} from "../../HttpRequests/BasketRequests/BasketRequestActions";
+import {BasketApiRequest} from "../../HttpRequests/BasketRequests/Requests/BasketApiRequest";
+import {BasketMediator} from "../../HttpRequests/BasketRequests/BasketMediator";
 
-const basket = new BasketRequestManager();
+const basketApi = new BasketApiRequest();
+const basketRequestActions = new BasketRequestActions();
+new BasketMediator(basketApi, basketRequestActions);
+const basketActions = new BasketActions(basketRequestActions, basketApi);
+console.log("Created the cart context");
 
 export const CartContext = React.createContext({
-	totalAmount: 0,
-	setShippingValue: (value: number | null) => {},
-	shippingValue: ({} as {[value: string]: number | null}).value,
-	getTotalProducts: () => [{} as BasketModel],
-	getAmountById: (id: number) => Number(),
-	clearItemsById: (id: number) => Number(),
-	getTotalProductCash: () => Number(),
-	getTotalProductCashById: (id: number) => Number(),
-	increaseAmount: (product: BasketModel) => {},
-	decreaseAmount: (product: BasketModel) => {},
+    totalAmount: 0,
+    shippingValue: ({} as { [value: string]: number | null }).value,
+    basketItemsAsync: () => Promise.resolve({} as BasketModel[] | null),
+    getTotalProducts: () => [{} as BasketModel],
+    getAmountById: (id: number) => Number(),
+    clearItemsById: (id: number) => Number(),
+    getTotalProductCash: () => Number(),
+    getTotalProductCashById: (id: number) => Number(),
+    setShippingValue: (value: number | null) => {
+    },
+    increaseAmount: (product: BasketModel) => {
+    },
+    decreaseAmount: (product: BasketModel) => {
+    },
 });
 
-export const CartContextProvider: React.FunctionComponent = (props) => {
-	const [cartTotalAmount, setCartTotalAmount] = React.useState(0);
-	const [shippingValue, setShippingValue] = React.useState<number | null>(null);
+export const CartContextProvider: React.FunctionComponent = props => {
+    const [cartTotalAmount, setCartTotalAmount] = React.useState(0);
+    const [shippingValue, setShippingValue] = React.useState<number | null>(null);
 
-	const increaseAmount = (product: BasketModel): void => {
-		basket.addProduct(product);
-		setCartTotalAmount(basket.getProductsAmount());
-	};
+    React.useEffect(() => {
+        basketApi
+            .getBasketFromApi()
+            .then(fullBasket => {
+                setCartTotalAmount(fullBasket?.items.length ?? 0);
+            })
+    }, []);
 
-	const decreaseAmount = (product: BasketModel): void => {
-		basket.removeProduct(product);
-		setCartTotalAmount(basket.getProductsAmount());
-	};
+    const increaseAmount = (product: BasketModel): void => {
+        basketApi.addProduct(product);
+        setCartTotalAmount(basketApi.getProductsAmount());
+    };
 
-	const clearItemsById = (id: number): number => {
-		const cleared = basket.clearItemsById(id);
-		setCartTotalAmount(basket.getProductsAmount());
-		return cleared;
-	};
+    const decreaseAmount = (product: BasketModel): void => {
+        basketApi.removeProduct(product);
+        setCartTotalAmount(basketApi.getProductsAmount());
+    };
 
-	return (
-		<CartContext.Provider
-			value={{
-				increaseAmount,
-				decreaseAmount,
+    const clearItemsById = (id: number): number => {
+        const cleared = basketApi.clearItemsById(id);
+        setCartTotalAmount(basketApi.getProductsAmount());
+        return cleared;
+    };
+
+    return (
+        <CartContext.Provider
+            value={{
                 shippingValue,
-                clearItemsById,
                 setShippingValue,
-				getTotalProducts: () => basket.basketProducts,
-				getTotalProductCash: () => basket.getTotalProductCash(),
-				getTotalProductCashById: (id) => basket.getTotalProductCashById(id),
-				getAmountById: (id) => basket.getProductAmountById(id),
-				totalAmount: cartTotalAmount || basket.getProductsAmount(),
-			}}
-		>
-			{props.children}
-		</CartContext.Provider>
-	);
+                increaseAmount,
+                decreaseAmount,
+                clearItemsById,
+                basketItemsAsync: () => basketActions.basketItemsAsync(),
+                getTotalProducts: () => basketApi.basketProducts,
+                getTotalProductCash: () => basketApi.getTotalProductCash(),
+                getTotalProductCashById: id => basketApi.getTotalProductCashById(id),
+                getAmountById: id => basketApi.getProductAmountById(id),
+                totalAmount: cartTotalAmount || basketApi.getProductsAmount(),
+            }}
+        >
+            {props.children}
+        </CartContext.Provider>
+    );
 };
