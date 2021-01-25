@@ -12,8 +12,8 @@ import {UserAccountIcon} from "../UserAccountIcon";
 
 const logoutStyle = makeStyles({
     root: {
-            fontFamily: "Nunito, sans-serif",
-            textTransform: "capitalize"
+        fontFamily: "Nunito, sans-serif",
+        textTransform: "capitalize"
     }
 })
 
@@ -26,6 +26,7 @@ export const HeaderDesktop: React.FunctionComponent<HeaderProps> = props => {
     const logout: React.MouseEventHandler = event => {
         jwtManager.deleteJwt();
         handleMenuClose();
+        sessionStorage.removeItem(JWT_SESSION_KEY);
     }
 
     const handleProfileMenuOpen: React.MouseEventHandler = event => {

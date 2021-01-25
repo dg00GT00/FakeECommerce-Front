@@ -4,12 +4,12 @@ import {BasketModel} from "../BasketModel/BasketModel";
 import {BasketRequestActions} from "../../HttpRequests/BasketRequests/BasketRequestActions";
 import {BasketApiRequest} from "../../HttpRequests/BasketRequests/Requests/BasketApiRequest";
 import {BasketMediator} from "../../HttpRequests/BasketRequests/BasketMediator";
+import {AuthContext} from "./AuthContext";
 
 const basketApi = new BasketApiRequest();
 const basketRequestActions = new BasketRequestActions();
 new BasketMediator(basketApi, basketRequestActions);
 const basketActions = new BasketActions(basketRequestActions, basketApi);
-console.log("Created the cart context");
 
 export const CartContext = React.createContext({
     totalAmount: 0,
@@ -29,16 +29,23 @@ export const CartContext = React.createContext({
 });
 
 export const CartContextProvider: React.FunctionComponent = props => {
+    const {JWT_SESSION_KEY} = React.useContext(AuthContext);
+
     const [cartTotalAmount, setCartTotalAmount] = React.useState(0);
     const [shippingValue, setShippingValue] = React.useState<number | null>(null);
 
+    // Updates the cart total amount getting the product from cache
     React.useEffect(() => {
         basketApi
-            .getBasketFromApi()
-            .then(fullBasket => {
-                setCartTotalAmount(fullBasket?.items.length ?? 0);
+            .setJwtCacheKeyAsync(JWT_SESSION_KEY)
+            .then(_ => {
+                basketApi
+                    .getBasketFromApi()
+                    .then(fullBasket => {
+                        setCartTotalAmount(fullBasket?.items.length ?? 0);
+                    })
             })
-    }, []);
+    }, [JWT_SESSION_KEY]);
 
     const increaseAmount = (product: BasketModel): void => {
         basketApi.addProduct(product);

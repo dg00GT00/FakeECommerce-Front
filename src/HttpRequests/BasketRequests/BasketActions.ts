@@ -11,7 +11,7 @@ export class BasketActions {
     }
 
     /**
-     * Manages the state of customer basket from the api
+     * Manages the state of customer basket from api
      * Automatically posts and retrieves the products from cache
      */
     public async basketItemsAsync(): Promise<BasketModel[] | null> {

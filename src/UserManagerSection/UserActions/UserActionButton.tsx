@@ -22,7 +22,7 @@ type LoginType = Record<"generic" | "email", { fieldValue: string }>;
 
 export const UserActionButton: React.FunctionComponent<UserFormButtonProps> = (props) => {
     const [errorSnack, setErrorSnack] = useSnackMessageError();
-    const {registerUser, userLogin, userAddress} = React.useContext(AuthContext);
+    const {registerUser, userLogin, userAddress, JWT_SESSION_KEY} = React.useContext(AuthContext);
     const {goBack, push, location: {state}} = useHistory();
 
     const promiseError = React.useCallback((formId: FormId, statusCode: number) => {
@@ -57,7 +57,11 @@ export const UserActionButton: React.FunctionComponent<UserFormButtonProps> = (p
 
             if (checkFormValues(props.formState)) {
                 userLogin(email, password)
-                    .then(_ => goBack())
+                    .then(_ => {
+                        sessionStorage.removeItem(JWT_SESSION_KEY);
+                        sessionStorage.setItem(JWT_SESSION_KEY, JWT_SESSION_KEY);
+                        goBack();
+                    })
                     .catch(statusCode => promiseError(props.formId, statusCode));
             }
         }

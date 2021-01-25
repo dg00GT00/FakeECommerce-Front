@@ -38,6 +38,7 @@ export const HeaderMobile: React.FunctionComponent<HeaderProps> = props => {
     const logout: React.MouseEventHandler = event => {
         jwtManager.deleteJwt();
         handleMenuClose();
+        sessionStorage.removeItem(JWT_SESSION_KEY);
     }
 
     return (
