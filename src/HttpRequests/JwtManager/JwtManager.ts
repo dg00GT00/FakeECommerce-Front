@@ -6,7 +6,7 @@ type JwtPayload = { given_name: string, email: string };
  * Utilities' methods for getting information from JWT
  */
 export class JwtManager {
-    protected jwt_key = "jwt";
+    public jwt_key = "jwt";
 
     get jwt(): string | null {
         return sessionStorage.getItem(this.jwt_key);
@@ -17,6 +17,14 @@ export class JwtManager {
             sessionStorage.setItem(this.jwt_key, token);
         } else {
             throw new Error("The jwt must have a value");
+        }
+    }
+
+    public deleteJwt(): void {
+        if (this.jwt) {
+            sessionStorage.removeItem(this.jwt_key);
+        } else {
+            throw new Error("No _jwtManager.jwt found to be deleted");
         }
     }
 
