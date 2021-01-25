@@ -24,7 +24,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export const HeaderMobile: React.FunctionComponent<HeaderProps> = props => {
     const [anchorEl, setAnchorEl] = React.useState<null | Element>(null);
-    const {getJwt, user} = React.useContext(AuthContext);
+    const {jwtManager, JWT_SESSION_KEY} = React.useContext(AuthContext);
     const style = useStyles();
 
     const handleProfileMenuOpen: React.MouseEventHandler = event => {
@@ -36,7 +36,7 @@ export const HeaderMobile: React.FunctionComponent<HeaderProps> = props => {
     };
 
     const logout: React.MouseEventHandler = event => {
-        user.deleteJwt();
+        jwtManager.deleteJwt();
         handleMenuClose();
     }
 
@@ -51,7 +51,7 @@ export const HeaderMobile: React.FunctionComponent<HeaderProps> = props => {
                     open={Boolean(anchorEl)}
                     onClose={handleMenuClose}
                     TransitionComponent={Fade}>
-                    {getJwt() ?
+                    {jwtManager.jwt ?
                         <MenuItem className={style.root} onClick={logout}>Logout</MenuItem> :
                         <>
                             <MenuItem>
@@ -72,7 +72,7 @@ export const HeaderMobile: React.FunctionComponent<HeaderProps> = props => {
                 <div className={styles.menu_actions}>
                     <CartDefault classNameButton={""} colorButton={"inherit"}/>
                     {
-                        getJwt() ?
+                        jwtManager.jwt ?
                             <IconButton onClick={handleProfileMenuOpen}>
                                 <UserAccountIcon fill={"white"}/>
                             </IconButton> :

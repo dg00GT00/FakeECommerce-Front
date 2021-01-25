@@ -19,12 +19,12 @@ const logoutStyle = makeStyles({
 
 export const HeaderDesktop: React.FunctionComponent<HeaderProps> = props => {
     const [anchorEl, setAnchorEl] = React.useState<null | Element>(null);
-    const {getJwt, user} = React.useContext(AuthContext);
+    const {jwtManager, JWT_SESSION_KEY} = React.useContext(AuthContext);
     const {push} = useHistory();
     const style = logoutStyle();
 
     const logout: React.MouseEventHandler = event => {
-        user.deleteJwt();
+        jwtManager.deleteJwt();
         handleMenuClose();
     }
 
@@ -56,7 +56,7 @@ export const HeaderDesktop: React.FunctionComponent<HeaderProps> = props => {
                 <MenuItem className={style.root} onClick={logout}>Logout</MenuItem>
                 <MenuItem className={style.root} onClick={_ => push("/user/address/update")}>Update Address</MenuItem>
             </Menu>
-            <Tooltip title={user.getDisplayNameFromJwt() ?? {}} className={styles.user_account} placement={"top"}>
+            <Tooltip title={jwtManager.getDisplayNameFromJwt() ?? {}} className={styles.user_account} placement={"top"}>
                 <IconButton onClick={handleProfileMenuOpen}>
                     <UserAccountIcon/>
                 </IconButton>
@@ -69,7 +69,7 @@ export const HeaderDesktop: React.FunctionComponent<HeaderProps> = props => {
             <Logo/>
             <nav className={styles.nav}>
                 <ul>
-                    {getJwt() ? accountButton :
+                    {jwtManager.jwt ? accountButton :
                         <>
                             <NavLink to={props.loginPath}>Login</NavLink>
                             <NavLink to={props.signupPath}>Signup</NavLink>

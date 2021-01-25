@@ -5,9 +5,10 @@ import {ErrorModel} from "../Utilities/UserModels/ErrorModel";
 import {AddressFieldId, FormState} from "../UserManagerSection/UserFormsTypes/UserFormsTypes";
 import {UserAddressModel} from "../Utilities/UserModels/UserAddressModel";
 import {addressToFormMapper, formToAddressMapper} from "../Utilities/Mappers/AddressFormMapper";
-import {JwtManager} from "./JwtManager";
+import {JwtManager} from "./JwtManager/JwtManager";
 
-export class UserRequestManager extends JwtManager {
+export class UserRequestManager {
+    public jwtManager = new JwtManager();
 
     public async registerUser(userName: string, email: string, password: string): Promise<UserModel> {
         try {
@@ -18,7 +19,7 @@ export class UserRequestManager extends JwtManager {
             }, {
                 headers: {"Content-Type": "application/json; charset=UTF-8"}
             });
-            this.jwt = (user.data as FullUserModel).token;
+            this.jwtManager.jwt = (user.data as FullUserModel).token;
             return (user.data as UserModel);
         } catch (e) {
             return Promise.reject((e as AxiosError).response?.status);
@@ -33,7 +34,7 @@ export class UserRequestManager extends JwtManager {
             }, {
                 headers: {"Content-Type": "application/json; charset=UTF-8"}
             });
-            this.jwt = (login.data as FullUserModel).token;
+            this.jwtManager.jwt = (login.data as FullUserModel).token;
             return (login.data as UserModel);
         } catch (e) {
             return Promise.reject((e as AxiosError).response?.status);
@@ -48,7 +49,7 @@ export class UserRequestManager extends JwtManager {
                 {
                     headers: {
                         "Content-Type": "application/json; charset=UTF-8",
-                        "Authorization": `Bearer ${this.jwt}`
+                        "Authorization": `Bearer ${this.jwtManager.jwt}`
                     }
                 }
             );
@@ -63,20 +64,12 @@ export class UserRequestManager extends JwtManager {
             const address = await api.get<UserAddressModel | ErrorModel>("/account/address", {
                 headers: {
                     "Content-Type": "application/json; charset=UTF-8",
-                    "Authorization": `Bearer ${this.jwt}`
+                    "Authorization": `Bearer ${this.jwtManager.jwt}`
                 }
             });
             return addressToFormMapper((address.data as UserAddressModel));
         } catch (e) {
             return Promise.reject((e as AxiosError).response?.status);
-        }
-    }
-
-    public deleteJwt(): void {
-        if (this.jwt) {
-            sessionStorage.removeItem(this.jwt_key);
-        } else {
-            throw new Error("No jwt found to be deleted");
         }
     }
 }
