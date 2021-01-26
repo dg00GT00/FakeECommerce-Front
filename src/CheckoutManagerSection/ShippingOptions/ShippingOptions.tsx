@@ -10,6 +10,8 @@ import {useHistory} from "react-router-dom";
 import {CheckoutRoute} from "../../Utilities/CustomHooks/CheckoutRoute/CheckoutRoute";
 import {CartContext} from "../../Utilities/Context/CartContext";
 import Button from "@material-ui/core/Button/Button";
+import {AuthContext} from "../../Utilities/Context/AuthContext";
+import {LoadProgressButton} from "../../Utilities/CustomButtons/LoadProgressButton";
 
 const formGridStyle = makeStyles({
     root: {
@@ -34,8 +36,10 @@ const orders = new OrdersRequestsManager();
 
 export const ShippingOptions: React.FunctionComponent = () => {
     const {push} = useHistory();
-    const {setShippingValue} = React.useContext(CartContext);
+    const {jwtManager: {jwt}} = React.useContext(AuthContext);
+    const {setShippingValue, updateBasketPaymentIntent} = React.useContext(CartContext);
 
+    const [confirmState, setConfirmState] = React.useState(false);
     const [check, setCheckValue] = React.useState(initialCheckState);
     const [shippingOptions, setShippingOption] = React.useState<OrderModel[]>([]);
 
@@ -67,20 +71,27 @@ export const ShippingOptions: React.FunctionComponent = () => {
     };
 
     const enterShippingValue: React.MouseEventHandler = event => {
+        let id = Number();
+        setConfirmState(true);
         for (const key in check) {
             if (check.hasOwnProperty(key) && check[key as keyof CheckFormsType]) {
                 for (const option of shippingOptions) {
                     if (option.shortName === key) {
+                        id = option.id;
                         setShippingValue(option.price);
                         break;
                     }
                 }
             }
         }
-        push({
-            pathname: "/user/address/update",
-            state: CheckoutRoute.TO_ADDRESS_UPDATE
-        });
+        updateBasketPaymentIntent(id, jwt ?? "")
+            .then(_ => {
+                push({
+                    pathname: "/user/address/update",
+                    state: CheckoutRoute.TO_ADDRESS_UPDATE
+                });
+            })
+            .catch(_ => setConfirmState(false));
     };
 
     const goBack: React.MouseEventHandler = event => {
@@ -118,14 +129,14 @@ export const ShippingOptions: React.FunctionComponent = () => {
                 <Button variant={"contained"} onClick={goBack}>
                     Go Back
                 </Button>
-                <Button
-                    disabled={!Object.values(check).some(option => option)}
+                <LoadProgressButton
+                    disabled={!Object.values(check).some(option => option) || confirmState}
                     onClick={enterShippingValue}
+                    isLoading={confirmState}
                     variant={"contained"}
-                    color={"secondary"}
-                >
+                    color={"secondary"}>
                     Confirm
-                </Button>
+                </LoadProgressButton>
             </div>
         </>
     );

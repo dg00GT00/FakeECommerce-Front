@@ -11,7 +11,8 @@ export type BasketModel = {
 export type BasketPaymentModel = {
     id: string;
     items: BasketModel[];
-    deliveryMethod?: number;
+    deliveryMethodId?: number;
     clientSecret?: string;
-    paymentIntend?: string;
+    paymentIntentId?: string;
+    shippingPrice?: number;
 }

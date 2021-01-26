@@ -6,6 +6,7 @@ import {AuthContext} from "../../Utilities/Context/AuthContext";
 import {FormId, FormState, UserFormButtonProps,} from "../UserFormsTypes/UserFormsTypes";
 import {useSnackMessageError} from "../../Utilities/CustomHooks/UserSnackbar/useSnackMessageError";
 import {CheckoutRoute} from "../../Utilities/CustomHooks/CheckoutRoute/CheckoutRoute";
+import {LoadProgressButton} from "../../Utilities/CustomButtons/LoadProgressButton";
 
 const checkFormValues = (formObj: FormState<any>): boolean => {
     for (const key in formObj) {
@@ -22,17 +23,22 @@ type LoginType = Record<"generic" | "email", { fieldValue: string }>;
 
 export const UserActionButton: React.FunctionComponent<UserFormButtonProps> = (props) => {
     const [errorSnack, setErrorSnack] = useSnackMessageError();
-    const {registerUser, userLogin, userAddress, JWT_SESSION_KEY} = React.useContext(AuthContext);
+
+    const [isLoading, setLoadingState] = React.useState(false);
+
+    const {registerUser, userLogin, userAddress} = React.useContext(AuthContext);
     const {goBack, push, location: {state}} = useHistory();
 
     const promiseError = React.useCallback((formId: FormId, statusCode: number) => {
             setErrorSnack(formId, statusCode);
+            setLoadingState(false);
         },
         [setErrorSnack]
     );
 
     const submitForm: React.MouseEventHandler = (event) => {
         if (props.formId === FormId.SIGNUP) {
+            setLoadingState(true);
             const {
                 email: {fieldValue: email},
                 password: {fieldValue: password},
@@ -50,6 +56,7 @@ export const UserActionButton: React.FunctionComponent<UserFormButtonProps> = (p
             }
         }
         if (props.formId === FormId.LOGIN) {
+            setLoadingState(true);
             const {
                 generic: {fieldValue: password},
                 email: {fieldValue: email},
@@ -64,6 +71,7 @@ export const UserActionButton: React.FunctionComponent<UserFormButtonProps> = (p
             }
         }
         if (props.formId === FormId.ADDRESS) {
+            setLoadingState(true);
             if (checkFormValues(props.formState)) {
                 userAddress(props.formState)
                     .then(_ => {
@@ -84,10 +92,11 @@ export const UserActionButton: React.FunctionComponent<UserFormButtonProps> = (p
     return (
         <>
             <div className={styles.action_buttons}>
-                <Button variant={"contained"} onClick={(_) => goBack()}>
+                <Button variant={"contained"} onClick={_ => goBack()}>
                     Back
                 </Button>
-                <Button
+                <LoadProgressButton
+                    isLoading={isLoading}
                     type={"submit"}
                     form={props.formId}
                     onClick={submitForm}
@@ -95,7 +104,7 @@ export const UserActionButton: React.FunctionComponent<UserFormButtonProps> = (p
                     disabled={props.formValidity}
                     color={"secondary"}>
                     Go
-                </Button>
+                </LoadProgressButton>
             </div>
             {errorSnack}
         </>

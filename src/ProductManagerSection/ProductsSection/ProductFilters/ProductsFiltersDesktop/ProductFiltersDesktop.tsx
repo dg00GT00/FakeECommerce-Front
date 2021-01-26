@@ -7,7 +7,7 @@ import styles from "./ProductFiltersDesktop.module.scss";
 import {makeStyles} from "@material-ui/core/styles";
 import {Theme} from "@material-ui/core";
 import createStyles from "@material-ui/core/styles/createStyles";
-import {ClearButton} from "../../../../Utilities/ClearFilterManager/ClearButton";
+import {ClearButton} from "../../../../Utilities/CustomButtons/ClearButton";
 
 
 const useStyle = makeStyles((theme: Theme) => {

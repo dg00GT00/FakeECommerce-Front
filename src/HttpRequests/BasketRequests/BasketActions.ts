@@ -27,4 +27,15 @@ export class BasketActions {
         }
         return this._basketApi.basketProducts.length ? this._basketApi.basketProducts : null;
     }
+
+    public async updateBasketPaymentIntent(deliveryMethodId: number, jwt: string): Promise<BasketModel[] | null> {
+        const basketId = this._basketApi.getJwtCacheKey();
+        const newBasket = await this._basketRequestActions.paymentRequest.getPaymentIntent(basketId, jwt);
+        await this._basketApi.postBasketToApi(
+            deliveryMethodId,
+            newBasket.clientSecret ?? "",
+            newBasket.paymentIntentId ?? ""
+        );
+        return await this._basketRequestActions.getBasketAsync();
+    }
 }
