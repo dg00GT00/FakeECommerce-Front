@@ -58,8 +58,6 @@ export const UserActionButton: React.FunctionComponent<UserFormButtonProps> = (p
             if (checkFormValues(props.formState)) {
                 userLogin(email, password)
                     .then(_ => {
-                        sessionStorage.removeItem(JWT_SESSION_KEY);
-                        sessionStorage.setItem(JWT_SESSION_KEY, JWT_SESSION_KEY);
                         goBack();
                     })
                     .catch(statusCode => promiseError(props.formId, statusCode));

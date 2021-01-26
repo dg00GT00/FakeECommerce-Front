@@ -39,6 +39,7 @@ export const CartContextProvider: React.FunctionComponent = props => {
         basketApi
             .setJwtCacheKeyAsync(JWT_SESSION_KEY)
             .then(_ => {
+                sessionStorage.setItem(JWT_SESSION_KEY, JWT_SESSION_KEY);
                 basketApi
                     .getBasketFromApi()
                     .then(fullBasket => {

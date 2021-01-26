@@ -22,6 +22,10 @@ export const AuthContextProvider: React.FunctionComponent = props => {
     // Forces the component update when the user login and signup action
     const forceUpdate = useForceUpdate();
 
+    const getEmailFromJwt = (): string => {
+        return userAuth.jwtManager.getEmailFromJwt() ?? "";
+    }
+
     const userAddress = async (addressForm: FormState<AddressFieldId>): Promise<UserAddressModel> => {
         return await userAuth.registerUserAddress(addressForm);
     }
@@ -34,6 +38,7 @@ export const AuthContextProvider: React.FunctionComponent = props => {
 
     const userLogin = async (email: string, password: string): Promise<UserModel> => {
         const userModel = await userAuth.userLogin(email, password);
+        sessionStorage.removeItem(getEmailFromJwt());
         forceUpdate();
         return userModel;
     };

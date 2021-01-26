@@ -9,7 +9,7 @@ export type BasketModel = {
 };
 
 export type BasketPaymentModel = {
-    id: number;
+    id: string;
     items: BasketModel[];
     deliveryMethod?: number;
     clientSecret?: string;
