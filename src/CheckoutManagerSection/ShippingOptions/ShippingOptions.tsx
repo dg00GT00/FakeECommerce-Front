@@ -4,7 +4,7 @@ import Checkbox from "@material-ui/core/Checkbox";
 import FormControl from "@material-ui/core/FormControl";
 import styles from "./ShippingOptions.module.scss";
 import {makeStyles} from "@material-ui/core";
-import {OrderModel} from "../../Utilities/OrderModel/OrderModel";
+import {ShippingModel} from "../../Utilities/OrderModel/ShippingModel";
 import {OrderError, OrdersRequestsManager,} from "../../HttpRequests/OrdersRequestsManager";
 import {useHistory} from "react-router-dom";
 import {CheckoutRoute} from "../../Utilities/CustomHooks/CheckoutRoute/CheckoutRoute";
@@ -41,7 +41,7 @@ export const ShippingOptions: React.FunctionComponent = () => {
 
     const [confirmState, setConfirmState] = React.useState(false);
     const [check, setCheckValue] = React.useState(initialCheckState);
-    const [shippingOptions, setShippingOption] = React.useState<OrderModel[]>([]);
+    const [shippingOptions, setShippingOption] = React.useState<ShippingModel[]>([]);
 
     const styleFormGrid = formGridStyle();
 
@@ -95,7 +95,7 @@ export const ShippingOptions: React.FunctionComponent = () => {
     };
 
     const goBack: React.MouseEventHandler = event => {
-        setShippingValue(null);
+        setShippingValue(undefined);
         push("/");
     };
 
