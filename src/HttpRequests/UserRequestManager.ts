@@ -10,6 +10,15 @@ import {JwtManager} from "./JwtManager/JwtManager";
 export class UserRequestManager {
     public jwtManager = new JwtManager();
 
+    private _defaultHeader(): { headers: { [i: string]: string } } {
+        return {
+            headers: {
+                "Content-Type": "application/json; charset=UTF-8",
+                "Authorization": `Bearer ${this.jwtManager.jwt}`
+            }
+        };
+    }
+
     public async registerUser(userName: string, email: string, password: string): Promise<UserModel> {
         try {
             const user = await api.post<FullUserModel | ErrorModel>("/account/register", {
@@ -61,12 +70,7 @@ export class UserRequestManager {
 
     public async getUserAddress(): Promise<FormState<AddressFieldId>> {
         try {
-            const address = await api.get<UserAddressModel | ErrorModel>("/account/address", {
-                headers: {
-                    "Content-Type": "application/json; charset=UTF-8",
-                    "Authorization": `Bearer ${this.jwtManager.jwt}`
-                }
-            });
+            const address = await api.get<UserAddressModel | ErrorModel>("/account/address", this._defaultHeader());
             return addressToFormMapper((address.data as UserAddressModel));
         } catch (e) {
             return Promise.reject((e as AxiosError).response?.status);

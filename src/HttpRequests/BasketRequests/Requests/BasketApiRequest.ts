@@ -24,7 +24,7 @@ export class BasketApiRequest extends BasketMemoryRequest {
         return this._jwtCacheKey;
     }
 
-    public async postBasketToApi(deliveryMethodId: number, clientSecret: string, paymentIntendId: string): Promise<void>;
+    public async postBasketToApi(deliveryMethodId?: number, clientSecret?: string, paymentIntendId?: string): Promise<void>;
     public async postBasketToApi(): Promise<void>;
     public async postBasketToApi(...args: any[]): Promise<void> {
         if (this.basketProducts.length) {
