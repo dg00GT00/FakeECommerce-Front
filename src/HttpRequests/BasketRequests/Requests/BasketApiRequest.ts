@@ -1,5 +1,6 @@
 import {BasketMemoryRequest} from "./BasketMemoryRequest";
 import {BasketModel, BasketPaymentModel} from "../../../Utilities/BasketModel/BasketModel";
+import {UserRequestManager} from "../../UserRequestManager";
 import {BasketEvents} from "../BasketEvents";
 import {AxiosError} from "axios";
 import {api} from "../../AxiosInstance";
@@ -14,14 +15,9 @@ type BasketPayload = {
 
 export class BasketApiRequest extends BasketMemoryRequest {
     private _basketUrl = "/basket";
-    private _jwtCacheKey = "";
 
-    public async setJwtCacheKeyAsync(cacheKey: string): Promise<void> {
-        this._jwtCacheKey = cacheKey;
-    }
-
-    public getJwtCacheKey(): string {
-        return this._jwtCacheKey;
+    constructor(private _userRequest: UserRequestManager) {
+        super();
     }
 
     public async postBasketToApi(deliveryMethodId?: number, clientSecret?: string, paymentIntendId?: string): Promise<void>;
@@ -30,7 +26,7 @@ export class BasketApiRequest extends BasketMemoryRequest {
         if (this.basketProducts.length) {
             // sessionStorage.setItem(this._jwtCacheKey, this._jwtCacheKey);
             const basketPayload: BasketPayload = {
-                id: this._jwtCacheKey,
+                id: this._userRequest.jwtManager.getJwtCacheKey() ?? "",
                 items: this.basketProducts
             };
             if (args.length) {
@@ -38,7 +34,7 @@ export class BasketApiRequest extends BasketMemoryRequest {
                 basketPayload.clientSecret = args[1];
                 basketPayload.paymentIntentId = args[2];
             }
-            console.log("Basket payload on post basket: ", basketPayload);
+
             try {
                 const response = await api.post<BasketPaymentModel>(this._basketUrl, basketPayload);
                 this.basketProducts = response.data.items;
@@ -51,8 +47,8 @@ export class BasketApiRequest extends BasketMemoryRequest {
     }
 
     public async getBasketFromApi(): Promise<BasketPaymentModel | null> {
-        const id = sessionStorage.getItem(this._jwtCacheKey);
-        console.log("Inside get basket from api. ID: ", id);
+        const id = this._userRequest.jwtManager.getJwtCacheKey()
+
         if (id) {
             try {
                 const response = await api.get<BasketPaymentModel>(`${this._basketUrl}?id=${id}`);
@@ -67,8 +63,8 @@ export class BasketApiRequest extends BasketMemoryRequest {
     }
 
     public async deleteBasketFromApi(): Promise<void> {
-        const id = sessionStorage.getItem(this._jwtCacheKey);
-        sessionStorage.removeItem(this._jwtCacheKey);
+        const id = this._userRequest.jwtManager.getJwtCacheKey();
+        this._userRequest.jwtManager.deleteJwtCacheKey();
         try {
             await api.delete(`${this._basketUrl}?id=${id}`);
         } catch (e) {

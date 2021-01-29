@@ -19,14 +19,16 @@ const logoutStyle = makeStyles({
 
 export const HeaderDesktop: React.FunctionComponent<HeaderProps> = props => {
     const [anchorEl, setAnchorEl] = React.useState<null | Element>(null);
-    const {jwtManager, JWT_SESSION_KEY} = React.useContext(AuthContext);
+
+    const {jwt, getDisplayNameFromJwt, userLogout} = React.useContext(AuthContext);
+
     const {push} = useHistory();
+
     const style = logoutStyle();
 
     const logout: React.MouseEventHandler = event => {
-        jwtManager.deleteJwt();
+        userLogout();
         handleMenuClose();
-        sessionStorage.removeItem(JWT_SESSION_KEY);
     }
 
     const handleProfileMenuOpen: React.MouseEventHandler = event => {
@@ -36,6 +38,7 @@ export const HeaderDesktop: React.FunctionComponent<HeaderProps> = props => {
     const handleMenuClose = () => {
         setAnchorEl(null);
     }
+
 
     const accountButton = (
         <>
@@ -57,7 +60,7 @@ export const HeaderDesktop: React.FunctionComponent<HeaderProps> = props => {
                 <MenuItem className={style.root} onClick={logout}>Logout</MenuItem>
                 <MenuItem className={style.root} onClick={_ => push("/user/address/update")}>Update Address</MenuItem>
             </Menu>
-            <Tooltip title={jwtManager.getDisplayNameFromJwt() ?? {}} className={styles.user_account} placement={"top"}>
+            <Tooltip title={getDisplayNameFromJwt ?? {}} className={styles.user_account} placement={"top"}>
                 <IconButton onClick={handleProfileMenuOpen}>
                     <UserAccountIcon/>
                 </IconButton>
@@ -70,7 +73,7 @@ export const HeaderDesktop: React.FunctionComponent<HeaderProps> = props => {
             <Logo/>
             <nav className={styles.nav}>
                 <ul>
-                    {jwtManager.jwt ? accountButton :
+                    {jwt ? accountButton :
                         <>
                             <NavLink to={props.loginPath}>Login</NavLink>
                             <NavLink to={props.signupPath}>Signup</NavLink>

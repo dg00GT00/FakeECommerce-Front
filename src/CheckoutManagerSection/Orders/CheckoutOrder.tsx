@@ -4,10 +4,9 @@ import styles from "../CheckoutCart/CheckoutCartBase.module.scss";
 import {makeStyles} from "@material-ui/core/styles";
 import {Theme} from "@material-ui/core/styles/createMuiTheme";
 import {OrderContext} from "../../Utilities/Context/OrderContext";
-import {CartContext} from "../../Utilities/Context/CartContext";
+import {BasketContext} from "../../Utilities/Context/BasketContext";
 import {OrderModel} from "../../Utilities/OrderModel/OrderModel";
 import {CheckoutCartBase} from "../CheckoutCart/CheckoutCartBase";
-import {AuthContext} from "../../Utilities/Context/AuthContext";
 
 const listStyles = makeStyles((theme: Theme) => ({
     listItem: {
@@ -22,9 +21,8 @@ const listStyles = makeStyles((theme: Theme) => ({
 }));
 
 export const CheckoutOrder: React.FunctionComponent = () => {
-    const {JWT_SESSION_KEY} = React.useContext(AuthContext);
     const {postOrderAsync} = React.useContext(OrderContext);
-    const {getBasketItemsAsync} = React.useContext(CartContext);
+    const {getBasketItemsAsync} = React.useContext(BasketContext);
 
     const [checkoutComponent, setCheckoutComponent] = React.useState<JSX.Element | JSX.Element[] | null>(null);
 
@@ -34,10 +32,9 @@ export const CheckoutOrder: React.FunctionComponent = () => {
         (async () => {
             let order: OrderModel | null = null;
             const basketPaymentModel = await getBasketItemsAsync();
-            console.log("Basket after payment intent: ", basketPaymentModel);
+
             if (basketPaymentModel) {
-                order = await postOrderAsync(JWT_SESSION_KEY, basketPaymentModel.deliveryMethodId ?? 0);
-                console.log("Order: ", order);
+                order = await postOrderAsync(basketPaymentModel.deliveryMethodId ?? 0);
                 const orderComponent = (
                     <ListItem
                         key={order.id}
@@ -48,7 +45,7 @@ export const CheckoutOrder: React.FunctionComponent = () => {
                 setCheckoutComponent(orderComponent);
             }
         })();
-    }, [getBasketItemsAsync, postOrderAsync, styleList.listItem, JWT_SESSION_KEY]);
+    }, [getBasketItemsAsync, postOrderAsync, styleList.listItem]);
 
     return <CheckoutCartBase cartComponent={checkoutComponent}/>;
 }

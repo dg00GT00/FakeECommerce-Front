@@ -1,13 +1,13 @@
 import * as React from "react";
-import { ListItem, Modal, useMediaQuery } from "@material-ui/core";
+import {ListItem, Modal, useMediaQuery} from "@material-ui/core";
 import CancelRoundedIcon from "@material-ui/icons/CancelRounded";
-import { CartContext } from "../../../../Utilities/Context/CartContext";
-import { makeStyles, Theme } from "@material-ui/core/styles";
+import {BasketContext} from "../../../../Utilities/Context/BasketContext";
+import {makeStyles, Theme} from "@material-ui/core/styles";
 import List from "@material-ui/core/List/List";
 import IconButton from "@material-ui/core/IconButton";
 import styles from "./ModalDrawer.module.scss";
 import Button from "@material-ui/core/Button/Button";
-import { useCheckoutRoute } from "../../../../Utilities/CustomHooks/CheckoutRoute/useCheckoutRoute";
+import {useCheckoutRoute} from "../../../../Utilities/CustomHooks/CheckoutRoute/useCheckoutRoute";
 
 const drawerStyle = makeStyles((theme: Theme) => ({
 	listRoot: {
@@ -27,7 +27,7 @@ export const ModalDrawer: React.FunctionComponent<ModalDrawerProps> = React.memo
 			getTotalProducts,
 			getAmountById,
 			clearItemsById,
-		} = React.useContext(CartContext);
+		} = React.useContext(BasketContext);
 		const firstRender = React.useRef(true);
 		const [open, setOpen] = React.useState(false);
 		const setItems = React.useState<{ [i: number]: number }>({})[1];

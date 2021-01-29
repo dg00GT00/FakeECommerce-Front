@@ -1,5 +1,5 @@
 import * as React from "react";
-import { makeStyles } from "@material-ui/core/styles";
+import {makeStyles} from "@material-ui/core/styles";
 import Card from "@material-ui/core/Card";
 import CardActionArea from "@material-ui/core/CardActionArea";
 import CardActions from "@material-ui/core/CardActions";
@@ -8,11 +8,11 @@ import CardMedia from "@material-ui/core/CardMedia";
 import ShareRounded from "@material-ui/icons/ShareRounded";
 import CardHeader from "@material-ui/core/CardHeader";
 import styles from "./ProductCard.module.scss";
-import { ReactComponent as CartArrowDown } from "../../../Assets/cartArrowDown.svg";
-import { ButtonBase, Theme } from "@material-ui/core";
-import { CartContext } from "../../../Utilities/Context/CartContext";
-import { ProductCardProps } from "../../../Utilities/ProductProps/ProductCardProps";
-import { useHistory } from "react-router-dom";
+import {ReactComponent as CartArrowDown} from "../../../Assets/cartArrowDown.svg";
+import {ButtonBase, Theme} from "@material-ui/core";
+import {BasketContext} from "../../../Utilities/Context/BasketContext";
+import {ProductCardProps} from "../../../Utilities/ProductProps/ProductCardProps";
+import {useHistory} from "react-router-dom";
 
 const useStyle = makeStyles({
 	root: {
@@ -96,13 +96,13 @@ const cardReducer = (
 export const ProductCard: React.FunctionComponent<ProductCardProps> = (
 	props
 ) => {
-	const cartContext = React.useContext(CartContext);
+	const cartContext = React.useContext(BasketContext);
 	const cardStyle = useCardHighlightStyle();
 	const [cardState, dispatchCardState] = React.useReducer<CardHighlightReducer>(
 		cardReducer,
 		{}
 	);
-	const { push } = useHistory();
+	const {push} = useHistory();
 	const cardHeaderStyle = useStyle();
 
 	const toggleProductSelection = (): void => {

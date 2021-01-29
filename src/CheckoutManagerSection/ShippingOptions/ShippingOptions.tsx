@@ -8,9 +8,8 @@ import {ShippingModel} from "../../Utilities/OrderModel/ShippingModel";
 import {OrderError,} from "../../HttpRequests/OrdersRequestsManager";
 import {useHistory} from "react-router-dom";
 import {CheckoutRoute} from "../../Utilities/CustomHooks/CheckoutRoute/CheckoutRoute";
-import {CartContext} from "../../Utilities/Context/CartContext";
+import {BasketContext} from "../../Utilities/Context/BasketContext";
 import Button from "@material-ui/core/Button/Button";
-import {AuthContext} from "../../Utilities/Context/AuthContext";
 import {LoadProgressButton} from "../../Utilities/CustomButtons/LoadProgressButton";
 import {OrderContext} from "../../Utilities/Context/OrderContext";
 
@@ -37,9 +36,8 @@ const initialCheckState: CheckFormsType = {
 export const ShippingOptions: React.FunctionComponent = () => {
     const {push} = useHistory();
 
-    const {jwtManager: {jwt}} = React.useContext(AuthContext);
     const {getShippingOptionsAsync} = React.useContext(OrderContext);
-    const {updateBasketPaymentIntentAsync} = React.useContext(CartContext);
+    const {updateBasketPaymentIntentAsync} = React.useContext(BasketContext);
 
     const [confirmState, setConfirmState] = React.useState(false);
     const [check, setCheckValue] = React.useState(initialCheckState);
@@ -84,7 +82,7 @@ export const ShippingOptions: React.FunctionComponent = () => {
                 }
             }
         }
-        updateBasketPaymentIntentAsync(id, jwt ?? "")
+        updateBasketPaymentIntentAsync(id)
             .then(_ => {
                 push({
                     pathname: "/user/address/update",

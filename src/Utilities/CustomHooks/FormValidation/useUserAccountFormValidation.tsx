@@ -1,6 +1,6 @@
 import * as React from "react";
 import {AccountFieldId, FormState} from "../../../UserManagerSection/UserFormsTypes/UserFormsTypes";
-import {emailExists} from "../../../HttpRequests/UserRequestManager";
+import {checkEmailExistenceAsync} from "../../../HttpRequests/UserRequestManager";
 import {GenericFormActions, genericFormReducer} from "./genericFormReducer";
 import {ActionTypes} from "./FormActionTypes";
 import {errorStateTrigger} from "./FormStateManager";
@@ -132,7 +132,7 @@ export const useUserAccountFormValidation = (omitFieldValidators?: AccountFieldI
     function emailValidation(event: any, formState: any, checkEmailExistence: boolean): void {
         if (event.target.checkValidity()) {
             if (checkEmailExistence) {
-                emailExists(event.target.value)
+                checkEmailExistenceAsync(event.target.value)
                     .then(email => {
                         if (email) {
                             event.target.value = "This email already exists";

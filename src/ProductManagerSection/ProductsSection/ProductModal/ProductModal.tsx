@@ -9,7 +9,7 @@ import AddCircleOutlineRoundedIcon from "@material-ui/icons/AddCircleOutlineRoun
 import {makeStyles} from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button/Button";
 import IconButton from "@material-ui/core/IconButton";
-import {CartContext} from "../../../Utilities/Context/CartContext";
+import {BasketContext} from "../../../Utilities/Context/BasketContext";
 import {ModalDrawer} from "./ModalDrawer/ModalDrawer";
 import {useMediaQuery} from "@material-ui/core";
 import {CartDefault} from "../../Cart/CartDefault";
@@ -49,8 +49,8 @@ export const ProductModal: React.FunctionComponent<{
 	id: number;
 	modalKey: number;
 }> = (props) => {
-	const { productReq } = React.useContext(ProductsContext);
-	const cartContext = React.useContext(CartContext);
+	const {productReq} = React.useContext(ProductsContext);
+	const cartContext = React.useContext(BasketContext);
 
 	const [productModal, setProductModal] = React.useState<ProductCardProps>(
 		initialModalProducts

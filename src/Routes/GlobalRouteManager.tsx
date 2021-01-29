@@ -3,7 +3,7 @@ import {Route, Switch} from "react-router-dom";
 import {ProductManagerSection} from "../ProductManagerSection/ProductManagerSection";
 import {UserManagerSection} from "../UserManagerSection/UserManagerSection";
 import {AuthContextProvider} from "../Utilities/Context/AuthContext";
-import {CartContextProvider} from "../Utilities/Context/CartContext";
+import {CartContextProvider} from "../Utilities/Context/BasketContext";
 import {CheckoutManagerSection} from "../CheckoutManagerSection/CheckoutManagerSection";
 import {NotFound} from "../Utilities/RouterValidation/NotFound";
 import {OrderContextProvider} from "../Utilities/Context/OrderContext";

@@ -5,7 +5,7 @@ import {CheckoutRoute} from "../Utilities/CustomHooks/CheckoutRoute/CheckoutRout
 import {CheckoutForms} from "./CheckoutForms/CheckoutForms";
 
 export const CheckoutManagerSection: React.FunctionComponent = () => {
-    const {jwtManager: {jwt}} = React.useContext(AuthContext);
+    const {jwt} = React.useContext(AuthContext);
 
     return (
         <>

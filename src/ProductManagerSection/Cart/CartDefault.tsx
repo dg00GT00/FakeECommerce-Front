@@ -2,7 +2,7 @@ import * as React from "react";
 import ShoppingCartRounded from "@material-ui/icons/ShoppingCartRounded";
 import IconButton from "@material-ui/core/IconButton";
 import Badge from "@material-ui/core/Badge/Badge";
-import {CartContext} from "../../Utilities/Context/CartContext";
+import {BasketContext} from "../../Utilities/Context/BasketContext";
 import {useCheckoutRoute} from "../../Utilities/CustomHooks/CheckoutRoute/useCheckoutRoute";
 
 type CartDefaultProps = {
@@ -16,7 +16,7 @@ type CartDefaultProps = {
 }
 
 export const CartDefault: React.FunctionComponent<CartDefaultProps> = ({colorBadge = "secondary", ...props}) => {
-    const cartContext = React.useContext(CartContext);
+    const cartContext = React.useContext(BasketContext);
     let handleClick = useCheckoutRoute();
 
     if (props.onClick) {

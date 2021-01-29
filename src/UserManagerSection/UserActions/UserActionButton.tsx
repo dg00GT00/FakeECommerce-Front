@@ -21,12 +21,12 @@ type SignupType = Record<"email" | "password" | "generic", { fieldValue: string 
 
 type LoginType = Record<"generic" | "email", { fieldValue: string }>;
 
-export const UserActionButton: React.FunctionComponent<UserFormButtonProps> = (props) => {
+export const UserActionButton: React.FunctionComponent<UserFormButtonProps> = props => {
     const [errorSnack, setErrorSnack] = useSnackMessageError();
 
     const [isLoading, setLoadingState] = React.useState(false);
 
-    const {registerUser, userLogin, userAddress} = React.useContext(AuthContext);
+    const {registerUserAsync, userLoginAsync, registerUserAddressAsync} = React.useContext(AuthContext);
     const {goBack, push, location: {state}} = useHistory();
 
     const promiseError = React.useCallback((formId: FormId, statusCode: number) => {
@@ -46,7 +46,7 @@ export const UserActionButton: React.FunctionComponent<UserFormButtonProps> = (p
             } = props.formState as SignupType;
 
             if (checkFormValues(props.formState)) {
-                registerUser(username, email, password)
+                registerUserAsync(username, email, password)
                     .then(_ => {
                         push({
                             pathname: "/user/address",
@@ -63,7 +63,7 @@ export const UserActionButton: React.FunctionComponent<UserFormButtonProps> = (p
             } = props.formState as LoginType;
 
             if (checkFormValues(props.formState)) {
-                userLogin(email, password)
+                userLoginAsync(email, password)
                     .then(_ => {
                         goBack();
                     })
@@ -73,7 +73,7 @@ export const UserActionButton: React.FunctionComponent<UserFormButtonProps> = (p
         if (props.formId === FormId.ADDRESS) {
             setLoadingState(true);
             if (checkFormValues(props.formState)) {
-                userAddress(props.formState)
+                registerUserAddressAsync(props.formState)
                     .then(_ => {
                             if (state === CheckoutRoute.TO_ADDRESS_UPDATE) {
                                 push("/checkout/creditcard");

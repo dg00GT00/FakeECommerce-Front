@@ -20,11 +20,42 @@ export class JwtManager {
         }
     }
 
+    public getJwtAuthorizationHeaders(): { headers: { [p: string]: string } } {
+        return {
+            headers: {
+                "Content-Type": "application/json; charset=UTF-8",
+                "Authorization": `Bearer ${this.jwt}`
+            }
+        };
+    }
+
     public deleteJwt(): void {
         if (this.jwt) {
             sessionStorage.removeItem(this.jwt_key);
         } else {
             throw new Error("No _jwtManager.jwt found to be deleted");
+        }
+    }
+
+    public setJwtCacheKey(): void | never {
+        const jwtCacheKey = this.getJwtCacheKey();
+        if (jwtCacheKey) {
+            sessionStorage.setItem(jwtCacheKey, jwtCacheKey);
+        } else {
+            throw new Error("No jwt found to retrieve email information of");
+        }
+    }
+
+    public getJwtCacheKey(): string | null {
+        return this.getEmailFromJwt();
+    }
+
+    public deleteJwtCacheKey(): void | never {
+        const jwtCacheKey = this.getJwtCacheKey();
+        if (jwtCacheKey) {
+            sessionStorage.removeItem(jwtCacheKey);
+        } else {
+            throw new Error("No jwt found to retrieve email information of");
         }
     }
 

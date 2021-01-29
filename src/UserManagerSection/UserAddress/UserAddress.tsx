@@ -33,14 +33,14 @@ export const UserAddress: React.FunctionComponent<UserInputTypes> = (props) => {
     const [infoSnack, setInfoSnack] = useUserSnackbar();
 
     const firstRender = React.useRef(true);
-    const {getUserAddress} = React.useContext(AuthContext);
+    const {getUserAddressAsync} = React.useContext(AuthContext);
     const {location: {pathname, state}} = useHistory();
 
     React.useEffect(() => {
         if (firstRender.current) {
             if ("/user/address/update" === pathname) {
                 firstRender.current = false;
-                getUserAddress()
+                getUserAddressAsync()
                     .then((response) => {
                         const addressFormState = addressToFormMapper(response);
                         resetFormState(addressFormState);
@@ -51,7 +51,7 @@ export const UserAddress: React.FunctionComponent<UserInputTypes> = (props) => {
                     .catch((statusCode) => setErrorSnack(FormId.ADDRESS, statusCode));
             }
         }
-    }, [setErrorSnack, resetFormState, pathname, state, getUserAddress, setInfoSnack]);
+    }, [setErrorSnack, resetFormState, pathname, state, getUserAddressAsync, setInfoSnack]);
 
     return (
         <>

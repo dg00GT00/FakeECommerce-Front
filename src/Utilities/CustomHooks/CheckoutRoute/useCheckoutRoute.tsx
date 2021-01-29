@@ -6,7 +6,7 @@ import {CheckoutRoute} from "./CheckoutRoute";
 
 export const useCheckoutRoute = () => {
     const {push} = useHistory();
-    const {jwtManager: {jwt}} = useContext(AuthContext);
+    const {jwt} = useContext(AuthContext);
 
     return (event: React.MouseEvent) => {
         if (!jwt) {

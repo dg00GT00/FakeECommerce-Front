@@ -1,5 +1,5 @@
 import * as React from "react";
-import {CartContext} from "../../Utilities/Context/CartContext";
+import {BasketContext} from "../../Utilities/Context/BasketContext";
 import List from "@material-ui/core/List/List";
 import styles from "./CheckoutCartBase.module.scss";
 import {makeStyles} from "@material-ui/core/styles";
@@ -22,7 +22,7 @@ type CheckoutCartBaseProps = {
 };
 
 export const CheckoutCartBase: React.FunctionComponent<CheckoutCartBaseProps> = props => {
-    const {getTotalProductCash} = React.useContext(CartContext);
+    const {getTotalProductCash} = React.useContext(BasketContext);
 
     const styleList = listStyles();
 

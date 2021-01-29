@@ -37,7 +37,6 @@ export const CheckoutForms: React.FunctionComponent = () => {
 	const {location: {pathname}} = useHistory();
 	const {path} = useRouteMatch();
 
-	console.log("Inside checkout forms");
 	React.useEffect(() => {
 		if (pathname === `${path}/shipping`) {
 			setCheckoutComponent(<CheckoutCart/>);

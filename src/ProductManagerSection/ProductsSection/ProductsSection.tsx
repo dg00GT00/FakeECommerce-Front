@@ -1,11 +1,11 @@
 import * as React from "react";
-import { LandingMarketing } from "../../StructureSection/LandingMarketing/LandingMarketing";
+import {LandingMarketing} from "../../StructureSection/LandingMarketing/LandingMarketing";
 import styles from "./ProductsSection.module.scss";
-import { createStyles, makeStyles } from "@material-ui/core/styles";
-import { CartContext } from "../../Utilities/Context/CartContext";
-import { FloatingCart } from "../Cart/FloatingCart";
-import { ProductPaginationManager } from "./ProductPaginationManager/ProductPaginationManager";
-import { ProductsContextProvider } from "./ProductContext/ProductsContext";
+import {createStyles, makeStyles} from "@material-ui/core/styles";
+import {BasketContext} from "../../Utilities/Context/BasketContext";
+import {FloatingCart} from "../Cart/FloatingCart";
+import {ProductPaginationManager} from "./ProductPaginationManager/ProductPaginationManager";
+import {ProductsContextProvider} from "./ProductContext/ProductsContext";
 
 const useStyles = makeStyles((theme) =>
 	createStyles({
@@ -17,7 +17,7 @@ const useStyles = makeStyles((theme) =>
 
 export const ProductsSection: React.FunctionComponent = () => {
 	const style = useStyles();
-	const productContext = React.useContext(CartContext);
+	const productContext = React.useContext(BasketContext);
 
 	const [floatingCart, setFloatingCart] = React.useState<JSX.Element | null>(
 		null

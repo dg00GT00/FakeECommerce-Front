@@ -2,50 +2,38 @@ import {AxiosError} from "axios";
 import {ErrorModel} from "../Utilities/UserModels/ErrorModel";
 import {UserRequestManager} from "./UserRequestManager";
 import {ShippingModel} from "../Utilities/OrderModel/ShippingModel";
-import {api} from "./AxiosInstance";
 import {OrderModel} from "../Utilities/OrderModel/OrderModel";
+import {api} from "./AxiosInstance";
 
 export type OrderError = Omit<ErrorModel, "error">;
 
 export class OrdersRequestsManager {
-    private _userInfo?: UserRequestManager;
-
-    private _getDefaultHeaders(): { headers: { [i: string]: string } } {
-        return {
-            headers: {
-                "Content-Type": "application/json; charset=UTF-8",
-                "Authorization": `Bearer ${this._userInfo?.jwtManager.jwt}`
-            }
-        };
-    }
-
-    public setUserInfo(userInfo: UserRequestManager): void {
-        this._userInfo = userInfo;
+    constructor(private _userRequest: UserRequestManager) {
     }
 
     public async getShippingOptionsAsync(): Promise<ShippingModel[]> {
         try {
-            const shippingOptions = await api.get<ShippingModel[]>("/orders/deliveryMethods", this._getDefaultHeaders());
-            return shippingOptions.data as ShippingModel[];
+            const shippingOptions = await api.get<ShippingModel[]>("/orders/deliveryMethods", this._userRequest.jwtManager.getJwtAuthorizationHeaders());
+            return shippingOptions.data;
         } catch (e) {
             const error = (e as AxiosError).response;
-            if (error?.status === 401) { // Unauthorized error
+            if (error?.status === 401) { // Unauthorized user error
                 // Deleting the jwt forces the user effect login before progress getting the shipping options
-                this._userInfo?.jwtManager.deleteJwt();
+                this._userRequest.jwtManager.deleteJwt();
             }
             return Promise.reject({statusCode: error?.status.toString(), message: error?.data});
         }
     }
 
-    public async postOrderAsync(jwtCacheKey: string, deliveryMethodId: number): Promise<OrderModel> {
+    public async postOrderAsync(deliveryMethodId: number): Promise<OrderModel> {
         try {
-            const userAddress = await this._userInfo?.getUserAddress();
-            console.log("Posting the order with user address: ", userAddress);
+            const userAddress = await this._userRequest.getUserAddressAsync();
             const response = await api.post<OrderModel>("/orders", {
-                basketId: sessionStorage.getItem(jwtCacheKey),
+                basketId: this._userRequest.jwtManager.getJwtCacheKey(),
                 deliveryMethodId: deliveryMethodId,
                 shipToAddress: userAddress
-            }, this._getDefaultHeaders());
+            }, this._userRequest.jwtManager.getJwtAuthorizationHeaders());
+
             return response.data;
         } catch (e) {
             const error = (e as AxiosError).response;
@@ -55,7 +43,7 @@ export class OrdersRequestsManager {
 
     public async getOrdersAsync(): Promise<OrderModel[]> {
         try {
-            const response = await api.get<OrderModel[]>("/orders");
+            const response = await api.get<OrderModel[]>("/orders", this._userRequest.jwtManager.getJwtAuthorizationHeaders());
             return response.data;
         } catch (e) {
             const error = (e as AxiosError).response;
