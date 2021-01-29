@@ -1,8 +1,8 @@
 import * as React from "react";
+import styles from "./CheckoutCartBase.module.scss";
 import {ListItem} from "@material-ui/core";
 import {CartContext} from "../../Utilities/Context/CartContext";
 import Button from "@material-ui/core/Button/Button";
-import styles from "./CheckoutCart.module.scss";
 import {makeStyles} from "@material-ui/core/styles";
 import Badge from "@material-ui/core/Badge/Badge";
 import {Theme} from "@material-ui/core/styles/createMuiTheme";
@@ -23,24 +23,20 @@ const listStyles = makeStyles((theme: Theme) => ({
 
 export const CheckoutCart: React.FunctionComponent = () => {
     const {
-        shippingValue,
-        basketItemsAsync,
+        manageBasketItemsAsync,
         clearItemsById,
-        getAmountById,
         getTotalProductCash,
-        getTotalProductCashById,
     } = React.useContext(CartContext);
 
     const [checkoutComponent, setCheckoutComponent] = React.useState<JSX.Element | JSX.Element[] | null>(null);
 
     const styleList = listStyles();
-    let subTotalPurchaseAmount = getTotalProductCash();
-
+    console.log("Inside checkout cart");
     React.useEffect(() => {
-        basketItemsAsync()
+        manageBasketItemsAsync()
             .then(products => {
                 if (products) {
-                    const productsList = products.map(basket => {
+                    const productsList = products.items.map(basket => {
                         return (
                             <ListItem
                                 key={basket.id}
@@ -71,22 +67,18 @@ export const CheckoutCart: React.FunctionComponent = () => {
                     setCheckoutComponent(<EmptyCheckoutCart/>);
                 }
             });
-    }, [basketItemsAsync, getAmountById, getTotalProductCashById, clearItemsById, styleList.listItem]);
+    }, [manageBasketItemsAsync, clearItemsById, styleList.listItem]);
 
-
+    console.log("Inside the cart checkout with component: ", checkoutComponent);
     return (
         <CheckoutCartBase cartComponent={checkoutComponent}>
             <div className={[styles.divider, styleList.divider].join(" ")}/>
             <p className={styles.subtotal}>Subtotal</p>
             <p className={styles.subtotal_price}>
-                $ {subTotalPurchaseAmount.toFixed(2)}
+                $ {getTotalProductCash().toFixed(2)}
             </p>
             <p className={styles.shipping}>Shipping</p>
-            <p className={styles.shipping_price}>
-                {shippingValue
-                    ? `$ ${shippingValue}`
-                    : "Calculated in the current step"}
-            </p>
+            <p className={styles.shipping_price}>Calculated in the current step</p>
         </CheckoutCartBase>
     );
 };

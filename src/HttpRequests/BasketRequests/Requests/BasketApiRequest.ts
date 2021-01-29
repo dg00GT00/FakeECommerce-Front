@@ -28,7 +28,7 @@ export class BasketApiRequest extends BasketMemoryRequest {
     public async postBasketToApi(): Promise<void>;
     public async postBasketToApi(...args: any[]): Promise<void> {
         if (this.basketProducts.length) {
-            sessionStorage.setItem(this._jwtCacheKey, this._jwtCacheKey);
+            // sessionStorage.setItem(this._jwtCacheKey, this._jwtCacheKey);
             const basketPayload: BasketPayload = {
                 id: this._jwtCacheKey,
                 items: this.basketProducts
@@ -38,6 +38,7 @@ export class BasketApiRequest extends BasketMemoryRequest {
                 basketPayload.clientSecret = args[1];
                 basketPayload.paymentIntentId = args[2];
             }
+            console.log("Basket payload on post basket: ", basketPayload);
             try {
                 const response = await api.post<BasketPaymentModel>(this._basketUrl, basketPayload);
                 this.basketProducts = response.data.items;
@@ -51,6 +52,7 @@ export class BasketApiRequest extends BasketMemoryRequest {
 
     public async getBasketFromApi(): Promise<BasketPaymentModel | null> {
         const id = sessionStorage.getItem(this._jwtCacheKey);
+        console.log("Inside get basket from api. ID: ", id);
         if (id) {
             try {
                 const response = await api.get<BasketPaymentModel>(`${this._basketUrl}?id=${id}`);

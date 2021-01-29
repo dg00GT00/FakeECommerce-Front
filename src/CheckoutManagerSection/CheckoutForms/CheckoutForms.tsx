@@ -9,10 +9,11 @@ import {Theme} from "@material-ui/core/styles/createMuiTheme";
 import {CheckoutCart} from "../CheckoutCart/CheckoutCart";
 import styles from "./CheckoutForms.module.scss";
 import {ShippingOptions} from "../ShippingOptions/ShippingOptions";
-import {Route, Switch, useRouteMatch} from "react-router-dom";
+import {Route, Switch, useHistory, useRouteMatch} from "react-router-dom";
 import {NotFound} from "../../Utilities/RouterValidation/NotFound";
 import {CheckoutFormHeader} from "./CheckoutFormHeader";
 import {CreditCardForms} from "../CreditCardForms/CreditCardForms";
+import {CheckoutOrder} from "../Orders/CheckoutOrder";
 
 const fakeCardStyle = makeStyles((theme: Theme) => ({
 	fakeCard: {
@@ -30,24 +31,37 @@ const fakeCardStyle = makeStyles((theme: Theme) => ({
 }));
 
 export const CheckoutForms: React.FunctionComponent = () => {
+	const [checkoutComponent, setCheckoutComponent] = React.useState<JSX.Element | null>(null);
+
 	const styleFakeCard = fakeCardStyle();
-	const { path } = useRouteMatch();
+	const {location: {pathname}} = useHistory();
+	const {path} = useRouteMatch();
+
+	console.log("Inside checkout forms");
+	React.useEffect(() => {
+		if (pathname === `${path}/shipping`) {
+			setCheckoutComponent(<CheckoutCart/>);
+		}
+		if (pathname === `${path}/creditcard`) {
+			setCheckoutComponent(<CheckoutOrder/>);
+		}
+	}, [path, pathname]);
 
 	return (
 		<section className={styles.container}>
 			<div className={styles.inner_container}>
 				<div className={styles.checkout_header}>
-					<Logo className={styles.logo} />
+					<Logo className={styles.logo}/>
 					<div className={styles.express_checkout}>
 						<div className={styles.tags}>
 							<Paper>
-								<GPlay className={styles.gplay} />
+								<GPlay className={styles.gplay}/>
 							</Paper>
 							<Paper className={styleFakeCard.payPal}>
-								<Paypal className={styles.paypal} />
+								<Paypal className={styles.paypal}/>
 							</Paper>
 							<Paper className={styleFakeCard.fakeCard}>
-								<FakeCreditCard className={styles.fakeCard} />
+								<FakeCreditCard className={styles.fakeCard}/>
 								<p className={styleFakeCard.badge}>FakeCard</p>
 							</Paper>
 						</div>
@@ -56,7 +70,7 @@ export const CheckoutForms: React.FunctionComponent = () => {
 						<Switch>
 							<Route exact path={`${path}/shipping`}>
 								<CheckoutFormHeader title={"Shipping Options"}>
-									<ShippingOptions />
+									<ShippingOptions/>
 								</CheckoutFormHeader>
 							</Route>
 							<Route exact path={`${path}/creditcard`}>
@@ -65,7 +79,7 @@ export const CheckoutForms: React.FunctionComponent = () => {
 								</CheckoutFormHeader>
 							</Route>
 							<Route>
-								<NotFound color={"black"} />
+								<NotFound color={"black"}/>
 							</Route>
 						</Switch>
 					</div>
@@ -73,16 +87,16 @@ export const CheckoutForms: React.FunctionComponent = () => {
 			</div>
 			<div className={styles.divider_group}>
 				<div className={styles.divider_superior}>
-					<div />
-					<div className={styleFakeCard.divider} />
+					<div/>
+					<div className={styleFakeCard.divider}/>
 				</div>
 				<div className={styles.divider_inferior}>
-					<div className={styleFakeCard.divider} />
-					<div />
+					<div className={styleFakeCard.divider}/>
+					<div/>
 				</div>
 			</div>
 			<div className={styles.cart}>
-				<CheckoutCart />
+				{checkoutComponent}
 			</div>
 		</section>
 	);

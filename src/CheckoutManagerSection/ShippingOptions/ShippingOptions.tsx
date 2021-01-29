@@ -5,13 +5,14 @@ import FormControl from "@material-ui/core/FormControl";
 import styles from "./ShippingOptions.module.scss";
 import {makeStyles} from "@material-ui/core";
 import {ShippingModel} from "../../Utilities/OrderModel/ShippingModel";
-import {OrderError, OrdersRequestsManager,} from "../../HttpRequests/OrdersRequestsManager";
+import {OrderError,} from "../../HttpRequests/OrdersRequestsManager";
 import {useHistory} from "react-router-dom";
 import {CheckoutRoute} from "../../Utilities/CustomHooks/CheckoutRoute/CheckoutRoute";
 import {CartContext} from "../../Utilities/Context/CartContext";
 import Button from "@material-ui/core/Button/Button";
 import {AuthContext} from "../../Utilities/Context/AuthContext";
 import {LoadProgressButton} from "../../Utilities/CustomButtons/LoadProgressButton";
+import {OrderContext} from "../../Utilities/Context/OrderContext";
 
 const formGridStyle = makeStyles({
     root: {
@@ -32,12 +33,13 @@ const initialCheckState: CheckFormsType = {
     FREE: false,
 };
 
-const orders = new OrdersRequestsManager();
 
 export const ShippingOptions: React.FunctionComponent = () => {
     const {push} = useHistory();
+
     const {jwtManager: {jwt}} = React.useContext(AuthContext);
-    const {setShippingValue, updateBasketPaymentIntent} = React.useContext(CartContext);
+    const {getShippingOptionsAsync} = React.useContext(OrderContext);
+    const {updateBasketPaymentIntentAsync} = React.useContext(CartContext);
 
     const [confirmState, setConfirmState] = React.useState(false);
     const [check, setCheckValue] = React.useState(initialCheckState);
@@ -46,8 +48,7 @@ export const ShippingOptions: React.FunctionComponent = () => {
     const styleFormGrid = formGridStyle();
 
     React.useEffect(() => {
-        orders
-            .getShippingOptions()
+        getShippingOptionsAsync()
             .then(response => {
                 setShippingOption(response);
             })
@@ -59,7 +60,7 @@ export const ShippingOptions: React.FunctionComponent = () => {
                     });
                 }
             });
-    }, [push]);
+    }, [push, getShippingOptionsAsync]);
 
     const handleChange: React.ChangeEventHandler<HTMLInputElement> = event => {
         setCheckValue(_ => {
@@ -78,13 +79,12 @@ export const ShippingOptions: React.FunctionComponent = () => {
                 for (const option of shippingOptions) {
                     if (option.shortName === key) {
                         id = option.id;
-                        setShippingValue(option.price);
                         break;
                     }
                 }
             }
         }
-        updateBasketPaymentIntent(id, jwt ?? "")
+        updateBasketPaymentIntentAsync(id, jwt ?? "")
             .then(_ => {
                 push({
                     pathname: "/user/address/update",
@@ -95,7 +95,6 @@ export const ShippingOptions: React.FunctionComponent = () => {
     };
 
     const goBack: React.MouseEventHandler = event => {
-        setShippingValue(undefined);
         push("/");
     };
 
@@ -126,7 +125,9 @@ export const ShippingOptions: React.FunctionComponent = () => {
                     .reverse()}
             </FormControl>
             <div className={styles.nav_buttons}>
-                <Button variant={"contained"} onClick={goBack}>
+                <Button variant={"contained"}
+                        disabled={confirmState}
+                        onClick={goBack}>
                     Go Back
                 </Button>
                 <LoadProgressButton

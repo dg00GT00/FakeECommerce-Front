@@ -1,7 +1,7 @@
 import * as React from "react";
 import {CartContext} from "../../Utilities/Context/CartContext";
 import List from "@material-ui/core/List/List";
-import styles from "./CheckoutCart.module.scss";
+import styles from "./CheckoutCartBase.module.scss";
 import {makeStyles} from "@material-ui/core/styles";
 import {Theme} from "@material-ui/core/styles/createMuiTheme";
 
@@ -22,17 +22,9 @@ type CheckoutCartBaseProps = {
 };
 
 export const CheckoutCartBase: React.FunctionComponent<CheckoutCartBaseProps> = props => {
-    const {shippingValue, getTotalProductCash,} = React.useContext(CartContext);
+    const {getTotalProductCash} = React.useContext(CartContext);
 
     const styleList = listStyles();
-    let subTotalPurchaseAmount = getTotalProductCash();
-
-    const getTotalPurchaseAmount = (): string => {
-        if (shippingValue) {
-            subTotalPurchaseAmount += shippingValue;
-        }
-        return subTotalPurchaseAmount.toFixed(2);
-    };
 
     return (
         <div className={styles.container}>
@@ -43,7 +35,7 @@ export const CheckoutCartBase: React.FunctionComponent<CheckoutCartBaseProps> = 
                 {props.children}
                 <div className={[styles.divider, styleList.divider].join(" ")}/>
                 <h2>Total</h2>
-                <h2 className={styles.total_price}>$ {getTotalPurchaseAmount()}</h2>
+                <h2 className={styles.total_price}>$ {getTotalProductCash().toFixed(2)}</h2>
             </div>
         </div>
     );

@@ -3,6 +3,9 @@ import {Button, TextField} from "@material-ui/core";
 import {useCreditCardFormValidation} from "../../Utilities/CustomHooks/FormValidation/useCreditCardFormValidation";
 import styles from "./CreditCardForms.module.scss";
 import {useHistory} from "react-router-dom";
+import {loadStripe} from "@stripe/stripe-js/pure";
+
+const stripePromise = loadStripe("pk_test_51HpH8pDWWNDRw41cUn4L4N9MGqbiwlRIwinyTAMk4OzPaqLNLctlG5VNeN2q6SNcg89HaGN93R2z4sRfS2NT06RM00XUMtOcXf");
 
 export const CreditCardForms: React.FunctionComponent = () => {
     const {
@@ -16,7 +19,7 @@ export const CreditCardForms: React.FunctionComponent = () => {
         }
     } = useCreditCardFormValidation();
 
-    const {push, goBack} = useHistory();
+    const {goBack} = useHistory();
 
     const isFirstRender = React.useRef(true);
     const cardNumberRef = React.useRef<HTMLInputElement | null>(null);

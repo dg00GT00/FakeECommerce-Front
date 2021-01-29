@@ -6,22 +6,22 @@ import {UserAddressModel} from "../UserModels/UserAddressModel";
 import {JwtManager} from "../../HttpRequests/JwtManager/JwtManager";
 import {useForceUpdate} from "../CustomHooks/useForceUpdate";
 
-const userAuth = new UserRequestManager();
+export const userAuth = new UserRequestManager();
 
 export const AuthContext = React.createContext({
     // A hack to make the return value of this function be string or null
     userLogin: async (email: string, password: string) => Promise.resolve({}),
     registerUser: async (userName: string, email: string, password: string) => Promise.resolve({}),
-    userAddress: async (addressForm: FormState<AddressFieldId>) => Promise.resolve({}),
-    getUserAddress: async () => Promise.resolve({}),
+    userAddress: async (addressForm: FormState<AddressFieldId>) => Promise.resolve({} as UserAddressModel),
+    getUserAddress: async () => Promise.resolve({} as UserAddressModel),
     JWT_SESSION_KEY: String(),
     jwtManager: {} as JwtManager
 });
 
 export const AuthContextProvider: React.FunctionComponent = props => {
-    // Forces the component update when the user login and signup action
+    // Forces the component update on user login and signup action
     const forceUpdate = useForceUpdate();
-
+    console.log("Inside auth context");
     const getEmailFromJwt = (): string => {
         return userAuth.jwtManager.getEmailFromJwt() ?? "";
     }
@@ -43,7 +43,7 @@ export const AuthContextProvider: React.FunctionComponent = props => {
         return userModel;
     };
 
-    const getUserAddress = async (): Promise<FormState<AddressFieldId>> => {
+    const getUserAddress = async (): Promise<UserAddressModel> => {
         return await userAuth.getUserAddress();
     }
 

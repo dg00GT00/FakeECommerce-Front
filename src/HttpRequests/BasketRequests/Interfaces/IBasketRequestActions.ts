@@ -1,4 +1,4 @@
-import {BasketModel, BasketPaymentModel} from "../../../Utilities/BasketModel/BasketModel";
+import {BasketPaymentModel} from "../../../Utilities/BasketModel/BasketModel";
 import {PaymentRequestManager} from "../../PaymentRequestManager";
 
 export interface IBasketRequestActions {
@@ -7,5 +7,5 @@ export interface IBasketRequestActions {
 
     setBasketPromise(basketPromise: Promise<BasketPaymentModel | null>): void;
 
-    getBasketAsync(): Promise<BasketModel[] | null>;
+    getBasketAsync(): Promise<BasketPaymentModel | null>;
 }

@@ -13,10 +13,11 @@ import {UserFirstName} from "./UserAddressFields/UserFirstName";
 import {UserLastName} from "./UserAddressFields/UserLastName";
 import {AuthContext} from "../../Utilities/Context/AuthContext";
 import {useHistory} from "react-router-dom";
-import {AddressFieldId, FormId, FormState,} from "../UserFormsTypes/UserFormsTypes";
+import {FormId,} from "../UserFormsTypes/UserFormsTypes";
 import {useSnackMessageError} from "../../Utilities/CustomHooks/UserSnackbar/useSnackMessageError";
 import {CheckoutRoute} from "../../Utilities/CustomHooks/CheckoutRoute/CheckoutRoute";
 import {useUserSnackbar} from "../../Utilities/CustomHooks/UserSnackbar/useUserSnackbar";
+import {addressToFormMapper} from "../../Utilities/Mappers/AddressFormMapper";
 
 export const UserAddress: React.FunctionComponent<UserInputTypes> = (props) => {
     const {
@@ -41,7 +42,8 @@ export const UserAddress: React.FunctionComponent<UserInputTypes> = (props) => {
                 firstRender.current = false;
                 getUserAddress()
                     .then((response) => {
-                        resetFormState(response as FormState<AddressFieldId>);
+                        const addressFormState = addressToFormMapper(response);
+                        resetFormState(addressFormState);
                         if (state === CheckoutRoute.TO_ADDRESS_UPDATE) {
                             setInfoSnack({message: "Update your address to continue buying", severity: "info"})
                         }

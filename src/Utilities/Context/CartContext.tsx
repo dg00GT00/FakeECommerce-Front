@@ -1,6 +1,6 @@
 import * as React from "react";
 import {BasketActions} from "../../HttpRequests/BasketRequests/BasketActions";
-import {BasketModel} from "../BasketModel/BasketModel";
+import {BasketModel, BasketPaymentModel} from "../BasketModel/BasketModel";
 import {BasketRequestActions} from "../../HttpRequests/BasketRequests/BasketRequestActions";
 import {BasketApiRequest} from "../../HttpRequests/BasketRequests/Requests/BasketApiRequest";
 import {BasketMediator} from "../../HttpRequests/BasketRequests/BasketMediator";
@@ -13,16 +13,14 @@ const basketActions = new BasketActions(basketRequestActions, basketApi);
 
 export const CartContext = React.createContext({
     totalAmount: 0,
-    shippingValue: ({} as { [value: string]: number | null }).value,
-    basketItemsAsync: () => Promise.resolve({} as BasketModel[] | null),
-    updateBasketPaymentIntent: (deliveryMethodId: number, jwt: string) => Promise.resolve({} as BasketModel[] | null),
+    getBasketItemsAsync: () => Promise.resolve({} as BasketPaymentModel | null),
+    manageBasketItemsAsync: () => Promise.resolve({} as BasketPaymentModel | null),
+    updateBasketPaymentIntentAsync: (deliveryMethodId: number, jwt: string) => Promise.resolve({} as BasketModel[] | null),
+    getTotalProductCash: () => Number(),
     getTotalProducts: () => [{} as BasketModel],
     getAmountById: (id: number) => Number(),
     clearItemsById: (id: number) => Number(),
-    getTotalProductCash: () => Number(),
     getTotalProductCashById: (id: number) => Number(),
-    setShippingValue: (value: number | null) => {
-    },
     increaseAmount: (product: BasketModel) => {
     },
     decreaseAmount: (product: BasketModel) => {
@@ -33,8 +31,7 @@ export const CartContextProvider: React.FunctionComponent = props => {
     const {JWT_SESSION_KEY} = React.useContext(AuthContext);
 
     const [cartTotalAmount, setCartTotalAmount] = React.useState(0);
-    const [shippingValue, setShippingValue] = React.useState<number | null>(null);
-
+    console.log("Inside cart context. JWT: ", JWT_SESSION_KEY);
     // Updates the cart total amount getting the product from cache
     React.useEffect(() => {
         basketApi
@@ -44,6 +41,7 @@ export const CartContextProvider: React.FunctionComponent = props => {
                 basketApi
                     .getBasketFromApi()
                     .then(fullBasket => {
+                        console.log("Updating the basket total amount");
                         setCartTotalAmount(fullBasket?.items.length ?? 0);
                     })
             })
@@ -68,13 +66,12 @@ export const CartContextProvider: React.FunctionComponent = props => {
     return (
         <CartContext.Provider
             value={{
-                shippingValue,
-                setShippingValue,
                 increaseAmount,
                 decreaseAmount,
                 clearItemsById,
-                updateBasketPaymentIntent: (deliveryMethodId, jwt) => basketActions.updateBasketPaymentIntent(deliveryMethodId, jwt),
-                basketItemsAsync: () => basketActions.basketItemsAsync(),
+                getBasketItemsAsync: () => basketApi.getBasketFromApi(),
+                updateBasketPaymentIntentAsync: (deliveryMethodId, jwt) => basketActions.updateBasketPaymentIntentAsync(deliveryMethodId, jwt),
+                manageBasketItemsAsync: () => basketActions.manageBasketItemsAsync(),
                 getTotalProducts: () => basketApi.basketProducts,
                 getTotalProductCash: () => basketApi.getTotalProductCash(),
                 getTotalProductCashById: id => basketApi.getTotalProductCashById(id),

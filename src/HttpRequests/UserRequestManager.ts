@@ -4,7 +4,7 @@ import {FullUserModel, UserModel} from "../Utilities/UserModels/FullUserModel";
 import {ErrorModel} from "../Utilities/UserModels/ErrorModel";
 import {AddressFieldId, FormState} from "../UserManagerSection/UserFormsTypes/UserFormsTypes";
 import {UserAddressModel} from "../Utilities/UserModels/UserAddressModel";
-import {addressToFormMapper, formToAddressMapper} from "../Utilities/Mappers/AddressFormMapper";
+import {formToAddressMapper} from "../Utilities/Mappers/AddressFormMapper";
 import {JwtManager} from "./JwtManager/JwtManager";
 
 export class UserRequestManager {
@@ -68,10 +68,10 @@ export class UserRequestManager {
         }
     }
 
-    public async getUserAddress(): Promise<FormState<AddressFieldId>> {
+    public async getUserAddress(): Promise<UserAddressModel> {
         try {
-            const address = await api.get<UserAddressModel | ErrorModel>("/account/address", this._defaultHeader());
-            return addressToFormMapper((address.data as UserAddressModel));
+            const address = await api.get<UserAddressModel>("/account/address", this._defaultHeader());
+            return address.data;
         } catch (e) {
             return Promise.reject((e as AxiosError).response?.status);
         }

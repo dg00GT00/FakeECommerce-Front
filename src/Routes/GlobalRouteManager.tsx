@@ -6,6 +6,7 @@ import {AuthContextProvider} from "../Utilities/Context/AuthContext";
 import {CartContextProvider} from "../Utilities/Context/CartContext";
 import {CheckoutManagerSection} from "../CheckoutManagerSection/CheckoutManagerSection";
 import {NotFound} from "../Utilities/RouterValidation/NotFound";
+import {OrderContextProvider} from "../Utilities/Context/OrderContext";
 
 /* 
 * The "Not Found" should be rendered separately for each application section manager
@@ -18,27 +19,29 @@ export const GlobalRouteManager: React.FunctionComponent = () => {
 	return (
 		<AuthContextProvider>
 			<CartContextProvider>
-				<Route exact path={["/", "/products"]}>
-					<ProductManagerSection />
-				</Route>
-				<Switch>
-					<Route path={"/checkout"}>
-						<CheckoutManagerSection />
+				<OrderContextProvider>
+					<Route exact path={["/", "/products"]}>
+						<ProductManagerSection/>
 					</Route>
-					<Route path={"/user"}>
-						<UserManagerSection />
-					</Route>
-					<Route
-						render={({ location: { pathname } }) => {
-							for (const path of ["/", "/products", "/checkout", "/user"]) {
-								if (pathname === path) {
-									return null;
+					<Switch>
+						<Route path={"/checkout"}>
+							<CheckoutManagerSection/>
+						</Route>
+						<Route path={"/user"}>
+							<UserManagerSection/>
+						</Route>
+						<Route
+							render={({location: {pathname}}) => {
+								for (const path of ["/", "/products", "/checkout", "/user"]) {
+									if (pathname === path) {
+										return null;
+									}
 								}
-							}
-							return <NotFound />;
-						}}
-					/>
-				</Switch>
+								return <NotFound/>;
+							}}
+						/>
+					</Switch>
+				</OrderContextProvider>
 			</CartContextProvider>
 		</AuthContextProvider>
 	);

@@ -1,5 +1,5 @@
 import {IBasketRequestActions} from "./Interfaces/IBasketRequestActions";
-import {BasketModel, BasketPaymentModel} from "../../Utilities/BasketModel/BasketModel";
+import {BasketPaymentModel} from "../../Utilities/BasketModel/BasketModel";
 import {PaymentRequestManager} from "../PaymentRequestManager";
 
 export class BasketRequestActions implements IBasketRequestActions {
@@ -11,7 +11,7 @@ export class BasketRequestActions implements IBasketRequestActions {
         this._basketPromise = basketPromise;
     }
 
-    public async getBasketAsync(): Promise<BasketModel[] | null> {
-        return (await this._basketPromise)?.items ?? null;
+    public async getBasketAsync(): Promise<BasketPaymentModel | null> {
+        return this._basketPromise;
     }
 }
