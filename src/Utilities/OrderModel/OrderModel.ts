@@ -1,6 +1,12 @@
 import {UserAddressModel} from "../UserModels/UserAddressModel";
 import {ShippingModel} from "./ShippingModel";
 
+export enum PaymentStatusEnum {
+    Pending = "Pending",
+    PaymentReceived = "Payment Received",
+    PaymentFailed = "Payment Failed"
+}
+
 type ProductOrdered = {
     productItemId: number;
     productName: string;
@@ -14,7 +20,7 @@ type OrderItem = {
 }
 
 export type OrderModel = {
-    status: "Pending" | "Payment Received" | "Payment Failed";
+    status: number;
     buyerEmail: string;
     orderDate: string;
     shipToAddress: UserAddressModel;

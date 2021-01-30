@@ -3,8 +3,9 @@ import {ListItem} from "@material-ui/core";
 import {BasketContext} from "../../Utilities/Context/BasketContext";
 import {makeStyles} from "@material-ui/core/styles";
 import {Theme} from "@material-ui/core/styles/createMuiTheme";
-import {EmptyCheckoutCart} from "../EmptyCheckoutCart/EmptyCheckoutCart";
+import {EmptyItemsCheckoutCart} from "../EmptyCheckoutCart/EmptyItemsCheckoutCart";
 import {CheckoutCartBase} from "./CheckoutCartBase";
+import {ReactComponent as CartArrowDown} from "../../Assets/cartArrowDown.svg";
 import styles from "./CheckoutCartBase.module.scss";
 import Badge from "@material-ui/core/Badge/Badge";
 import Button from "@material-ui/core/Button/Button";
@@ -64,7 +65,11 @@ export const CheckoutCart: React.FunctionComponent = () => {
                 });
                 setCheckoutComponent(productsList);
             } else {
-                setCheckoutComponent(<EmptyCheckoutCart/>);
+                setCheckoutComponent(
+                    <EmptyItemsCheckoutCart message={"Your cart is empty!"}>
+                        <CartArrowDown/>
+                    </EmptyItemsCheckoutCart>
+                );
             }
         })();
     }, [manageBasketItemsAsync, clearItemsById, styleList.listItem]);

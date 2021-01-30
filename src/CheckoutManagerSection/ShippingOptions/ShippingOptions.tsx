@@ -12,6 +12,7 @@ import {BasketContext} from "../../Utilities/Context/BasketContext";
 import Button from "@material-ui/core/Button/Button";
 import {LoadProgressButton} from "../../Utilities/CustomButtons/LoadProgressButton";
 import {OrderContext} from "../../Utilities/Context/OrderContext";
+import {useUserSnackbar} from "../../Utilities/CustomHooks/UserSnackbar/useUserSnackbar";
 
 const formGridStyle = makeStyles({
     root: {
@@ -42,6 +43,8 @@ export const ShippingOptions: React.FunctionComponent = () => {
     const [confirmState, setConfirmState] = React.useState(false);
     const [check, setCheckValue] = React.useState(initialCheckState);
     const [shippingOptions, setShippingOption] = React.useState<ShippingModel[]>([]);
+
+    const [snack, setSnackMessage] = useUserSnackbar();
 
     const styleFormGrid = formGridStyle();
 
@@ -89,7 +92,13 @@ export const ShippingOptions: React.FunctionComponent = () => {
                     state: CheckoutRoute.TO_ADDRESS_UPDATE
                 });
             })
-            .catch(_ => setConfirmState(false));
+            .catch(_ => {
+                setConfirmState(false);
+                setSnackMessage({
+                    message: "Error setting shipping options. Probably your cart is empty",
+                    severity: "error"
+                });
+            });
     };
 
     const goBack: React.MouseEventHandler = event => {
@@ -137,6 +146,7 @@ export const ShippingOptions: React.FunctionComponent = () => {
                     Confirm
                 </LoadProgressButton>
             </div>
+            {snack}
         </>
     );
 };
