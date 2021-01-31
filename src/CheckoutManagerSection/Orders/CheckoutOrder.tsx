@@ -9,6 +9,7 @@ import {BasketContext} from "../../Utilities/Context/BasketContext";
 import {CheckoutCartBase} from "../CheckoutCart/CheckoutCartBase";
 import {EmptyItemsCheckoutCart} from "../EmptyCheckoutCart/EmptyItemsCheckoutCart";
 import {PaymentStatus} from "./PaymentStatus";
+import {OrderModel} from "../../Utilities/OrderModel/OrderModel";
 
 const listStyles = makeStyles((theme: Theme) => ({
     listItem: {
@@ -32,7 +33,9 @@ type OrderComponentState = {
 }
 
 // "React.memo" avoid the second rerender of this component when changing the inner state
-export const CheckoutOrder: React.FunctionComponent = React.memo(() => {
+export const CheckoutOrder = React.memo<{ orderModel: OrderModel | null }>(cmp => {
+    const {orderModel: order} = cmp;
+
     const {postOrderAsync} = React.useContext(OrderContext);
     const {getBasketItemsAsync} = React.useContext(BasketContext);
 
@@ -42,11 +45,8 @@ export const CheckoutOrder: React.FunctionComponent = React.memo(() => {
 
     React.useEffect(() => {
         (async () => {
-            const basketPaymentModel = await getBasketItemsAsync();
-
-            if (basketPaymentModel?.items.length) {
-                const order = await postOrderAsync(basketPaymentModel.deliveryMethodId ?? 0);
-                const orderDate = new Date(order.orderDate)
+            if (order) {
+                const orderDate = new Date(order.orderDate);
                 const orderComponent = (
                     <ListItem
                         button
@@ -69,17 +69,15 @@ export const CheckoutOrder: React.FunctionComponent = React.memo(() => {
                     deliveryMethodPrice: shippingPrice.toString()
                 });
             } else {
-                setOrderComponent(
-                    {
-                        component:
-                            <EmptyItemsCheckoutCart message={"You have no order!"}>
-                                <svg viewBox="0 0 24 24">
-                                    <path
-                                        d="M20 21H4V10H6V19H18V10H20V21M3 3H21V9H3V3M5 5V7H19V5M10.5 17V14H8L12 10L16 14H13.5V17"/>
-                                </svg>
-                            </EmptyItemsCheckoutCart>
-                    }
-                );
+                setOrderComponent({
+                    component:
+                        <EmptyItemsCheckoutCart message={"You have no order!"}>
+                            <svg viewBox="0 0 24 24">
+                                <path
+                                    d="M20 21H4V10H6V19H18V10H20V21M3 3H21V9H3V3M5 5V7H19V5M10.5 17V14H8L12 10L16 14H13.5V17"/>
+                            </svg>
+                        </EmptyItemsCheckoutCart>
+                });
             }
         })();
     }, [getBasketItemsAsync, postOrderAsync, styleList.listItem]);

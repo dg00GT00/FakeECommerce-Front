@@ -14,89 +14,124 @@ import {NotFound} from "../../Utilities/RouterValidation/NotFound";
 import {CheckoutFormHeader} from "./CheckoutFormHeader";
 import {CreditCardForms} from "../CreditCardForms/CreditCardForms";
 import {CheckoutOrder} from "../Orders/CheckoutOrder";
+import {OrderModel} from "../../Utilities/OrderModel/OrderModel";
+import {OrderContext} from "../../Utilities/Context/OrderContext";
+import {BasketContext} from "../../Utilities/Context/BasketContext";
+import {Elements} from "@stripe/react-stripe-js";
+import {loadStripe} from "@stripe/stripe-js/pure";
 
 const fakeCardStyle = makeStyles((theme: Theme) => ({
-	fakeCard: {
-		backgroundColor: theme.palette.primary.dark,
-	},
-	payPal: {
-		backgroundColor: theme.palette.secondary.main,
-	},
-	divider: {
-		backgroundColor: theme.palette.primary.main,
-	},
-	badge: {
-		color: "white",
-	},
+    fakeCard: {
+        backgroundColor: theme.palette.primary.dark,
+    },
+    payPal: {
+        backgroundColor: theme.palette.secondary.main,
+    },
+    divider: {
+        backgroundColor: theme.palette.primary.main,
+    },
+    badge: {
+        color: "white",
+    },
 }));
 
+type OrderProps = {
+    order: OrderModel,
+    clientSecrets: string | undefined;
+}
+
+const stripePromise = loadStripe("pk_test_51HpH8pDWWNDRw41cUn4L4N9MGqbiwlRIwinyTAMk4OzPaqLNLctlG5VNeN2q6SNcg89HaGN93R2z4sRfS2NT06RM00XUMtOcXf");
+
 export const CheckoutForms: React.FunctionComponent = () => {
-	const [checkoutComponent, setCheckoutComponent] = React.useState<JSX.Element | null>(null);
+    const {postOrderAsync} = React.useContext(OrderContext);
+    const {getBasketItemsAsync} = React.useContext(BasketContext);
 
-	const styleFakeCard = fakeCardStyle();
-	const {location: {pathname}} = useHistory();
-	const {path} = useRouteMatch();
+    const [checkoutComponent, setCheckoutComponent] = React.useState<JSX.Element | null>(null);
+    const [orderContainer, setOrderContainer] = React.useState<OrderProps | null>(null);
 
-	React.useEffect(() => {
-		if (pathname === `${path}/shipping`) {
-			setCheckoutComponent(<CheckoutCart/>);
-		}
-		if (pathname === `${path}/creditcard`) {
-			setCheckoutComponent(<CheckoutOrder/>);
-		}
-	}, [path, pathname]);
+    const styleFakeCard = fakeCardStyle();
+    const {location: {pathname}} = useHistory();
+    const {path} = useRouteMatch();
 
-	return (
-		<section className={styles.container}>
-			<div className={styles.inner_container}>
-				<div className={styles.checkout_header}>
-					<Logo className={styles.logo}/>
-					<div className={styles.express_checkout}>
-						<div className={styles.tags}>
-							<Paper>
-								<GPlay className={styles.gplay}/>
-							</Paper>
-							<Paper className={styleFakeCard.payPal}>
-								<Paypal className={styles.paypal}/>
-							</Paper>
-							<Paper className={styleFakeCard.fakeCard}>
-								<FakeCreditCard className={styles.fakeCard}/>
-								<p className={styleFakeCard.badge}>FakeCard</p>
-							</Paper>
-						</div>
-					</div>
-					<div className={styles.checkout_forms}>
-						<Switch>
-							<Route exact path={`${path}/shipping`}>
-								<CheckoutFormHeader title={"Shipping Options"}>
-									<ShippingOptions/>
-								</CheckoutFormHeader>
-							</Route>
-							<Route exact path={`${path}/creditcard`}>
-								<CheckoutFormHeader title={"Credit Card Information"}>
-									<CreditCardForms/>
-								</CheckoutFormHeader>
-							</Route>
-							<Route>
-								<NotFound color={"black"}/>
-							</Route>
-						</Switch>
-					</div>
-				</div>
-			</div>
-			<div className={styles.divider_group}>
-				<div className={styles.divider_superior}>
-					<div/>
-					<div className={styleFakeCard.divider}/>
-				</div>
-				<div className={styles.divider_inferior}>
-					<div className={styleFakeCard.divider}/>
-					<div/>
-				</div>
-			</div>
-			<div className={styles.cart}>
-				{checkoutComponent}
-			</div>
-		</section>
-	);
+    const getCheckoutOrderAsync = async (): Promise<OrderProps | null> => {
+        const basketPaymentModel = await getBasketItemsAsync();
+        if (basketPaymentModel?.items.length) {
+            return {
+                order: await postOrderAsync(basketPaymentModel.deliveryMethodId ?? 0),
+                clientSecrets: basketPaymentModel.clientSecret
+            };
+        }
+        return null;
+    }
+
+    React.useEffect(() => {
+        if (pathname === `${path}/shipping`) {
+            setCheckoutComponent(<CheckoutCart/>);
+        }
+        if (pathname === `${path}/creditcard`) {
+            getCheckoutOrderAsync()
+                .then(order => {
+                    setCheckoutComponent(<CheckoutOrder orderModel={order?.order ?? null}/>);
+                    setOrderContainer(order);
+                });
+        }
+    }, [path, pathname]);
+
+    return (
+        <section className={styles.container}>
+            <div className={styles.inner_container}>
+                <div className={styles.checkout_header}>
+                    <Logo className={styles.logo}/>
+                    <div className={styles.express_checkout}>
+                        <div className={styles.tags}>
+                            <Paper>
+                                <GPlay className={styles.gplay}/>
+                            </Paper>
+                            <Paper className={styleFakeCard.payPal}>
+                                <Paypal className={styles.paypal}/>
+                            </Paper>
+                            <Paper className={styleFakeCard.fakeCard}>
+                                <FakeCreditCard className={styles.fakeCard}/>
+                                <p className={styleFakeCard.badge}>FakeCard</p>
+                            </Paper>
+                        </div>
+                    </div>
+                    <div className={styles.checkout_forms}>
+                        <Switch>
+                            <Route exact path={`${path}/shipping`}>
+                                <CheckoutFormHeader title={"Shipping Options"}>
+                                    <ShippingOptions/>
+                                </CheckoutFormHeader>
+                            </Route>
+                            <Route exact path={`${path}/creditcard`}>
+                                <CheckoutFormHeader title={"Credit Card Information"}>
+                                    <Elements stripe={stripePromise}>
+                                        <CreditCardForms
+                                            orderModel={orderContainer?.order ?? null}
+                                            clientSecrets={orderContainer?.clientSecrets}/>
+                                    </Elements>
+                                </CheckoutFormHeader>
+                            </Route>
+                            <Route>
+                                <NotFound color={"black"}/>
+                            </Route>
+                        </Switch>
+                    </div>
+                </div>
+            </div>
+            <div className={styles.divider_group}>
+                <div className={styles.divider_superior}>
+                    <div/>
+                    <div className={styleFakeCard.divider}/>
+                </div>
+                <div className={styles.divider_inferior}>
+                    <div className={styleFakeCard.divider}/>
+                    <div/>
+                </div>
+            </div>
+            <div className={styles.cart}>
+                {checkoutComponent}
+            </div>
+        </section>
+    );
 };

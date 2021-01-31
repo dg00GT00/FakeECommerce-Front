@@ -1,38 +1,104 @@
 import * as React from "react";
 import {Button, TextField} from "@material-ui/core";
 import {useCreditCardFormValidation} from "../../Utilities/CustomHooks/FormValidation/useCreditCardFormValidation";
-import styles from "./CreditCardForms.module.scss";
 import {useHistory} from "react-router-dom";
-import {loadStripe} from "@stripe/stripe-js/pure";
+import {CardCvcElement, CardExpiryElement, CardNumberElement, useElements, useStripe} from "@stripe/react-stripe-js";
+import {OrderModel} from "../../Utilities/OrderModel/OrderModel";
+import {PaymentMethodCreateParams, StripeElementChangeEvent} from "@stripe/stripe-js";
+import {useUserSnackbar} from "../../Utilities/CustomHooks/UserSnackbar/useUserSnackbar";
+import {LoadProgressButton} from "../../Utilities/CustomButtons/LoadProgressButton";
+import styles from "./CreditCardForms.module.scss";
 
-const stripePromise = loadStripe("pk_test_51HpH8pDWWNDRw41cUn4L4N9MGqbiwlRIwinyTAMk4OzPaqLNLctlG5VNeN2q6SNcg89HaGN93R2z4sRfS2NT06RM00XUMtOcXf");
-
-export const CreditCardForms: React.FunctionComponent = () => {
+export const CreditCardForms: React.FunctionComponent<{ orderModel: OrderModel | null, clientSecrets?: string }> = props => {
     const {
         validationState: {formState, errorState},
         validationFunctions: {
             blankFieldValidation,
             genericFieldValidation,
-            creditCardCVVValidation,
-            creditCardNumberValidation,
-            creditCardValidityValidation
         }
     } = useCreditCardFormValidation();
 
     const {goBack} = useHistory();
 
-    const isFirstRender = React.useRef(true);
-    const cardNumberRef = React.useRef<HTMLInputElement | null>(null);
-    const cardValidityRef = React.useRef<HTMLInputElement | null>(null);
-    const cvvRef = React.useRef<HTMLInputElement | null>(null);
+    const stripe = useStripe();
+    const stripeElements = useElements();
 
-    React.useEffect(() => {
-        if (isFirstRender.current && cardNumberRef.current && cardValidityRef.current) {
-            creditCardNumberValidation(`#${cardNumberRef.current?.id}`);
-            creditCardValidityValidation(`#${cardValidityRef.current?.id}`)
-            isFirstRender.current = false;
+    const [snack, setErrorMessage] = useUserSnackbar();
+    const [creditCardValidationError, setCreditCardValidationError] = React.useState<string | null>(null);
+    const [formProcessing, setFormProcessing] = React.useState(false);
+    const [fullErrorState, setFullErrorState] = React.useState<{ creditCardErrorState: boolean }>({
+        creditCardErrorState: true
+    });
+
+    const setCreditCardErrorMessage = (message: string): void => setErrorMessage({message, severity: "error"});
+
+    const cardNumber = stripeElements?.getElement("cardNumber");
+    stripeElements?.getElement("cardExpiry");
+    stripeElements?.getElement("cardCvc");
+
+    const onChangeHandler = (event: StripeElementChangeEvent): void => {
+        if (event.error?.message) {
+            setCreditCardValidationError(event.error.message);
+            setFullErrorState(prevState => {
+                const state = prevState || fullErrorState;
+                return {
+                    ...state,
+                    creditCardErrorState: true
+                }
+            });
+        } else {
+            setCreditCardValidationError(null);
+            setFullErrorState(prevState => {
+                const state = prevState || fullErrorState;
+                return {
+                    ...state,
+                    creditCardErrorState: false
+                }
+            });
         }
-    }, [creditCardNumberValidation, creditCardValidityValidation, creditCardCVVValidation]);
+    }
+
+    const submitCreditCard = async (event: React.MouseEvent) => {
+        if (props.orderModel) {
+            const {buyerEmail, shipToAddress: {city, zipCode, state}} = props.orderModel;
+
+            const billingDetails: PaymentMethodCreateParams.BillingDetails = {
+                name: formState.username.fieldValue,
+                email: buyerEmail,
+                address: {
+                    city: city,
+                    postal_code: zipCode,
+                    state: state
+                }
+            };
+
+            setFormProcessing(true);
+            try {
+                const paymentMethodReq = await stripe?.createPaymentMethod({
+                    type: "card",
+                    billing_details: billingDetails,
+                    card: cardNumber ?? {token: ""}
+                });
+
+                if (paymentMethodReq?.error) {
+                    setFormProcessing(false);
+                    setCreditCardErrorMessage("Error on your credit card entries");
+                }
+
+                const paymentConfirm = await stripe?.confirmCardPayment(props?.clientSecrets ?? "", {
+                    payment_method: paymentMethodReq?.paymentMethod?.id
+                })
+
+                if (paymentConfirm?.error) {
+                    setFormProcessing(false);
+                    setCreditCardErrorMessage("Error on your credit card entries");
+                }
+            } catch (e) {
+                setFormProcessing(false);
+                return;
+            }
+        }
+    }
 
     return (
         <div className={styles.container}>
@@ -47,48 +113,33 @@ export const CreditCardForms: React.FunctionComponent = () => {
                 id={"card_name"}
                 variant={"outlined"}
                 color={"primary"}/>
-            <TextField
-                required
-                className={styles.cardnumber}
-                id={"card_number"}
-                inputRef={cardNumberRef}
-                onBlur={event => blankFieldValidation(event, "cardnumber")}
-                error={formState.cardnumber.requiredValidity}
-                placeholder={"XXXX XXXX XXXX XXXX"}
-                variant={"outlined"}
-                color={"primary"}/>
-            <TextField
-                required
-                id={"card_validity"}
-                inputRef={cardValidityRef}
-                onBlur={event => blankFieldValidation(event, "cardvalidity")}
-                error={formState.cardvalidity.requiredValidity}
-                placeholder={"MM/YY"}
-                variant={"outlined"}
-                color={"primary"}/>
-            <TextField
-                required
-                id={"cvv"}
-                inputRef={cvvRef}
-                onChange={_ => creditCardCVVValidation(cvvRef)}
-                onBlur={event => blankFieldValidation(event, "cvv")}
-                error={formState.cvv.requiredValidity}
-                placeholder={"CVV"}
-                variant={"outlined"}
-                color={"primary"}/>
+            <div className={styles.stripe_card}>
+                <CardNumberElement onChange={onChangeHandler}/>
+            </div>
+            <div className={styles.stripe_card}>
+                <CardExpiryElement onChange={onChangeHandler}/>
+            </div>
+            <div className={styles.stripe_card}>
+                <CardCvcElement/>
+            </div>
+            <p className={styles.validation_error}>{creditCardValidationError}</p>
             <div className={styles.nav_buttons}>
                 <Button
                     variant={"contained"}
+                    disabled={!stripe || formProcessing}
                     onClick={_ => goBack()}>
                     Back
                 </Button>
-                <Button
-                    disabled={errorState}
+                <LoadProgressButton
+                    isLoading={formProcessing}
+                    onClick={submitCreditCard}
+                    disabled={!stripe || errorState || fullErrorState.creditCardErrorState || formProcessing}
                     variant={"contained"}
                     color={"primary"}>
                     Confirm
-                </Button>
+                </LoadProgressButton>
             </div>
+            {snack}
         </div>
     );
 }
