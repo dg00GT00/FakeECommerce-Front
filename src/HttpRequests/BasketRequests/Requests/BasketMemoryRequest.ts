@@ -22,7 +22,7 @@ export class BasketMemoryRequest implements IBasketRequest {
     public getTotalProductCash(): number {
         let totalCash = 0;
         for (const product of this._basketProducts) {
-            totalCash += product.price;
+            totalCash += product.quantity * product.price;
         }
         return totalCash;
     }
