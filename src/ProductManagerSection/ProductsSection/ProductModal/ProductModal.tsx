@@ -1,4 +1,4 @@
-import React from "react";
+import * as React from "react";
 import Dialog from "@material-ui/core/Dialog";
 import {ProductsContext} from "../ProductContext/ProductsContext";
 import {ProductCardProps} from "../../../Utilities/ProductProps/ProductCardProps";

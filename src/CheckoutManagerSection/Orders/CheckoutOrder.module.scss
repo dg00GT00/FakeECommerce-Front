@@ -1,0 +1,29 @@
+.id {
+  grid-area: id;
+}
+
+.date {
+  grid-area: date;
+  justify-self: end;
+}
+
+.delivery {
+  grid-area: delivery;
+  display: flex;
+  justify-content: space-between;
+}
+
+.payment {
+  display: flex;
+  grid-area: payment;
+  justify-self: end;
+  width: 40%;
+
+  span {
+    margin-right: 1em;
+  }
+
+  .p_status {
+    width: 100%;
+  }
+}

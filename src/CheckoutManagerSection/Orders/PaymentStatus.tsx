@@ -40,7 +40,7 @@ const chipStyle = makeStyles<Theme, { chipColor: string, textColor: string }>((t
     });
 });
 
-export const PaymentStatus: React.FunctionComponent<{ status: number }> = props => {
+export const PaymentStatus: React.FunctionComponent<{ status: number, className?: string }> = props => {
     const theme = useTheme();
 
     const statusColor: StatusColor = {
@@ -56,6 +56,7 @@ export const PaymentStatus: React.FunctionComponent<{ status: number }> = props 
     return (
         <Chip
             size={"small"}
+            className={props.className}
             label={statusObj.statusMessage}
             classes={{
                 root: styleChip.root
