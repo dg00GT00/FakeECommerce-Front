@@ -26,7 +26,7 @@ export type OrderModel = {
     shipToAddress: UserAddressModel;
     deliveryMethod: ShippingModel;
     orderItems: OrderItem;
-    subTotal: number;
+    subtotal: number;
     paymentIntentId: string;
     id: number;
 }
