@@ -18,7 +18,8 @@ const listStyles = makeStyles((theme: Theme) => ({
 }));
 
 type CheckoutCartBaseProps = {
-  cartComponent: JSX.Element | JSX.Element[] | null;
+    cartComponent: JSX.Element | JSX.Element[] | null;
+    totalProductCash?: string;
 };
 
 export const CheckoutCartBase: React.FunctionComponent<CheckoutCartBaseProps> = props => {
@@ -33,9 +34,9 @@ export const CheckoutCartBase: React.FunctionComponent<CheckoutCartBaseProps> = 
             </List>
             <div className={styles.purchase_amount}>
                 {props.children}
-                <div className={[styles.divider, styleList.divider].join(" ")}/>
-                <h2>Total</h2>
-                <h2 className={styles.total_price}>$ {getTotalProductCash().toFixed(2)}</h2>
+                <div className={[styles.divider, styles.divider_total, styleList.divider].join(" ")}/>
+                <h2 className={styles.total}>Total</h2>
+                <h2 className={styles.total_price}>$ {props.totalProductCash ?? 0}</h2>
             </div>
         </div>
     );

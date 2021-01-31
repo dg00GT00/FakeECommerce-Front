@@ -33,6 +33,8 @@ export const CheckoutCart: React.FunctionComponent = () => {
 
     const styleList = listStyles();
 
+    const totalProductCash = (): string => getTotalProductCash().toFixed(2);
+
     React.useEffect(() => {
         (async () => {
             const products = await manageBasketItemsAsync();
@@ -76,11 +78,11 @@ export const CheckoutCart: React.FunctionComponent = () => {
 
 
     return (
-        <CheckoutCartBase cartComponent={checkoutComponent}>
+        <CheckoutCartBase cartComponent={checkoutComponent} totalProductCash={totalProductCash()}>
             <div className={[styles.divider, styleList.divider].join(" ")}/>
             <p className={styles.subtotal}>Subtotal</p>
             <p className={styles.subtotal_price}>
-                $ {getTotalProductCash().toFixed(2)}
+                $ {totalProductCash()}
             </p>
             <p className={styles.shipping}>Shipping</p>
             <p className={styles.shipping_price}>Calculated in the current step</p>

@@ -1,90 +1,109 @@
 .container {
-    width: 80%;
-    margin: 0 auto;
+  width: 80%;
+  margin: 0 auto;
 
-    .items {
-        margin-top: 40px;
-        height: 710px;
-        overflow-y: auto;
+  .items {
+    margin-top: 40px;
+    height: 710px;
+    overflow-y: auto;
 
-        .item_grid {
-            align-items: start;
-            justify-content: stretch;
-            padding: 5% 0;
-            grid-template-columns: 20% 20% auto 20%;
-            grid-template-areas: "img name name price"
-                             "img clear clear .";
+    .item_grid {
+      align-items: start;
+      justify-content: stretch;
+      padding: 5% 0;
+      grid-template-columns: 20% 20% auto 20%;
+      grid-template-areas: "img name name price"
+                           "img clear clear .";
 
-            .image {
-                grid-area: img;
-                background-color: white;
-                position: relative;
-                width: 100px;
-                height: 100px;
-                border: 1px solid #0000001c;
-                border-radius: 6px;
+      .image {
+        grid-area: img;
+        background-color: white;
+        position: relative;
+        width: 100px;
+        height: 100px;
+        border: 1px solid #0000001c;
+        border-radius: 6px;
 
-                .badge {
-                    height: 100%;
-                }
-
-                img {
-                    object-fit: contain;
-                    width: 100%;
-                    height: 100%;
-                }
-            }
-
-            .name {
-                grid-area: name;
-                font-weight: bold;
-                font-size: clamp(0.8rem, 1vw, 1.1rem);
-            }
-
-            .price {
-                font-size: 1.2rem;
-                justify-self: end;
-                opacity: 0.4;
-                font-weight: bold;
-                grid-area: price;
-            }
-
-            .clear {
-                grid-area: clear;
-                font-size: clamp(0.7rem, 2vw, 0.7rem);
-                padding: 0;
-                width: 25%;
-            }
+        .badge {
+          height: 100%;
         }
+
+        img {
+          object-fit: contain;
+          width: 100%;
+          height: 100%;
+        }
+      }
+
+      .name {
+        grid-area: name;
+        font-weight: bold;
+        font-size: clamp(0.8rem, 1vw, 1.1rem);
+      }
+
+      .price {
+        font-size: 1.2rem;
+        justify-self: end;
+        opacity: 0.4;
+        font-weight: bold;
+        grid-area: price;
+      }
+
+      .clear {
+        grid-area: clear;
+        font-size: clamp(0.7rem, 2vw, 0.7rem);
+        padding: 0;
+        width: 25%;
+      }
+    }
+  }
+
+  .purchase_amount {
+    display: grid;
+    align-items: center;
+    grid-template-columns: 20% 1fr;
+    grid-template-rows: auto repeat(2, 60px) auto 60px;
+
+    .divider {
+      grid-column: 1 / -1;
+      width: 30%;
+      height: 2px;
     }
 
-    .purchase_amount {
-        display: grid;
-        align-items: center;
-        grid-template-columns: 20% 1fr;
-        grid-template-rows: auto repeat(2, 60px) auto 60px;
-
-        .divider {
-            grid-column: 1 / -1;
-            width: 30%;
-            height: 2px;
-        }
-
-        .subtotal {
-            grid-column: 1 / 2;
-            grid-row: 2 / 3;
-        }
-
-        .shipping {
-            grid-column: 1 / 2;
-            grid-row: 3 / 4;
-        }
-
-        .subtotal_price,
-        .shipping_price,
-        .total_price {
-            justify-self: end;
-        }
+    .divider_total {
+      grid-row: 4 / 5;
     }
+
+    .subtotal {
+      grid-column: 1 / 2;
+      grid-row: 2 / 3;
+    }
+
+    .shipping {
+      grid-column: 1 / 2;
+      grid-row: 3 / 4;
+    }
+
+    .shipping_price {
+      grid-column: 2 / 3;
+      grid-row: 3 / 4;
+    }
+
+    .total {
+      grid-column: 1 / 2;
+      grid-row: 5 / 6;
+    }
+
+    .total_price {
+      grid-column: 2 / 3;
+      grid-row: 5 / 6;
+    }
+
+    .subtotal_price,
+    .shipping_price,
+    .total_price {
+      justify-self: end;
+    }
+  }
 }
 
