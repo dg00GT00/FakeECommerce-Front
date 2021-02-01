@@ -7,7 +7,7 @@ const dividerStyle = makeStyles((theme: Theme) => ({
 		backgroundColor: theme.palette.primary.main,
 		width: "10%",
 		height: 3,
-		margin: "13px auto 100px",
+		margin: "13px auto 0",
 	},
 }));
 

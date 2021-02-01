@@ -49,7 +49,6 @@ export const CheckoutOrder = React.memo<{ orderModel: OrderModel | null }>(cmp =
                 const orderDate = new Date(order.orderDate);
                 const orderComponent = (
                     <ListItem
-                        button
                         key={order.id}
                         className={[styleList.listItem, styles.listItem].join(" ")}>
                         <h2 className={styles.id}>#{order.id}</h2>

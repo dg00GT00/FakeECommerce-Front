@@ -82,7 +82,8 @@ export const CreditCardForms: React.FunctionComponent<{ orderModel: OrderModel |
 
                 if (paymentMethodReq?.error) {
                     setFormProcessing(false);
-                    setCreditCardErrorMessage("Error on your credit card entries");
+                    setCreditCardErrorMessage(paymentMethodReq.error.message ?? "");
+                    return;
                 }
 
                 const paymentConfirm = await stripe?.confirmCardPayment(props?.clientSecrets ?? "", {
@@ -91,7 +92,8 @@ export const CreditCardForms: React.FunctionComponent<{ orderModel: OrderModel |
 
                 if (paymentConfirm?.error) {
                     setFormProcessing(false);
-                    setCreditCardErrorMessage("Error on your credit card entries");
+                    setCreditCardErrorMessage(paymentConfirm.error.message ?? "");
+                    return;
                 }
             } catch (e) {
                 setFormProcessing(false);
