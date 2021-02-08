@@ -7,6 +7,7 @@ const {basketApi, basketActions} = appBuilder();
 
 export const BasketContext = React.createContext({
     totalAmount: 0,
+    deleteBasketAsync: () => Promise.resolve(),
     getBasketItemsAsync: () => Promise.resolve({} as BasketPaymentModel | null),
     manageBasketItemsAsync: () => Promise.resolve({} as BasketPaymentModel | null),
     updateBasketPaymentIntentAsync: (deliveryMethodId: number) => Promise.resolve({} as BasketModel[] | null),
@@ -57,6 +58,7 @@ export const CartContextProvider: React.FunctionComponent = props => {
                 increaseAmount,
                 decreaseAmount,
                 clearItemsById,
+                deleteBasketAsync: () => basketApi.deleteBasketFromApi(),
                 getBasketItemsAsync: () => basketApi.getBasketFromApi(),
                 updateBasketPaymentIntentAsync: (deliveryMethodId) => basketActions.updateBasketPaymentIntentAsync(deliveryMethodId),
                 manageBasketItemsAsync: () => basketActions.manageBasketItemsAsync(),

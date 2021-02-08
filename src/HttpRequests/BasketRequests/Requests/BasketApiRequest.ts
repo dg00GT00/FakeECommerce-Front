@@ -24,7 +24,6 @@ export class BasketApiRequest extends BasketMemoryRequest {
     public async postBasketToApi(): Promise<void>;
     public async postBasketToApi(...args: any[]): Promise<void> {
         if (this.basketProducts.length) {
-            // sessionStorage.setItem(this._jwtCacheKey, this._jwtCacheKey);
             const basketPayload: BasketPayload = {
                 id: this._userRequest.jwtManager.getJwtCacheKey() ?? "",
                 items: this.basketProducts
@@ -67,6 +66,7 @@ export class BasketApiRequest extends BasketMemoryRequest {
         this._userRequest.jwtManager.deleteJwtCacheKey();
         try {
             await api.delete(`${this._basketUrl}?id=${id}`);
+            this.basketProducts = [];
         } catch (e) {
             const error = (e as AxiosError).response;
             return Promise.reject({statusCode: error?.status, message: error?.data});
