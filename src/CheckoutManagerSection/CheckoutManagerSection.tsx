@@ -3,6 +3,7 @@ import {Redirect} from "react-router-dom";
 import {AuthContext} from "../Utilities/Context/AuthContext";
 import {CheckoutRoute} from "../Utilities/CustomHooks/CheckoutRoute/CheckoutRoute";
 import {CheckoutForms} from "./CheckoutForms/CheckoutForms";
+import {PaymentContextProvider} from "../Utilities/Context/PaymentContext";
 
 export const CheckoutManagerSection: React.FunctionComponent = () => {
     const {jwt} = React.useContext(AuthContext);
@@ -10,7 +11,9 @@ export const CheckoutManagerSection: React.FunctionComponent = () => {
     return (
         <>
             {jwt ? (
-                <CheckoutForms/>
+                <PaymentContextProvider>
+                    <CheckoutForms/>
+                </PaymentContextProvider>
             ) : (
                 <Redirect
                     to={{
