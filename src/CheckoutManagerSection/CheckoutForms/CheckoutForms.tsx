@@ -19,6 +19,7 @@ import {OrderContext} from "../../Utilities/Context/OrderContext";
 import {BasketContext} from "../../Utilities/Context/BasketContext";
 import {Elements} from "@stripe/react-stripe-js";
 import {loadStripe} from "@stripe/stripe-js/pure";
+import {PaymentContext} from "../../Utilities/Context/PaymentContext";
 
 const fakeCardStyle = makeStyles((theme: Theme) => ({
     fakeCard: {
@@ -37,14 +38,15 @@ const fakeCardStyle = makeStyles((theme: Theme) => ({
 
 type OrderProps = {
     order: OrderModel,
-    clientSecrets: string | undefined;
+    clientSecrets?: string;
 }
 
 const stripePromise = loadStripe("pk_test_51HpH8pDWWNDRw41cUn4L4N9MGqbiwlRIwinyTAMk4OzPaqLNLctlG5VNeN2q6SNcg89HaGN93R2z4sRfS2NT06RM00XUMtOcXf");
 
 export const CheckoutForms: React.FunctionComponent = () => {
-    const {postOrderAsync} = React.useContext(OrderContext);
     const {getBasketItemsAsync} = React.useContext(BasketContext);
+    const {postOrderAsync, getCurrentOrderAsync} = React.useContext(OrderContext);
+    const {isPaymentProcessingFinished} = React.useContext(PaymentContext);
 
     const [checkoutComponent, setCheckoutComponent] = React.useState<JSX.Element | null>(null);
     const [orderContainer, setOrderContainer] = React.useState<OrderProps | null>(null);
@@ -53,7 +55,7 @@ export const CheckoutForms: React.FunctionComponent = () => {
     const {location: {pathname}} = useHistory();
     const {path} = useRouteMatch();
 
-    const getCheckoutOrderAsync = async (): Promise<OrderProps | null> => {
+    const getCheckoutOrderAsync = React.useCallback(async (): Promise<OrderProps | null> => {
         const basketPaymentModel = await getBasketItemsAsync();
         if (basketPaymentModel?.items.length) {
             return {
@@ -61,8 +63,14 @@ export const CheckoutForms: React.FunctionComponent = () => {
                 clientSecrets: basketPaymentModel.clientSecret
             };
         }
+        if (isPaymentProcessingFinished) {
+            const order = await getCurrentOrderAsync();
+            if (order) {
+                return {order};
+            }
+        }
         return null;
-    }
+    }, [getBasketItemsAsync, getCurrentOrderAsync, postOrderAsync, isPaymentProcessingFinished]);
 
     React.useEffect(() => {
         if (pathname === `${path}/shipping`) {
@@ -75,7 +83,7 @@ export const CheckoutForms: React.FunctionComponent = () => {
                     setOrderContainer(order);
                 });
         }
-    }, [path, pathname]);
+    }, [path, pathname, getCheckoutOrderAsync, isPaymentProcessingFinished]);
 
     return (
         <section className={styles.container}>
