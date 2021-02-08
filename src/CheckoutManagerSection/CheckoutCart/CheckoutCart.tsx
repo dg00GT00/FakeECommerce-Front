@@ -36,7 +36,6 @@ export const CheckoutCart: React.FunctionComponent = () => {
 
     const totalProductCash = (): string => getTotalProductCash().toFixed(2);
 
-
     React.useEffect(() => {
         (async () => {
             const products = await manageBasketItemsAsync();

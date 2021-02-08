@@ -88,7 +88,7 @@ export const CreditCardForms: React.FunctionComponent<{ orderModel: OrderModel |
 
                 const paymentConfirm = await stripe?.confirmCardPayment(props?.clientSecrets ?? "", {
                     payment_method: paymentMethodReq?.paymentMethod?.id
-                })
+                });
 
                 if (paymentConfirm?.error) {
                     setFormProcessing(false);

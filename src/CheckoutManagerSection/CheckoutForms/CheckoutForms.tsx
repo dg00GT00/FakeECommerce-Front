@@ -20,6 +20,7 @@ import {BasketContext} from "../../Utilities/Context/BasketContext";
 import {Elements} from "@stripe/react-stripe-js";
 import {loadStripe} from "@stripe/stripe-js/pure";
 import {PaymentContext} from "../../Utilities/Context/PaymentContext";
+import {SuccessfullyPurchase} from "../SuccessfullyPurchase/SuccessfullyPurchase";
 
 const fakeCardStyle = makeStyles((theme: Theme) => ({
     fakeCard: {
@@ -112,13 +113,15 @@ export const CheckoutForms: React.FunctionComponent = () => {
                                 </CheckoutFormHeader>
                             </Route>
                             <Route exact path={`${path}/creditcard`}>
-                                <CheckoutFormHeader title={"Credit Card Information"}>
-                                    <Elements stripe={stripePromise}>
-                                        <CreditCardForms
-                                            orderModel={orderContainer?.order ?? null}
-                                            clientSecrets={orderContainer?.clientSecrets}/>
-                                    </Elements>
-                                </CheckoutFormHeader>
+                                {isPaymentProcessingFinished ?
+                                    <SuccessfullyPurchase/> :
+                                    <CheckoutFormHeader title={"Credit Card Information"}>
+                                        <Elements stripe={stripePromise}>
+                                            <CreditCardForms
+                                                orderModel={orderContainer?.order ?? null}
+                                                clientSecrets={orderContainer?.clientSecrets}/>
+                                        </Elements>
+                                    </CheckoutFormHeader>}
                             </Route>
                             <Route>
                                 <NotFound color={"black"}/>
