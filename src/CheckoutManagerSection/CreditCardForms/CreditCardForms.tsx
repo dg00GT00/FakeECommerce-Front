@@ -7,9 +7,9 @@ import {OrderModel} from "../../Utilities/OrderModel/OrderModel";
 import {PaymentMethodCreateParams, StripeElementChangeEvent} from "@stripe/stripe-js";
 import {useUserSnackbar} from "../../Utilities/CustomHooks/UserSnackbar/useUserSnackbar";
 import {LoadProgressButton} from "../../Utilities/CustomButtons/LoadProgressButton";
-import styles from "./CreditCardForms.module.scss";
 import {PaymentContext} from "../../Utilities/Context/PaymentContext";
 import {BasketContext} from "../../Utilities/Context/BasketContext";
+import styles from "./CreditCardForms.module.scss";
 
 export const CreditCardForms: React.FunctionComponent<{ orderModel: OrderModel | null, clientSecrets?: string }> = props => {
     const {
@@ -28,9 +28,7 @@ export const CreditCardForms: React.FunctionComponent<{ orderModel: OrderModel |
     const [snack, setErrorMessage] = useUserSnackbar();
     const [creditCardValidationError, setCreditCardValidationError] = React.useState<string | null>(null);
     const [formProcessing, setFormProcessing] = React.useState(false);
-    const [fullErrorState, setFullErrorState] = React.useState<{ creditCardErrorState: boolean }>({
-        creditCardErrorState: true
-    });
+    const [fullErrorState, setFullErrorState] = React.useState(true);
 
     const {connectPaymentProcessing} = React.useContext(PaymentContext);
     const {deleteBasketAsync} = React.useContext(BasketContext);
@@ -53,22 +51,10 @@ export const CreditCardForms: React.FunctionComponent<{ orderModel: OrderModel |
     const onChangeHandler = (event: StripeElementChangeEvent): void => {
         if (event.error?.message) {
             setCreditCardValidationError(event.error.message);
-            setFullErrorState(prevState => {
-                const state = prevState || fullErrorState;
-                return {
-                    ...state,
-                    creditCardErrorState: true
-                }
-            });
+            setFullErrorState(true);
         } else {
             setCreditCardValidationError(null);
-            setFullErrorState(prevState => {
-                const state = prevState || fullErrorState;
-                return {
-                    ...state,
-                    creditCardErrorState: false
-                }
-            });
+            setFullErrorState(false);
         }
     }
 
@@ -151,7 +137,7 @@ export const CreditCardForms: React.FunctionComponent<{ orderModel: OrderModel |
                 <LoadProgressButton
                     isLoading={formProcessing}
                     onClick={submitCreditCard}
-                    disabled={!stripe || errorState || fullErrorState.creditCardErrorState || formProcessing}
+                    disabled={!stripe || errorState || fullErrorState || formProcessing}
                     variant={"contained"}
                     color={"primary"}>
                     Confirm
