@@ -7,7 +7,7 @@ export class PaymentRequestManager {
     constructor(private _userRequest: UserRequestManager) {
     }
 
-    public async getPaymentIntent(): Promise<BasketPaymentModel> {
+    public async getPaymentIntentAsync(): Promise<BasketPaymentModel> {
         try {
             const basketId = this._userRequest.jwtManager.getJwtCacheKey();
             const response = await api.post<BasketPaymentModel>(`/payments/${basketId}`,

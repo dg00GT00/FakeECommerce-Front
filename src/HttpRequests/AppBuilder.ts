@@ -6,21 +6,28 @@ import {BasketActions} from "./BasketRequests/BasketActions";
 import {OrdersRequestsManager} from "./OrdersRequestsManager";
 import {PaymentRequestManager} from "./PaymentRequestManager";
 
-type BasketBuilder = { basketActions: BasketActions; basketApi: BasketApiRequest };
+type BasketBuilder = { basketActions: BasketActions; basketApi: BasketApiRequest, payment: PaymentRequestManager };
 
 const generateBasketBuilder = (userRequest: UserRequestManager): BasketBuilder => {
     const basketApi = new BasketApiRequest(userRequest);
     const basketRequestActions = new BasketRequestActions();
-    const paymentIntent = new PaymentRequestManager(userRequest);
+    const payment = new PaymentRequestManager(userRequest);
     new BasketMediator(basketApi, basketRequestActions);
-    const basketActions = new BasketActions(basketRequestActions, basketApi, paymentIntent);
+    const basketActions = new BasketActions(basketRequestActions, basketApi, payment);
     return {
         basketApi,
-        basketActions
+        basketActions,
+        payment
     };
 }
 
-type AppBuilder = () => { basketActions: BasketActions; auth: UserRequestManager; basketApi: BasketApiRequest; orders: OrdersRequestsManager };
+type AppBuilder = () => {
+    payment: PaymentRequestManager;
+    basketActions: BasketActions;
+    auth: UserRequestManager;
+    basketApi: BasketApiRequest;
+    orders: OrdersRequestsManager
+};
 
 const generateAppBuilder = (): AppBuilder => {
     const auth = new UserRequestManager();

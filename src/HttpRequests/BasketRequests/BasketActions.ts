@@ -33,6 +33,6 @@ export class BasketActions {
 
     public async updateBasketPaymentIntentAsync(deliveryMethodId: number): Promise<BasketModel[]> {
         await this._basketApi.postBasketToApi(deliveryMethodId);
-        return (await this._paymentIntent.getPaymentIntent()).items;
+        return (await this._paymentIntent.getPaymentIntentAsync()).items;
     }
 }
