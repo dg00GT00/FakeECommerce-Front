@@ -38,7 +38,7 @@ export const ShippingOptions: React.FunctionComponent = () => {
     const {push} = useHistory();
 
     const {getShippingOptionsAsync} = React.useContext(OrderContext);
-    const {updateBasketPaymentIntentAsync} = React.useContext(BasketContext);
+    const {updateBasketPaymentIntentAsync, totalAmount} = React.useContext(BasketContext);
 
     const [confirmState, setConfirmState] = React.useState(false);
     const [check, setCheckValue] = React.useState(initialCheckState);
@@ -73,6 +73,13 @@ export const ShippingOptions: React.FunctionComponent = () => {
     };
 
     const enterShippingValue: React.MouseEventHandler = event => {
+        if (!totalAmount) {
+            setSnackMessage({
+                severity: "warning",
+                message: "Your cart is empty! Put some items into the basket before proceed"
+            });
+            return;
+        }
         let id = Number();
         setConfirmState(true);
         for (const key in check) {
@@ -94,10 +101,6 @@ export const ShippingOptions: React.FunctionComponent = () => {
             })
             .catch(_ => {
                 setConfirmState(false);
-                setSnackMessage({
-                    message: "Error setting shipping options. Probably your cart is empty",
-                    severity: "error"
-                });
             });
     };
 
