@@ -4,8 +4,6 @@ import styles from "./CheckoutOrder.module.scss";
 import baseStyles from "../CheckoutCart/CheckoutCartBase.module.scss";
 import {makeStyles} from "@material-ui/core/styles";
 import {Theme} from "@material-ui/core/styles/createMuiTheme";
-import {OrderContext} from "../../Utilities/Context/OrderContext";
-import {BasketContext} from "../../Utilities/Context/BasketContext";
 import {CheckoutCartBase} from "../CheckoutCart/CheckoutCartBase";
 import {EmptyItemsCheckoutCart} from "../EmptyCheckoutCart/EmptyItemsCheckoutCart";
 import {PaymentStatus} from "./PaymentStatus";
@@ -35,10 +33,6 @@ type OrderComponentState = {
 // "React.memo" avoid the second rerender of this component when changing the inner state
 export const CheckoutOrder = React.memo<{ orderModel: OrderModel | null }>(cmp => {
     const {orderModel: order} = cmp;
-
-    const {postOrderAsync} = React.useContext(OrderContext);
-    const {getBasketItemsAsync} = React.useContext(BasketContext);
-
     const [orderComponent, setOrderComponent] = React.useState<OrderComponentState>({component: null});
 
     const styleList = listStyles();
@@ -79,7 +73,7 @@ export const CheckoutOrder = React.memo<{ orderModel: OrderModel | null }>(cmp =
                 });
             }
         })();
-    }, [getBasketItemsAsync, postOrderAsync, styleList.listItem]);
+    }, [styleList.listItem, order]);
 
     return (
         <CheckoutCartBase cartComponent={orderComponent.component} totalProductCash={orderComponent.totalProductCash}>
