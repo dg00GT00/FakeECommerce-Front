@@ -26,12 +26,9 @@ export class PaymentRequestManager {
     }
 
     public connectPaymentProcessing(): void {
-        console.log("The socket message listener before connecting: ", this._socket.socket?.onmessage);
         this._socket.connect<string>(data => {
-            console.log("The socket message listener after connecting: ", this._socket.socket?.onmessage);
             let dataConverted = false;
             if (data.toLowerCase() === "true") dataConverted = true;
-            console.log("The data received from websocket api: ", dataConverted);
             this.paymentSubject.notifyPaymentProcessingStatus(!dataConverted);
         });
     }
