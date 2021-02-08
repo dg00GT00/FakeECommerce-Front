@@ -8,6 +8,8 @@ import {PaymentMethodCreateParams, StripeElementChangeEvent} from "@stripe/strip
 import {useUserSnackbar} from "../../Utilities/CustomHooks/UserSnackbar/useUserSnackbar";
 import {LoadProgressButton} from "../../Utilities/CustomButtons/LoadProgressButton";
 import styles from "./CreditCardForms.module.scss";
+import {PaymentContext} from "../../Utilities/Context/PaymentContext";
+import {BasketContext} from "../../Utilities/Context/BasketContext";
 
 export const CreditCardForms: React.FunctionComponent<{ orderModel: OrderModel | null, clientSecrets?: string }> = props => {
     const {
@@ -30,11 +32,23 @@ export const CreditCardForms: React.FunctionComponent<{ orderModel: OrderModel |
         creditCardErrorState: true
     });
 
+    const {connectPaymentProcessing} = React.useContext(PaymentContext);
+    const {deleteBasketAsync} = React.useContext(BasketContext);
+
     const setCreditCardErrorMessage = (message: string): void => setErrorMessage({message, severity: "error"});
 
     const cardNumber = stripeElements?.getElement("cardNumber");
     stripeElements?.getElement("cardExpiry");
     stripeElements?.getElement("cardCvc");
+
+    React.useEffect(() => {
+        connectPaymentProcessing();
+    }, [connectPaymentProcessing]);
+
+    const successfullyPayment = async (): Promise<void> => {
+        await deleteBasketAsync();
+        setFormProcessing(false);
+    }
 
     const onChangeHandler = (event: StripeElementChangeEvent): void => {
         if (event.error?.message) {
@@ -95,6 +109,8 @@ export const CreditCardForms: React.FunctionComponent<{ orderModel: OrderModel |
                     setCreditCardErrorMessage(paymentConfirm.error.message ?? "");
                     return;
                 }
+
+                await successfullyPayment();
             } catch (e) {
                 setFormProcessing(false);
                 return;
