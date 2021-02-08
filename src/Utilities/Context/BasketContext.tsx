@@ -52,13 +52,18 @@ export const CartContextProvider: React.FunctionComponent = props => {
         return cleared;
     };
 
+    const deleteBasketAsync = async (): Promise<void> => {
+        await basketApi.deleteBasketFromApi();
+        setCartTotalAmount(0);
+    }
+
     return (
         <BasketContext.Provider
             value={{
                 increaseAmount,
                 decreaseAmount,
                 clearItemsById,
-                deleteBasketAsync: () => basketApi.deleteBasketFromApi(),
+                deleteBasketAsync,
                 getBasketItemsAsync: () => basketApi.getBasketFromApi(),
                 updateBasketPaymentIntentAsync: (deliveryMethodId) => basketActions.updateBasketPaymentIntentAsync(deliveryMethodId),
                 manageBasketItemsAsync: () => basketActions.manageBasketItemsAsync(),

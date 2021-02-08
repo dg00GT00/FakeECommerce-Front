@@ -12,8 +12,6 @@ export const PaymentContext = React.createContext({
 
 export const PaymentContextProvider: React.FunctionComponent = props => {
     const [paymentProcessingStatus, setPaymentProcessingStatus] = React.useState(false);
-
-    console.log("The paymentProcessingStatus: ", paymentProcessingStatus);
     React.useEffect(() => {
         payment.paymentSubject.setPaymentProcessingDispatch(setPaymentProcessingStatus);
         if (paymentProcessingStatus) {
