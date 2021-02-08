@@ -14,7 +14,21 @@ type PaymentStatusProps = {
 
 type StatusColor = Record<keyof typeof PaymentStatusEnum, ChipColor>;
 
-const mapPaymentIntentStatus = (statusNumber: number, statusColor: StatusColor): PaymentStatusProps => {
+const mapPaymentIntentStatusString = (statusString: string): number => {
+    let statusNumber = 0;
+    if (statusString === "Payment Pending") {
+        statusNumber = 0;
+    }
+    if (statusString === "Payment Received") {
+        statusNumber = 1;
+    }
+    if (statusString === "Payment Failed") {
+        statusNumber = 2;
+    }
+    return statusNumber;
+}
+
+const mapPaymentIntentStatusNumber = (statusNumber: number, statusColor: StatusColor): PaymentStatusProps => {
     const statusObj: PaymentStatusProps = {statusMessage: null, chipStatus: {chipColor: "", textColor: ""}};
     if (statusNumber === 0) {
         statusObj.statusMessage = PaymentStatusEnum.Pending;
@@ -40,7 +54,9 @@ const chipStyle = makeStyles<Theme, { chipColor: string, textColor: string }>((t
     });
 });
 
-export const PaymentStatus: React.FunctionComponent<{ status: number, className?: string }> = props => {
+export const PaymentStatus: React.FunctionComponent<{ status: number | string, className?: string }> = props => {
+    let {status} = props;
+
     const theme = useTheme();
 
     const statusColor: StatusColor = {
@@ -49,7 +65,11 @@ export const PaymentStatus: React.FunctionComponent<{ status: number, className?
         PaymentFailed: {chipColor: theme.palette.error.light, textColor: "#6d2222"}
     };
 
-    const statusObj = mapPaymentIntentStatus(props.status, statusColor);
+    if (typeof status === "string") {
+        status = mapPaymentIntentStatusString(status);
+    }
+
+    const statusObj = mapPaymentIntentStatusNumber(status, statusColor);
 
     const styleChip = chipStyle({...statusObj.chipStatus});
 
