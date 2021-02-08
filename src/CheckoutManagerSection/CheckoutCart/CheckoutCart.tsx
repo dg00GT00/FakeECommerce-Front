@@ -27,6 +27,7 @@ export const CheckoutCart: React.FunctionComponent = () => {
         manageBasketItemsAsync,
         clearItemsById,
         getTotalProductCash,
+        totalAmount
     } = React.useContext(BasketContext);
 
     const [checkoutComponent, setCheckoutComponent] = React.useState<JSX.Element | JSX.Element[] | null>(null);
@@ -35,10 +36,11 @@ export const CheckoutCart: React.FunctionComponent = () => {
 
     const totalProductCash = (): string => getTotalProductCash().toFixed(2);
 
+
     React.useEffect(() => {
         (async () => {
             const products = await manageBasketItemsAsync();
-            if (products && products.items.length) {
+            if (totalAmount && products && products.items.length) {
                 const productsList = products.items.map(basket => {
                     return (
                         <ListItem
@@ -75,7 +77,6 @@ export const CheckoutCart: React.FunctionComponent = () => {
             }
         })();
     }, [manageBasketItemsAsync, clearItemsById, styleList.listItem]);
-
 
     return (
         <CheckoutCartBase cartComponent={checkoutComponent} totalProductCash={totalProductCash()}>
