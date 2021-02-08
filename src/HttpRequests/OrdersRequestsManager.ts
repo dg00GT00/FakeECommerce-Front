@@ -8,6 +8,8 @@ import {api} from "./AxiosInstance";
 export type OrderError = Omit<ErrorModel, "error">;
 
 export class OrdersRequestsManager {
+    private _orderMemory?: OrderModel;
+
     constructor(private _userRequest: UserRequestManager) {
     }
 
@@ -34,11 +36,29 @@ export class OrdersRequestsManager {
                 shipToAddress: userAddress
             }, this._userRequest.jwtManager.getJwtAuthorizationHeaders());
 
-            return response.data;
+            const order = response.data;
+            this._orderMemory = order;
+            return order;
         } catch (e) {
             const error = (e as AxiosError).response;
             return Promise.reject({statusCode: error?.status, message: error?.data});
         }
+    }
+
+    public async getCurrentOrderAsync(): Promise<OrderModel | null> {
+        if (this._orderMemory?.id) {
+            try {
+                const response = await api.get<OrderModel>(
+                    `/orders/${this._orderMemory?.id}`,
+                    this._userRequest.jwtManager.getJwtAuthorizationHeaders()
+                );
+                return response.data;
+            } catch (e) {
+                const error = (e as AxiosError).response;
+                return Promise.reject({statusCode: error?.status, message: error?.data});
+            }
+        }
+        return null;
     }
 
     public async getOrdersAsync(): Promise<OrderModel[]> {
