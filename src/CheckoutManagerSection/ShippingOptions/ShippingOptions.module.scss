@@ -1,12 +1,19 @@
+@import "./src/Utilities/GeneralMediaQueries";
+
 .price {
-	justify-self: end;
+  justify-self: end;
 }
 
 .nav_buttons {
-	display: flex;
-    justify-content: space-between;
-    
-	button {
-		width: 25%;
-	}
+  display: flex;
+  justify-content: space-between;
+
+  button {
+    width: 25%;
+    font-size: clamp(.8rem, 1vw, 1rem);
+
+    @media (max-width: map-get($general-media-queries, "LAPTOP_1024")) {
+      width: initial;
+    }
+  }
 }

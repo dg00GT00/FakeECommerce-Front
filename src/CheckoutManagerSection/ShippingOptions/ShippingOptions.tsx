@@ -21,7 +21,13 @@ const formGridStyle = makeStyles({
         gridAutoRows: 60,
         alignItems: "center",
         margin: "40px 0",
-    },
+    }
+});
+
+const labelStyle = makeStyles({
+    label: {
+        fontSize: "clamp(.8rem, 1vw, 1rem)"
+    }
 });
 
 type CheckFormsType = Record<"UPS1" | "UPS2" | "UPS3" | "FREE", boolean>;
@@ -32,7 +38,6 @@ const initialCheckState: CheckFormsType = {
     UPS3: false,
     FREE: false,
 };
-
 
 export const ShippingOptions: React.FunctionComponent = () => {
     const {push} = useHistory();
@@ -47,6 +52,7 @@ export const ShippingOptions: React.FunctionComponent = () => {
     const [snack, setSnackMessage] = useUserSnackbar();
 
     const styleFormGrid = formGridStyle();
+    const styleLabel = labelStyle();
 
     React.useEffect(() => {
         getShippingOptionsAsync()
@@ -101,6 +107,10 @@ export const ShippingOptions: React.FunctionComponent = () => {
             })
             .catch(_ => {
                 setConfirmState(false);
+                setSnackMessage({
+                    severity: "error",
+                    message: "Some error have occurred"
+                });
             });
     };
 
@@ -116,13 +126,15 @@ export const ShippingOptions: React.FunctionComponent = () => {
                         return (
                             <React.Fragment key={option.shortName}>
                                 <FormControlLabel
+                                    classes={{
+                                        label: styleLabel.label
+                                    }}
                                     control={
                                         <Checkbox
                                             color={"primary"}
                                             checked={check[option.shortName as keyof CheckFormsType]}
                                             onChange={handleChange}
-                                            name={option.shortName}
-                                        />
+                                            name={option.shortName}/>
                                     }
                                     label={option.shortName}
                                 />

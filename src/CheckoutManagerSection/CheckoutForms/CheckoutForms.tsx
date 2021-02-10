@@ -1,5 +1,5 @@
 import * as React from "react";
-import {Paper} from "@material-ui/core";
+import {Paper, useMediaQuery} from "@material-ui/core";
 import {ReactComponent as Logo} from "../../Assets/eCommerceBaseLogo.svg";
 import {ReactComponent as FakeCreditCard} from "../../Assets/Checkout/fakeCredictCard.svg";
 import {ReactComponent as GPlay} from "../../Assets/Checkout/google-pay-primary-logo.svg";
@@ -21,6 +21,8 @@ import {Elements} from "@stripe/react-stripe-js";
 import {loadStripe} from "@stripe/stripe-js/pure";
 import {PaymentContext} from "../../Utilities/Context/PaymentContext";
 import {SuccessfullyPurchase} from "../SuccessfullyPurchase/SuccessfullyPurchase";
+import {GeneralMediaQueries} from "../../Utilities/Theme/GeneralMediaQueries";
+import {CheckoutDrawer} from "./CheckoutDrawer/CheckoutDrawer";
 
 const fakeCardStyle = makeStyles((theme: Theme) => ({
     fakeCard: {
@@ -45,6 +47,8 @@ type OrderProps = {
 const stripePromise = loadStripe("pk_test_51HpH8pDWWNDRw41cUn4L4N9MGqbiwlRIwinyTAMk4OzPaqLNLctlG5VNeN2q6SNcg89HaGN93R2z4sRfS2NT06RM00XUMtOcXf");
 
 export const CheckoutForms: React.FunctionComponent = () => {
+    const mediaQuery = useMediaQuery(`(max-width: ${GeneralMediaQueries.TABLET})`);
+
     const {getBasketItemsAsync} = React.useContext(BasketContext);
     const {postOrderAsync, getCurrentOrderAsync} = React.useContext(OrderContext);
     const {isPaymentProcessingFinished} = React.useContext(PaymentContext);
@@ -89,6 +93,7 @@ export const CheckoutForms: React.FunctionComponent = () => {
     return (
         <section className={styles.container}>
             <div className={styles.inner_container}>
+                {mediaQuery ? <CheckoutDrawer/> : null}
                 <div className={styles.checkout_header}>
                     <Logo className={styles.logo}/>
                     <div className={styles.express_checkout}>
@@ -100,7 +105,7 @@ export const CheckoutForms: React.FunctionComponent = () => {
                                 <Paypal className={styles.paypal}/>
                             </Paper>
                             <Paper className={styleFakeCard.fakeCard}>
-                                <FakeCreditCard className={styles.fakeCard}/>
+                                <FakeCreditCard className={styles.fakeCard} style={{height: "inherit"}}/>
                                 <p className={styleFakeCard.badge}>FakeCard</p>
                             </Paper>
                         </div>
@@ -130,19 +135,24 @@ export const CheckoutForms: React.FunctionComponent = () => {
                     </div>
                 </div>
             </div>
-            <div className={styles.divider_group}>
-                <div className={styles.divider_superior}>
-                    <div/>
-                    <div className={styleFakeCard.divider}/>
-                </div>
-                <div className={styles.divider_inferior}>
-                    <div className={styleFakeCard.divider}/>
-                    <div/>
-                </div>
-            </div>
-            <div className={styles.cart}>
-                {checkoutComponent}
-            </div>
+            {mediaQuery ?
+                null :
+                <>
+                    <div className={styles.divider_group}>
+                        <div className={styles.divider_superior}>
+                            <div/>
+                            <div className={styleFakeCard.divider}/>
+                        </div>
+                        <div className={styles.divider_inferior}>
+                            <div className={styleFakeCard.divider}/>
+                            <div/>
+                        </div>
+                    </div>
+                    <div className={styles.cart}>
+                        {checkoutComponent}
+                    </div>
+                </>
+            }
         </section>
     );
 };

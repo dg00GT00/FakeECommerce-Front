@@ -1,5 +1,4 @@
 import * as React from "react";
-import {BasketContext} from "../../Utilities/Context/BasketContext";
 import List from "@material-ui/core/List/List";
 import styles from "./CheckoutCartBase.module.scss";
 import {makeStyles} from "@material-ui/core/styles";
@@ -18,20 +17,19 @@ const listStyles = makeStyles((theme: Theme) => ({
 }));
 
 type CheckoutCartBaseProps = {
-    cartComponent: JSX.Element | JSX.Element[] | null;
+    cartComponent?: JSX.Element | JSX.Element[] | null;
     totalProductCash?: string;
 };
 
 export const CheckoutCartBase: React.FunctionComponent<CheckoutCartBaseProps> = props => {
-    const {getTotalProductCash} = React.useContext(BasketContext);
-
     const styleList = listStyles();
 
     return (
         <div className={styles.container}>
-            <List className={[styleList.listRoot, styles.items].join(" ")}>
-                {props.cartComponent}
-            </List>
+            {props.cartComponent ?
+                <List className={[styleList.listRoot, styles.items].join(" ")}>
+                    {props.cartComponent}
+                </List> : null}
             <div className={styles.purchase_amount}>
                 {props.children}
                 <div className={[styles.divider, styles.divider_total, styleList.divider].join(" ")}/>

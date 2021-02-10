@@ -1,0 +1,154 @@
+@import "src/Utilities/GeneralMediaQueries";
+
+.cart {
+  width: 1.5rem;
+  height: auto;
+}
+
+.modal_container {
+  height: 100vh;
+  padding: 5%;
+  display: flex;
+  min-width: 40%;
+  flex-direction: column;
+  justify-content: flex-start;
+
+  .close_button_group {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .items {
+    overflow: auto;
+    padding: 0 4%;
+    flex: 1;
+  }
+
+  .close_button {
+    width: max-content;
+    align-self: flex-end;
+    margin-bottom: 10px;
+    padding: initial;
+  }
+
+  .divider {
+    height: #{"min(3px, 0.2vw)"};
+    width: 60%;
+    align-self: flex-end;
+    margin-bottom: 17px;
+  }
+
+  .checkout {
+    margin-top: 3%;
+    font-size: clamp(0.7rem, 1vw, 0.8rem);
+  }
+
+  .item_grid {
+    display: grid;
+    padding: 1.4% 0;
+    justify-content: initial;
+
+    @media (max-width: map-get($general-media-queries, "LAPTOP_1024")) {
+      grid-template-columns: 120px auto;
+      grid-template-areas: "img name name"
+                           "img price qty"
+                           "img clear .";
+    }
+
+    .image {
+      grid-area: img;
+      width: 100px;
+      height: 100px;
+      outline: 1px solid #00000029;
+      padding: 10%;
+
+      @media (max-width: map-get($general-media-queries, "LAPTOP_1024")) {
+        width: 90%;
+        height: 90%;
+      }
+
+      img {
+        object-fit: contain;
+        width: 100%;
+        height: 100%;
+      }
+    }
+
+    .name {
+      grid-area: name;
+      font-weight: bold;
+      padding-bottom: 2%;
+      font-size: clamp(0.7rem, 1vw, 1rem);
+    }
+
+    .price {
+      grid-area: price;
+      font-size: 1.1rem;
+      font-weight: bold;
+      opacity: 0.5;
+    }
+
+    .quantity {
+      grid-area: qty;
+
+      span {
+        font-size: 1rem;
+        margin: 0 10% 0 0;
+      }
+    }
+
+    .clear {
+      grid-area: clear;
+      font-size: clamp(0.5rem, 1vw, 0.7rem);
+    }
+  }
+
+  .purchase_amount {
+    display: grid;
+    align-items: center;
+    margin: 17px 5% 0;
+    grid-template-columns: 20% 1fr;
+
+    .divider {
+      background-color: black;
+      grid-column: 1 / -1;
+      width: 30%;
+      height: 1px;
+    }
+
+    .divider_total {
+      grid-row: 4 / 5;
+    }
+
+    .subtotal {
+      grid-column: 1 / 2;
+      grid-row: 2 / 3;
+    }
+
+    .shipping {
+      grid-column: 1 / 2;
+      grid-row: 3 / 4;
+    }
+
+    .shipping_price {
+      grid-column: 2 / 3;
+      grid-row: 3 / 4;
+    }
+
+    .total {
+      grid-column: 1 / 2;
+      grid-row: 5 / 6;
+    }
+
+    .total_price {
+      grid-column: 2 / 3;
+      grid-row: 5 / 6;
+    }
+
+    .subtotal_price,
+    .shipping_price,
+    .total_price {
+      justify-self: end;
+    }
+  }
+}

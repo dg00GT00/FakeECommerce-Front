@@ -1,7 +1,6 @@
-.container {
-  width: 80%;
-  margin: 0 auto;
+@import "./src/Utilities/GeneralMediaQueries";
 
+.container {
   .items {
     margin-top: 40px;
     height: 710px;
@@ -10,19 +9,25 @@
     .item_grid {
       align-items: start;
       justify-content: stretch;
-      padding: 5% 0;
+      padding: 1em 3%;
       grid-template-columns: 20% 20% auto 20%;
       grid-template-areas: "img name name price"
                            "img clear clear .";
+
+      @media (max-width: map-get($general-media-queries, "TABLET")) {
+        grid-template-areas: "img name name name"
+                             "img clear price price";
+      }
 
       .image {
         grid-area: img;
         background-color: white;
         position: relative;
-        width: 100px;
-        height: 100px;
+        width: #{"min(80%, 100px)"};
+        height: #{"min(80%, 100px)"};
         border: 1px solid #0000001c;
         border-radius: 6px;
+        align-self: center;
 
         .badge {
           height: 100%;
@@ -42,7 +47,7 @@
       }
 
       .price {
-        font-size: 1.2rem;
+        font-size: clamp(1rem, 1.1vw, 2rem);
         justify-self: end;
         opacity: 0.4;
         font-weight: bold;
@@ -61,6 +66,7 @@
   .purchase_amount {
     display: grid;
     align-items: center;
+    margin: 0 5%;
     grid-template-columns: 20% 1fr;
     grid-template-rows: auto repeat(2, 60px) auto 60px;
 
