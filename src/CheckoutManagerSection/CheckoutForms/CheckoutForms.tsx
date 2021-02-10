@@ -7,7 +7,6 @@ import {ReactComponent as Paypal} from "../../Assets/Checkout/paypal-seeklogo.co
 import {makeStyles} from "@material-ui/core/styles";
 import {Theme} from "@material-ui/core/styles/createMuiTheme";
 import {CheckoutCart} from "../CheckoutCart/CheckoutCart";
-import styles from "./CheckoutForms.module.scss";
 import {ShippingOptions} from "../ShippingOptions/ShippingOptions";
 import {Route, Switch, useHistory, useRouteMatch} from "react-router-dom";
 import {NotFound} from "../../Utilities/RouterValidation/NotFound";
@@ -23,6 +22,7 @@ import {PaymentContext} from "../../Utilities/Context/PaymentContext";
 import {SuccessfullyPurchase} from "../SuccessfullyPurchase/SuccessfullyPurchase";
 import {GeneralMediaQueries} from "../../Utilities/Theme/GeneralMediaQueries";
 import {CheckoutDrawer} from "./CheckoutDrawer/CheckoutDrawer";
+import styles from "./CheckoutForms.module.scss";
 
 const fakeCardStyle = makeStyles((theme: Theme) => ({
     fakeCard: {

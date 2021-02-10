@@ -33,7 +33,7 @@ export class JwtManager {
         if (this.jwt) {
             sessionStorage.removeItem(this.jwt_key);
         } else {
-            throw new Error("No _jwtManager.jwt found to be deleted");
+            throw new Error("No jwt found to be deleted");
         }
     }
 

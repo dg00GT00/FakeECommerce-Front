@@ -5,6 +5,7 @@
 }
 
 .nav_buttons {
+  height: 40px;
   display: flex;
   justify-content: space-between;
 
@@ -13,7 +14,7 @@
     font-size: clamp(.8rem, 1vw, 1rem);
 
     @media (max-width: map-get($general-media-queries, "LAPTOP_1024")) {
-      width: initial;
+      width: 40%;
     }
   }
 }

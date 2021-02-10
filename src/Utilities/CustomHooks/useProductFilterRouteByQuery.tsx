@@ -21,7 +21,6 @@ type FilterByParamsHook = {
     clearFilterFromParams: () => void
 }
 
-
 export const useProductFilterRouteByQuery = (
     queryFilterType: FilterOptions,
     divAnchor: React.RefObject<HTMLDivElement>,

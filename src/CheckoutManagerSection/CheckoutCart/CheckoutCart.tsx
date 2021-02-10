@@ -75,7 +75,7 @@ export const CheckoutCart: React.FunctionComponent = () => {
                 );
             }
         })();
-    }, [manageBasketItemsAsync, clearItemsById, styleList.listItem]);
+    }, [manageBasketItemsAsync, clearItemsById, totalAmount, styleList.listItem]);
 
     return (
         <CheckoutCartBase cartComponent={checkoutComponent} totalProductCash={totalProductCash()}>

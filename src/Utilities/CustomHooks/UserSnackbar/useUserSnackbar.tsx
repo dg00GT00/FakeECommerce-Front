@@ -1,12 +1,12 @@
 import * as React from "react";
-import Alert from "@material-ui/lab/Alert/Alert";
+import Alert, {Color} from "@material-ui/lab/Alert/Alert";
 import Snackbar from "@material-ui/core/Snackbar/Snackbar";
 import {MessageStateProps} from "../../../UserManagerSection/UserActions/UserActionTypes";
 import {createStyles, makeStyles} from "@material-ui/core/styles";
 import {Theme} from "@material-ui/core";
 
 const snackbarStyle = makeStyles<Theme,
-    { color?: string; severity?: "error" | "info" | "warning" | "success" }>((theme) => {
+    { color?: string; severity?: Color }>((theme) => {
     return createStyles({
         overrideColor: {
             background: (props) =>

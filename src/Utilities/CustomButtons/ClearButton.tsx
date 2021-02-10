@@ -22,6 +22,8 @@ export const ClearButton: React.FunctionComponent<ClearButtonProps> = props => {
         <Button color={"primary"}
                 variant={"contained"}
                 onClick={() => handleClick.apply(handleClick, props.onClick?.arguments)}
-                {...props}>Clear</Button>
+                {...props}>
+            Clear
+        </Button>
     );
 }

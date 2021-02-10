@@ -4,6 +4,8 @@ import CancelRoundedIcon from "@material-ui/icons/CancelRounded";
 import {makeStyles, Theme} from "@material-ui/core/styles";
 import {BasketContext} from "../../../Utilities/Context/BasketContext";
 import {CartDefault} from "../../../ProductManagerSection/Cart/CartDefault";
+import {EmptyItemsCheckoutCart} from "../../EmptyCheckoutCart/EmptyItemsCheckoutCart";
+import {ReactComponent as CartArrowDown} from "../../../Assets/cartArrowDown.svg";
 import List from "@material-ui/core/List/List";
 import IconButton from "@material-ui/core/IconButton";
 import Button from "@material-ui/core/Button/Button";
@@ -14,6 +16,10 @@ const drawerStyle = makeStyles((theme: Theme) => ({
         width: "2.5rem",
         height: "auto"
     },
+    buttonRoot: {
+        justifySelf: "end",
+        paddingRight: "30px"
+    },
     listRoot: {
         backgroundColor: theme.palette.common.white,
     },
@@ -22,84 +28,109 @@ const drawerStyle = makeStyles((theme: Theme) => ({
     },
 }));
 
-// Needed to use the React.memo in order to this component work properly
-export const CheckoutDrawer: React.FunctionComponent = React.memo(props => {
-        const {
-            getTotalProducts,
-            getAmountById,
-            clearItemsById,
-            getTotalProductCash
-        } = React.useContext(BasketContext);
+export const CheckoutDrawer: React.FunctionComponent = () => {
+    const {
+        totalAmount,
+        getTotalProducts,
+        clearItemsById,
+        getTotalProductCash,
+        manageBasketItemsAsync
+    } = React.useContext(BasketContext);
 
-        const [open, setOpen] = React.useState(false);
-        const setItems = React.useState<{ [i: number]: number }>({})[1];
+    // The "firstRender" ref avoids the infinite loop of the component
+    const firstRender = React.useRef(true);
+    const [open, setOpen] = React.useState(false);
+    const [checkoutComponent, setCheckoutComponent] = React.useState<JSX.Element | JSX.Element[] | null>(null);
+    const setItems = React.useState<{ [i: number]: number }>({})[1];
 
-        const styleDrawer = drawerStyle();
+    const styleDrawer = drawerStyle();
 
-        const totalProductCash = (): string => getTotalProductCash().toFixed(2);
+    const totalProductCash = (): string => getTotalProductCash().toFixed(2);
 
-        const clearBasketItems = (id: number): void => {
-            setItems((prevState) => {
-                const state = prevState && {};
-                const newState = {
-                    ...state,
-                    [id]: clearItemsById(id),
-                };
-                if (getTotalProducts().length === 0) {
-                    setOpen(false);
-                }
-                return newState;
-            });
-        };
-
-        const productList = getTotalProducts().map((basket) => {
-            return (
-                <ListItem
-                    key={basket.id}
-                    className={styles.item_grid}
-                    classes={{root: styleDrawer.listRoot}}>
-                    <div className={styles.image}>
-                        <img src={basket.pictureUrl} alt={basket.productName}/>
-                    </div>
-                    <p className={styles.name}>{basket.productName}</p>
-                    <p className={styles.price}>$ {basket.price}</p>
-                    <p className={styles.quantity}>
-                        <span>qty: </span>
-                        {getAmountById(basket.id)}
-                    </p>
-                    <Button
-                        className={styles.clear}
-                        variant={"outlined"}
-                        onClick={_ => clearBasketItems(basket.id)}>
-                        Clear Items
-                    </Button>
-                </ListItem>
-            );
+    const clearBasketItems = React.useCallback((id: number): void => {
+        firstRender.current = true;
+        setItems(prevState => {
+            const state = prevState && {};
+            const newState = {
+                ...state,
+                [id]: clearItemsById(id),
+            };
+            if (getTotalProducts().length === 0) {
+                setOpen(false);
+            }
+            return newState;
         });
+    }, [getTotalProducts, clearItemsById, setItems]);
 
-        return (
-            <>
-                <CartDefault classes={{root: styleDrawer.cartRoot}} onClick={_ => setOpen(!open)}/>
-                <Drawer anchor={"right"} open={open}>
-                    <div className={[styleDrawer.listRoot, styles.modal_container].join(" ")}>
-                        <div className={styles.close_button_group}>
-                            <IconButton onClick={_ => setOpen(false)} className={styles.close_button}>
-                                <CancelRoundedIcon/>
-                            </IconButton>
-                            <div className={[styles.divider, styleDrawer.dividerRoot].join(" ")}/>
-                        </div>
-                        <List className={[styleDrawer.listRoot, styles.items].join(" ")}>
-                            {productList}
-                        </List>
-                        <div className={styles.purchase_amount}>
-                            {props.children}
-                            <div className={[styles.divider, styles.divider_total].join(" ")}/>
-                            <h2 className={styles.total}>Total</h2>
-                            <h2 className={styles.total_price}>$ {totalProductCash() ?? 0}</h2>
-                        </div>
+    React.useEffect(() => {
+        if (firstRender.current) {
+            firstRender.current = false;
+            (async () => {
+                const products = await manageBasketItemsAsync();
+                console.log("Product cart amount: ", totalAmount);
+                if (products && products.items.length) {
+                    console.log("The cart product list: ", products?.items);
+                    const productList = products.items.map(basket => {
+                        return (
+                            <ListItem
+                                key={basket.id}
+                                className={styles.item_grid}
+                                classes={{root: styleDrawer.listRoot}}>
+                                <div className={styles.image}>
+                                    <img src={basket.pictureUrl} alt={basket.productName}/>
+                                </div>
+                                <p className={styles.name}>{basket.productName}</p>
+                                <p className={styles.price}>$ {basket.price.toFixed(2)}</p>
+                                <p className={styles.quantity}>
+                                    <span>qty: </span>
+                                    {basket.quantity}
+                                </p>
+                                <Button
+                                    className={styles.clear}
+                                    variant={"outlined"}
+                                    onClick={_ => clearBasketItems(basket.id)}>
+                                    Clear Items
+                                </Button>
+                            </ListItem>
+                        );
+                    });
+                    setCheckoutComponent(productList);
+                } else {
+                    setCheckoutComponent(
+                        <EmptyItemsCheckoutCart message={"Your cart is empty!"}>
+                            <CartArrowDown/>
+                        </EmptyItemsCheckoutCart>
+                    );
+                }
+            })();
+        }
+    }, [manageBasketItemsAsync, clearBasketItems, totalAmount, styleDrawer.listRoot]);
+
+    return (
+        <>
+            <CartDefault
+                hideWhenZero
+                buttonClasses={{root: styleDrawer.buttonRoot}}
+                iconClasses={{root: styleDrawer.cartRoot}}
+                onClick={_ => setOpen(true)}/>
+            <Drawer anchor={"right"} open={open}>
+                <div className={[styleDrawer.listRoot, styles.modal_container].join(" ")}>
+                    <div className={styles.close_button_group}>
+                        <IconButton onClick={_ => setOpen(false)} className={styles.close_button}>
+                            <CancelRoundedIcon/>
+                        </IconButton>
+                        <div className={[styles.divider, styleDrawer.dividerRoot].join(" ")}/>
                     </div>
-                </Drawer>
-            </>
-        );
-    }
-);
+                    <List className={[styleDrawer.listRoot, styles.items].join(" ")}>
+                        {checkoutComponent}
+                    </List>
+                    <div className={styles.purchase_amount}>
+                        <div className={[styles.divider, styles.divider_total].join(" ")}/>
+                        <h2 className={styles.total}>Total</h2>
+                        <h2 className={styles.total_price}>$ {totalProductCash() ?? 0}</h2>
+                    </div>
+                </div>
+            </Drawer>
+        </>
+    );
+}

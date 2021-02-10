@@ -32,7 +32,8 @@ export const CartContextProvider: React.FunctionComponent = props => {
         basketApi
             .getBasketFromApi()
             .then(fullBasket => {
-                setCartTotalAmount(fullBasket?.items.length ?? 0);
+                basketApi.basketProducts = fullBasket?.items ?? [];
+                setCartTotalAmount(basketApi.getProductsAmount() ?? 0);
             });
     }, [jwtCacheKey]);
 

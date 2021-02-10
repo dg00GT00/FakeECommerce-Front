@@ -21,23 +21,23 @@ const drawerStyle = makeStyles((theme: Theme) => ({
 type ModalDrawerProps = { open: boolean; containerId: string };
 
 // Needed to use the React.memo in order to this component work properly
-export const ModalDrawer: React.FunctionComponent<ModalDrawerProps> = React.memo(
-	(props) => {
-		const {
-			getTotalProducts,
-			getAmountById,
-			clearItemsById,
-		} = React.useContext(BasketContext);
-		const firstRender = React.useRef(true);
-		const [open, setOpen] = React.useState(false);
-		const setItems = React.useState<{ [i: number]: number }>({})[1];
+export const ModalDrawer: React.FunctionComponent<ModalDrawerProps> = React.memo(props => {
+	const {
+		getTotalProducts,
+		getAmountById,
+		clearItemsById,
+	} = React.useContext(BasketContext);
+
+	const firstRender = React.useRef(true);
+	const [open, setOpen] = React.useState(false);
+	const setItems = React.useState<{ [i: number]: number }>({})[1];
 
 		const styleDrawer = drawerStyle();
 		const goToCheckout = useCheckoutRoute();
 		const media = useMediaQuery("(max-width: 600px)");
 
 		const clearBasketItems = (id: number): void => {
-			setItems((prevState) => {
+			setItems(prevState => {
 				const state = prevState && {};
 				const newState = {
 					...state,
@@ -58,33 +58,31 @@ export const ModalDrawer: React.FunctionComponent<ModalDrawerProps> = React.memo
 			}
 		}, [props.open]);
 
-		const handleClose: React.MouseEventHandler = (event) => {
-			setOpen(false);
-		};
+	const handleClose: React.MouseEventHandler = (event) => {
+		setOpen(false);
+	};
 
-		const productList = getTotalProducts().map((basket) => {
-			return (
-				<ListItem
-					key={basket.id}
-					className={styles.item_grid}
-					classes={{ root: styleDrawer.listRoot }}
-				>
-					<div className={styles.image}>
-						<img src={basket.pictureUrl} alt={basket.productName} />
-					</div>
-					<p className={styles.name}>{basket.productName}</p>
-					<p className={styles.price}>$ {basket.price}</p>
-					<p className={styles.quantity}>
-						<span>qty: </span>
-						{getAmountById(basket.id)}
-					</p>
-					<Button
-						className={styles.clear}
-						variant={"outlined"}
-						onClick={(_) => clearBasketItems(basket.id)}
-					>
-						Clear Items
-					</Button>
+	const productList = getTotalProducts().map(basket => {
+		return (
+			<ListItem
+				key={basket.id}
+				className={styles.item_grid}
+				classes={{root: styleDrawer.listRoot}}>
+				<div className={styles.image}>
+					<img src={basket.pictureUrl} alt={basket.productName}/>
+				</div>
+				<p className={styles.name}>{basket.productName}</p>
+				<p className={styles.price}>$ {basket.price}</p>
+				<p className={styles.quantity}>
+					<span>qty: </span>
+					{getAmountById(basket.id)}
+				</p>
+				<Button
+					className={styles.clear}
+					variant={"outlined"}
+					onClick={_ => clearBasketItems(basket.id)}>
+					Clear Items
+				</Button>
 				</ListItem>
 			);
 		});
@@ -105,17 +103,12 @@ export const ModalDrawer: React.FunctionComponent<ModalDrawerProps> = React.memo
 				style={{
 					position: "absolute",
 					display: "flex",
-				}}
-			>
-				<div
-					className={[styleDrawer.listRoot, styles.modal_container].join(" ")}
-				>
+				}}>
+				<div className={[styleDrawer.listRoot, styles.modal_container].join(" ")}>
 					<IconButton onClick={handleClose} className={styles.close_button}>
-						<CancelRoundedIcon />
+						<CancelRoundedIcon/>
 					</IconButton>
-					<div
-						className={[styles.divider, styleDrawer.dividerRoot].join(" ")}
-					/>
+					<div className={[styles.divider, styleDrawer.dividerRoot].join(" ")}/>
 					<List className={[styleDrawer.listRoot, styles.items].join(" ")}>
 						{productList}
 					</List>
@@ -123,8 +116,7 @@ export const ModalDrawer: React.FunctionComponent<ModalDrawerProps> = React.memo
 						variant={"contained"}
 						color={"secondary"}
 						onClick={goToCheckout}
-						className={styles.checkout}
-					>
+						className={styles.checkout}>
 						Checkout
 					</Button>
 				</div>
