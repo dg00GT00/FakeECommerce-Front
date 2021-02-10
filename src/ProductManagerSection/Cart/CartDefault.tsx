@@ -6,6 +6,7 @@ import {BasketContext} from "../../Utilities/Context/BasketContext";
 import {useCheckoutRoute} from "../../Utilities/CustomHooks/CheckoutRoute/useCheckoutRoute";
 
 type CartDefaultProps = {
+    classes?: Partial<Record<"root", string>>
     classNameIcon?: string,
     classNameButton?: string,
     hideWhenZero?: boolean,
@@ -30,7 +31,7 @@ export const CartDefault: React.FunctionComponent<CartDefaultProps> = ({colorBad
                     color={props.colorButton}
                     style={props.style}>
             <Badge badgeContent={cartContext.totalAmount} color={colorBadge}>
-                <ShoppingCartRounded className={props.classNameIcon}/>
+                <ShoppingCartRounded className={props.classNameIcon} classes={props.classes}/>
             </Badge>
         </IconButton>
     );
