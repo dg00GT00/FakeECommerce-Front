@@ -55,7 +55,7 @@ export class JwtManager {
         if (jwtCacheKey) {
             sessionStorage.removeItem(jwtCacheKey);
         } else {
-            throw new Error("No jwt found to retrieve email information of");
+            throw new Error("No jwt found to retrieve information of");
         }
     }
 

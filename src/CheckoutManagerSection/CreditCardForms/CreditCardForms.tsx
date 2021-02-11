@@ -45,7 +45,6 @@ export const CreditCardForms: React.FunctionComponent<{ orderModel: OrderModel |
 
     const successfullyPayment = async (): Promise<void> => {
         await deleteBasketAsync();
-        setFormProcessing(false);
     }
 
     const onChangeHandler = (event: StripeElementChangeEvent): void => {

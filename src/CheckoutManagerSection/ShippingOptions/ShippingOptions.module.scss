@@ -2,6 +2,7 @@
 
 .price {
   justify-self: end;
+  font-size: clamp(.9rem, 1.3vw, 1.4rem);
 }
 
 .nav_buttons {
@@ -18,3 +19,4 @@
     }
   }
 }
+

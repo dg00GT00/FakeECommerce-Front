@@ -7,6 +7,7 @@
 
   p {
     font-size: 1.2rem;
+    text-align: center;
   }
 
   button {
@@ -18,4 +19,10 @@
     height: auto;
     width: 5em;
   }
+
+}
+
+.container,
+.continue_buying {
+  font-size: clamp(.8rem, 1.1vw, 1.2rem);
 }

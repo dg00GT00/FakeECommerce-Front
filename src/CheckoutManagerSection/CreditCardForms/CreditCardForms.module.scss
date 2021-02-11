@@ -38,8 +38,8 @@
   .nav_buttons {
     grid-column: 1 / -1;
     display: flex;
-    margin-top: 30px;
     justify-content: space-between;
+    height: 40px;
 
     button {
       width: 30%;

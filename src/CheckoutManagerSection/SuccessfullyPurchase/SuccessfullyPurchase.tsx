@@ -12,6 +12,7 @@ export const SuccessfullyPurchase: React.FunctionComponent = () => {
             <CheckCircleOutlineRoundedIcon className={styles.symbol}/>
             <p>Thank you for you money! You just have brought prime products</p>
             <Button
+                className={styles.continue_buying}
                 onClick={_ => push("/")}
                 color={"primary"}
                 variant={"contained"}>

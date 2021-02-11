@@ -77,11 +77,14 @@ export const CheckoutForms: React.FunctionComponent = () => {
         return null;
     }, [getBasketItemsAsync, getCurrentOrderAsync, postOrderAsync, isPaymentProcessingFinished]);
 
+    const shippingPath = `${path}/shipping`;
+    const creditCartPath = `${path}/creditcard`;
+
     React.useEffect(() => {
-        if (pathname === `${path}/shipping`) {
+        if (pathname === shippingPath) {
             setCheckoutComponent(<CheckoutCart/>);
         }
-        if (pathname === `${path}/creditcard`) {
+        if (pathname === creditCartPath) {
             getCheckoutOrderAsync()
                 .then(order => {
                     setCheckoutComponent(<CheckoutOrder orderModel={order?.order ?? null}/>);
@@ -93,7 +96,7 @@ export const CheckoutForms: React.FunctionComponent = () => {
     return (
         <section className={styles.container}>
             <div className={styles.inner_container}>
-                {mediaQuery ? <CheckoutDrawer/> : null}
+                {mediaQuery && (pathname !== creditCartPath) ? <CheckoutDrawer/> : null}
                 <div className={styles.checkout_header}>
                     <Logo className={styles.logo}/>
                     <div className={styles.express_checkout}>
@@ -112,12 +115,12 @@ export const CheckoutForms: React.FunctionComponent = () => {
                     </div>
                     <div className={styles.checkout_forms}>
                         <Switch>
-                            <Route exact path={`${path}/shipping`}>
+                            <Route exact path={shippingPath}>
                                 <CheckoutFormHeader title={"Shipping Options"}>
                                     <ShippingOptions/>
                                 </CheckoutFormHeader>
                             </Route>
-                            <Route exact path={`${path}/creditcard`}>
+                            <Route exact path={creditCartPath}>
                                 {isPaymentProcessingFinished ?
                                     <SuccessfullyPurchase/> :
                                     <CheckoutFormHeader title={"Credit Card Information"}>

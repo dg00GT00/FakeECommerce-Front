@@ -67,9 +67,7 @@ export const CheckoutDrawer: React.FunctionComponent = () => {
             firstRender.current = false;
             (async () => {
                 const products = await manageBasketItemsAsync();
-                console.log("Product cart amount: ", totalAmount);
                 if (products && products.items.length) {
-                    console.log("The cart product list: ", products?.items);
                     const productList = products.items.map(basket => {
                         return (
                             <ListItem

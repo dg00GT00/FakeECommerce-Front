@@ -93,7 +93,7 @@ export const ProductModal: React.FunctionComponent<{ id: number; modalKey: numbe
 	}, [cartContext, props.id]);
 
 	React.useEffect(() => {
-		productReq.getProduct(props.id).then((response) => {
+		productReq.getProduct(props.id).then(response => {
 			setOpenDialog(true);
 			setProductModal(response);
 		});

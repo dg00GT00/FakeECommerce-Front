@@ -17,9 +17,8 @@
   display: flex;
   grid-area: payment;
   justify-self: end;
-  width: 40%;
 
-  span {
+  & > span {
     margin-right: 1em;
   }
 

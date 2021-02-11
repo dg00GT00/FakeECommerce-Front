@@ -8,9 +8,15 @@ import {api} from "./AxiosInstance";
 export type OrderError = Omit<ErrorModel, "error">;
 
 export class OrdersRequestsManager {
-    private _orderMemory?: OrderModel;
-
     constructor(private _userRequest: UserRequestManager) {
+    }
+
+    private _orderSessionKey(): string | never {
+        if (this._userRequest.jwtManager.jwt) {
+            return this._userRequest.jwtManager.jwt;
+        } else {
+            throw new Error("No jwt found to set a session key");
+        }
     }
 
     public async getShippingOptionsAsync(): Promise<ShippingModel[]> {
@@ -19,7 +25,8 @@ export class OrdersRequestsManager {
             return shippingOptions.data;
         } catch (e) {
             const error = (e as AxiosError).response;
-            if (error?.status === 401) { // Unauthorized user error
+            if (error?.status === 401) {
+                // Unauthorized user error
                 // Deleting the jwt forces the user effect login before progress getting the shipping options
                 this._userRequest.jwtManager.deleteJwt();
             }
@@ -37,7 +44,7 @@ export class OrdersRequestsManager {
             }, this._userRequest.jwtManager.getJwtAuthorizationHeaders());
 
             const order = response.data;
-            this._orderMemory = order;
+            sessionStorage.setItem(this._orderSessionKey(), order.id.toString());
             return order;
         } catch (e) {
             const error = (e as AxiosError).response;
@@ -46,10 +53,12 @@ export class OrdersRequestsManager {
     }
 
     public async getCurrentOrderAsync(): Promise<OrderModel | null> {
-        if (this._orderMemory?.id) {
+        const orderId = sessionStorage.getItem(this._orderSessionKey());
+        if (orderId) {
+            sessionStorage.removeItem(this._orderSessionKey());
             try {
                 const response = await api.get<OrderModel>(
-                    `/orders/${this._orderMemory?.id}`,
+                    `/orders/${orderId}`,
                     this._userRequest.jwtManager.getJwtAuthorizationHeaders()
                 );
                 return response.data;

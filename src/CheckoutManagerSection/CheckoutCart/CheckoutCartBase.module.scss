@@ -9,7 +9,7 @@
     .item_grid {
       align-items: start;
       justify-content: stretch;
-      padding: 1em 3%;
+      padding: 1.4em 3%;
       grid-template-columns: 20% 20% auto 20%;
       grid-template-areas: "img name name price"
                            "img clear clear .";
