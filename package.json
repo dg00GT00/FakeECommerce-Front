@@ -28,7 +28,7 @@
   "scripts": {
     "start": "env DISABLE_NEW_JSX_TRANSFORM=true react-scripts start",
     "start:windows": "react-scripts start",
-    "build": "env DISABLE_NEW_JSX_TRANSFORM=true react-scripts build",
+    "build": "react-scripts build",
     "test": "env DISABLE_NEW_JSX_TRANSFORM=true react-scripts test",
     "eject": "env DISABLE_NEW_JSX_TRANSFORM=true react-scripts eject"
   },

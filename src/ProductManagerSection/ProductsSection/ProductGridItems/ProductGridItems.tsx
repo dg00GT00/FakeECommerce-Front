@@ -32,6 +32,7 @@ const ProductGrid: React.FunctionComponent<ProductGridRouteManagerProps> = ({
 		productGridItems,
 		setProductGrid,
 	] = React.useState<GridItemsType | null>(null);
+    
 	const [isLoading, toggleLoading] = React.useState(true);
 
 	React.useEffect(() => {

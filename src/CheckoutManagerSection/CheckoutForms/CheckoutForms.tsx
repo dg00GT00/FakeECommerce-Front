@@ -91,7 +91,7 @@ export const CheckoutForms: React.FunctionComponent = () => {
                     setOrderContainer(order);
                 });
         }
-    }, [path, pathname, getCheckoutOrderAsync, isPaymentProcessingFinished]);
+    }, [path, pathname, getCheckoutOrderAsync, isPaymentProcessingFinished, creditCartPath, shippingPath]);
 
     return (
         <section className={styles.container}>
