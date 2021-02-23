@@ -9,7 +9,7 @@ export class WebSocketManager {
      */
     public connect<T>(delegate: (data: T) => void): void {
         if (!this._socket) {
-            this._socket = new WebSocket(`wss://${location.host}/getpaymentprocessing`);
+            this._socket = new WebSocket(`wss://${window.location.host}:443/getpaymentprocessing`);
             this._socket.onmessage = (event: MessageEvent<T>) => {
                 delegate(event.data);
             }
