@@ -1,5 +1,7 @@
 export class WebSocketManager {
     private _socket?: WebSocket;
+    private _webSocketUrl = process.env.NODE_ENV === "production" ?
+        `wss://${window.location.host}:443/getpaymentprocessing` : "wss://localhost:5001/getpaymentprocessing";
 
     /**
      * Create an singleton websocket instance and assign it correspondent events.
@@ -9,16 +11,16 @@ export class WebSocketManager {
      */
     public connect<T>(delegate: (data: T) => void): void {
         if (!this._socket) {
-            this._socket = new WebSocket(`wss://${window.location.host}:443/getpaymentprocessing`);
+            this._socket = new WebSocket(this._webSocketUrl);
             this._socket.onmessage = (event: MessageEvent<T>) => {
                 delegate(event.data);
-            }
+            };
             this._socket.onerror = (event) => {
                 this._socket = undefined;
-            }
+            };
             this._socket.onclose = (event: CloseEvent) => {
                 this._socket = undefined;
-            }
+            };
         }
     }
 
