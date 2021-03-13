@@ -6,7 +6,7 @@ import {AxiosError} from "axios";
 import {api} from "../../AxiosInstance";
 
 type BasketPayload = {
-    id: string;
+    userEmail: string;
     items: BasketModel[];
     deliveryMethodId?: string;
     clientSecret?: string;
@@ -25,7 +25,7 @@ export class BasketApiRequest extends BasketMemoryRequest {
     public async postBasketToApi(...args: any[]): Promise<void> {
         if (this.basketProducts.length) {
             const basketPayload: BasketPayload = {
-                id: this._userRequest.jwtManager.getJwtCacheKey() ?? "",
+                userEmail: this._userRequest.jwtManager.getJwtCacheKey() ?? "",
                 items: this.basketProducts
             };
             if (args.length) {
@@ -51,6 +51,7 @@ export class BasketApiRequest extends BasketMemoryRequest {
         if (id) {
             try {
                 const response = await api.get<BasketPaymentModel>(`${this._basketUrl}?id=${id}`);
+
                 this.basketProducts = response.data.items;
                 return response.data;
             } catch (e) {

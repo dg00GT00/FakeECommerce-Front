@@ -65,7 +65,7 @@ export const ModalDrawer: React.FunctionComponent<ModalDrawerProps> = React.memo
 	const productList = getTotalProducts().map(basket => {
 		return (
 			<ListItem
-				key={basket.id}
+				key={basket.productId}
 				className={styles.item_grid}
 				classes={{root: styleDrawer.listRoot}}>
 				<div className={styles.image}>
@@ -75,12 +75,12 @@ export const ModalDrawer: React.FunctionComponent<ModalDrawerProps> = React.memo
 				<p className={styles.price}>$ {basket.price}</p>
 				<p className={styles.quantity}>
 					<span>qty: </span>
-					{getAmountById(basket.id)}
+					{getAmountById(basket.productId)}
 				</p>
 				<Button
 					className={styles.clear}
 					variant={"outlined"}
-					onClick={_ => clearBasketItems(basket.id)}>
+					onClick={_ => clearBasketItems(basket.productId)}>
 					Clear Items
 				</Button>
 				</ListItem>

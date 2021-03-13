@@ -4,7 +4,7 @@ import {ProductCardProps} from "../ProductProps/ProductCardProps";
 export const productCardMapper = (fullProduct: FullProductType): ProductCardProps[] => {
     return fullProduct.data.map(product => {
         return {
-            id: product.id,
+            productId: product.id,
             productName: product.name,
             description: product.description,
             pictureUrl: product.pictureUrl,
@@ -17,7 +17,7 @@ export const productCardMapper = (fullProduct: FullProductType): ProductCardProp
 
 export const productModalMapper = (product: ProductInformationType): ProductCardProps => {
     return {
-        id: product.id,
+        productId: product.id,
         description: product.description,
         brand: product.productBrand,
         pictureUrl: product.pictureUrl,

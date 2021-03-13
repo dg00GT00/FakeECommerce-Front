@@ -35,7 +35,7 @@ const dividerStyle = makeStyles((theme) => ({
 }));
 
 const initialModalProducts: ProductCardProps = {
-	id: 0,
+	productId: 0,
 	price: 0,
 	productName: "",
 	description: "",

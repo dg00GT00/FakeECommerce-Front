@@ -43,7 +43,7 @@ export const CheckoutCart: React.FunctionComponent = () => {
                 const productsList = products.items.map(basket => {
                     return (
                         <ListItem
-                            key={basket.id}
+                            key={basket.productId}
                             className={[styleList.listItem, styles.item_grid].join(" ")}>
                             <div className={styles.image}>
                                 <Badge
@@ -60,7 +60,7 @@ export const CheckoutCart: React.FunctionComponent = () => {
                             <Button
                                 className={styles.clear}
                                 variant={"outlined"}
-                                onClick={_ => clearItemsById(basket.id)}>
+                                onClick={_ => clearItemsById(basket.productId)}>
                                 Remove
                             </Button>
                         </ListItem>

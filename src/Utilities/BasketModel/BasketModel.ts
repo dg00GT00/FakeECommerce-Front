@@ -1,5 +1,5 @@
 export type BasketModel = {
-    id: number;
+    productId: number;
     productName: string;
     price: number;
     quantity: number;
@@ -9,7 +9,8 @@ export type BasketModel = {
 };
 
 export type BasketPaymentModel = {
-    id: string;
+    id: number;
+    userEmail: string;
     items: BasketModel[];
     deliveryMethodId?: number;
     clientSecret?: string;

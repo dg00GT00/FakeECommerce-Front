@@ -1,19 +1,19 @@
 import * as React from "react";
-import { ProductCard } from "../ProductCard/ProductCard";
-import { NotFound } from "../../../Utilities/RouterValidation/NotFound";
-import { ProductsContext } from "../ProductContext/ProductsContext";
-import { ProductGridSkeleton } from "../ProductGridSkeleton/ProductGridSkeleton";
-import { withRouter } from "react-router-dom";
-import { ProductGridRouteManagerProps } from "../../../Routes/ProductRouteManager/ProductGridRouteManagerProps";
+import {ProductCard} from "../ProductCard/ProductCard";
+import {NotFound} from "../../../Utilities/RouterValidation/NotFound";
+import {ProductsContext} from "../ProductContext/ProductsContext";
+import {ProductGridSkeleton} from "../ProductGridSkeleton/ProductGridSkeleton";
+import {withRouter} from "react-router-dom";
+import {ProductGridRouteManagerProps} from "../../../Routes/ProductRouteManager/ProductGridRouteManagerProps";
 
 type GridItemsType =
 	| React.FunctionComponentElement<typeof ProductCard>[]
 	| React.FunctionComponentElement<typeof NotFound>;
 
 const ProductGrid: React.FunctionComponent<ProductGridRouteManagerProps> = ({
-	location: { pathname },
-	...props
-}) => {
+																				location: {pathname},
+																				...props
+																			}) => {
 	// Deconstruct the props in order to prevent infinity request loop
 	const {
 		pageNumber,
@@ -51,7 +51,7 @@ const ProductGrid: React.FunctionComponent<ProductGridRouteManagerProps> = ({
 			})
 			.then((productList) => {
 				const productItems = productList?.map((product) => {
-					return <ProductCard key={product.id} {...product} />;
+					return <ProductCard key={product.productId} {...product} />;
 				});
 				setPageCount(productReq.getProductPageAmount());
 				setPageNumber(pageNumber);

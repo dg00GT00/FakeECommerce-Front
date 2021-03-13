@@ -30,7 +30,7 @@ export class BasketMemoryRequest implements IBasketRequest {
     public getTotalProductCashById(id: number): number {
         let totalCash = 0;
         for (const product of this._basketProducts) {
-            if (product.id === id) {
+            if (product.productId === id) {
                 totalCash = product.quantity * product.price;
             }
         }
@@ -39,7 +39,7 @@ export class BasketMemoryRequest implements IBasketRequest {
 
     public clearItemsById(id: number): number {
         for (const product of this._basketProducts) {
-            if (product.id === id) {
+            if (product.productId === id) {
                 product.quantity = 0;
                 this.removeProduct(product);
                 break;
@@ -62,7 +62,7 @@ export class BasketMemoryRequest implements IBasketRequest {
     public getProductAmountById(id: number): number {
         let quantity = 0;
         for (const product of this._basketProducts) {
-            if (product.id === id) {
+            if (product.productId === id) {
                 quantity = product.quantity;
                 break;
             }
@@ -72,7 +72,7 @@ export class BasketMemoryRequest implements IBasketRequest {
 
     public addProduct(product: BasketModel): void {
         for (const p of this._basketProducts) {
-            if (p.id === product.id) {
+            if (p.productId === product.productId) {
                 p.quantity += product.quantity;
                 return;
             }
@@ -83,7 +83,7 @@ export class BasketMemoryRequest implements IBasketRequest {
     public removeProduct(product: BasketModel): void {
         for (let i = 0; i < this._basketProducts.length; i++) {
             let p = this._basketProducts[i];
-            if (p.id === product.id) {
+            if (p.productId === product.productId) {
                 if (p.quantity > 1) {
                     p.quantity -= product.quantity;
                     return;

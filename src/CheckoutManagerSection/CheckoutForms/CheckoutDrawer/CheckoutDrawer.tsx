@@ -71,7 +71,7 @@ export const CheckoutDrawer: React.FunctionComponent = () => {
                     const productList = products.items.map(basket => {
                         return (
                             <ListItem
-                                key={basket.id}
+                                key={basket.productId}
                                 className={styles.item_grid}
                                 classes={{root: styleDrawer.listRoot}}>
                                 <div className={styles.image}>
@@ -86,7 +86,7 @@ export const CheckoutDrawer: React.FunctionComponent = () => {
                                 <Button
                                     className={styles.clear}
                                     variant={"outlined"}
-                                    onClick={_ => clearBasketItems(basket.id)}>
+                                    onClick={_ => clearBasketItems(basket.productId)}>
                                     Clear Items
                                 </Button>
                             </ListItem>

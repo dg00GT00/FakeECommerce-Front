@@ -64,10 +64,7 @@ type CardHighlightReducer = React.Reducer<
 	CardDispatchActions
 >;
 
-const cardReducer = (
-	prevState: CardHighlightState,
-	actions: CardDispatchActions
-): CardHighlightState => {
+const cardReducer = (prevState: CardHighlightState, actions: CardDispatchActions): CardHighlightState => {
 	switch (actions.type) {
 		case "SELECT_CARD":
 			return {
@@ -106,17 +103,17 @@ export const ProductCard: React.FunctionComponent<ProductCardProps> = (
 	const cardHeaderStyle = useStyle();
 
 	const toggleProductSelection = (): void => {
-		if (cartContext.getAmountById(props.id) > 1) return;
+		if (cartContext.getAmountById(props.productId) > 1) return;
 		if (cardState.isCardSelected) {
-			dispatchCardState({ type: "UNSELECT_CARD", productId: props.id });
-			cartContext.decreaseAmount({ quantity: 1, ...props });
+			dispatchCardState({type: "UNSELECT_CARD", productId: props.productId});
+			cartContext.decreaseAmount({quantity: 1, ...props});
 		} else {
 			dispatchCardState({
 				type: "SELECT_CARD",
-				productId: props.id,
+				productId: props.productId,
 				selectedState: cardStyle,
 			});
-			cartContext.increaseAmount({ quantity: 1, ...props });
+			cartContext.increaseAmount({quantity: 1, ...props});
 		}
 	};
 
@@ -129,16 +126,16 @@ export const ProductCard: React.FunctionComponent<ProductCardProps> = (
 
 	// Sets the product highlighting state at the first render if any product amount is found
 	React.useEffect(() => {
-		if (cartContext.getAmountById(props.id)) {
+		if (cartContext.getAmountById(props.productId)) {
 			dispatchCardState({
 				type: "SELECT_CARD",
-				productId: props.id,
+				productId: props.productId,
 				selectedState: cardStyle,
 			});
 		} else {
-			dispatchCardState({ type: "UNSELECT_CARD", productId: props.id });
+			dispatchCardState({type: "UNSELECT_CARD", productId: props.productId});
 		}
-	}, [props.id, cardStyle, cartContext]);
+	}, [props.productId, cardStyle, cartContext]);
 
 	return (
 		<div className={cardState.outerContainer}>
@@ -151,14 +148,14 @@ export const ProductCard: React.FunctionComponent<ProductCardProps> = (
 							cardHeaderStyle.root,
 							styles.card_title,
 						].join(" ")}
-						action={<ShareRounded />}
+						action={<ShareRounded/>}
 						disableTypography
 					></CardHeader>
 					<CardActionArea
 						className={styles.card_action_area}
-						onClick={(event) => seeProductDetail(event, props.id)}
+						onClick={(event) => seeProductDetail(event, props.productId)}
 					>
-						<CardMedia className={styles.media} image={props.pictureUrl} />
+						<CardMedia className={styles.media} image={props.pictureUrl}/>
 						<CardContent className={styles.card_content}>
 							<p>{props.description}</p>
 						</CardContent>
